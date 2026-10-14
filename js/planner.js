@@ -13,7 +13,7 @@ function hash(s){let h=7;for(const ch of s)h=(h*31+ch.charCodeAt(0))%1000;return
 const PRICES=window.DOCKET_PRICES||{coles:{},woolies:{},aldi:{}};
 function price(id,store=S.store){
   const it=ING[id];const real=(PRICES[store]||{})[id];
-  if(real)return{p:real.p,pk:real.pk||it.pk,fb:false,real:true,at:real.at};
+  if(real)return{p:real.p,pk:real.pk||it.pk,fb:false,real:true,at:real.at,wt:!!real.wt,sp:!!real.sp,was:real.was,alt:real.alt};
   const c=(PRICES.coles||{})[id];const base=c?{p:c.p,pk:c.pk||it.pk}:{p:it.p,pk:it.pk};
   if(store==='coles')return{...base,fb:false};
   if(store==='woolies')return{p:+(base.p*(0.95+hash(id)*0.11)).toFixed(2),pk:base.pk,fb:false};
@@ -24,7 +24,11 @@ function price(id,store=S.store){
 function kitCost(k,perMeal,dinners){if(!dinners)return 0;const kitPerMeal=Math.max(2,2*Math.ceil(perMeal/2));return dinners*kitPerMeal*k.ps+k.del*Math.ceil(kitPerMeal/k.max)}
 // A realistic starting budget: small households carry some fixed costs (whole packs, jars) that larger ones spread out
 // Tested against 4,000 random weeks: covers about 4 in 5 weeks at every household size
-function autoBudget(){const serves=S.people*(S.lunch?2:1)*S.dinners;return Math.ceil((70+serves*7.5+(S.people===1?25:0))/10)*10}
+// When live prices land, scale by how this week's shelf prices compare with the estimates the formula was tuned on
+function estPrice(id,store){const it=ING[id];if(store==='woolies')return it.p*(0.95+hash(id)*0.11);if(store==='aldi'&&!it.noAldi)return it.p*(0.79+hash(id+'a')*0.09);return it.p}
+const IDX={};
+function priceIndex(store=S.store){if(IDX[store])return IDX[store];let est=0,cur=0;R.forEach(r=>r.i.forEach(([id,q])=>{const pr=price(id,store);est+=q/ING[id].pk*estPrice(id,store);cur+=q/pr.pk*pr.p}));return IDX[store]=Math.min(1.35,Math.max(.8,Math.round(cur/est*100)/100))}
+function autoBudget(){const serves=S.people*(S.lunch?2:1)*S.dinners;return Math.ceil((70+serves*7.5*priceIndex()+(S.people===1?25:0))/10)*10}
 const STORE_NAME={coles:'Coles',woolies:'Woolies',aldi:'Aldi'};
 const spm=()=>S.people*(S.lunch?2:1);
 const gfShare=()=>S.people?Math.min(S.gf,S.people)/S.people:0;
@@ -49,11 +53,11 @@ function week(){
   S.sel.forEach(sid=>{const r=R.find(x=>x.id===sid);if(!r)return;splitLines(r,n).forEach(([id,a])=>{agg[id]=(agg[id]||0)+a})});
   const items=Object.entries(agg).map(([id,amt])=>{
     const it=ING[id];const pr=price(id);
-    const base={id,amt,pk:pr.pk,real:!!pr.real,at:pr.at,pan:!!it.pan,pack:pr.p,fb:pr.fb};
+    const base={id,amt,pk:pr.pk,real:!!pr.real,at:pr.at,pan:!!it.pan,pack:pr.p,fb:pr.fb,sp:!!pr.sp};
     if(it.pan)return{...base,packs:1,cost:amt/pr.pk*pr.p,label:'',left:0};
-    if(it.wt&&!pr.real){const buy=it.u==='ea'?Math.ceil(amt):Math.max(50,Math.ceil(amt/50)*50);return{...base,packs:1,cost:buy/pr.pk*pr.p,label:`about ${fmtAmt(id,buy)}`,left:buy-amt,bought:buy}}
+    if(it.wt&&(!pr.real||pr.wt)){const buy=it.u==='ea'?Math.ceil(amt):Math.max(50,Math.ceil(amt/50)*50);return{...base,packs:1,cost:buy/pr.pk*pr.p,label:`about ${fmtAmt(id,buy)}`,left:buy-amt,bought:buy}}
     // Cheapest mix of the big pack and (if there is one) a smaller pack
-    let best=null;const alt=!pr.real&&it.alt?{pk:it.alt[0],p:pr.p*(it.alt[1]/it.p)}:null;
+    let best=null;const alt=pr.alt?{pk:pr.alt[0],p:pr.alt[1]}:!pr.real&&it.alt?{pk:it.alt[0],p:pr.p*(it.alt[1]/it.p)}:null;
     const maxBig=Math.max(1,Math.ceil(amt/pr.pk-1e-6));
     for(let nb=0;nb<=maxBig;nb++){
       const rest=Math.max(0,amt-nb*pr.pk);let ns=0;
@@ -177,10 +181,11 @@ function renderList(w){
   $('#aisles').innerHTML=order.filter(a=>by[a]).map(a=>`<div class="aisle"><h3>${AISLE[a]}</h3>${by[a].sort((x,y)=>ING[x.id].n.localeCompare(ING[y.id].n)).map(x=>{
     const it=ING[x.id];const k='i-'+x.id;const done=!!S.done[x.id];
     const detail=x.pan?`you'll use ${kAmt(x.id,x.amt)} · if you're out: ${packLabel(x.id,x.pk)} ${money(x.pack)}`:`${fmtAmt(x.id,x.amt)} needed · ${x.label}${x.left>0&&ING[x.id].u!=='ea'&&x.left/x.bought>.15?` · <span class="left">${fmtAmt(x.id,x.left)} left over</span>`:''}`;
-    return`<label class="item${done?' done':''}" for="${k}"><input type="checkbox" id="${k}" data-id="${x.id}" ${done?'checked':''}><span class="what">${esc(it.n)}<small>${detail}${x.fb?' · <span class="flag">Not at Aldi, priced at Coles</span>':''}${it.ck?' · check label for GF':''}${x.real?' · <span class="ok">price checked</span>':''}</small></span><span class="c num">${x.pan?'≈':''}${money(x.cost)}</span></label>`}).join('')}</div>`).join('');
+    return`<label class="item${done?' done':''}" for="${k}"><input type="checkbox" id="${k}" data-id="${x.id}" ${done?'checked':''}><span class="what">${esc(it.n)}<small>${detail}${x.fb?' · <span class="flag">Not at Aldi, priced at Coles</span>':''}${it.ck?' · check label for GF':''}${x.sp?' · <span class="ok">on special</span>':x.real?' · <span class="ok">price checked</span>':''}</small></span><span class="c num">${x.pan?'≈':''}${money(x.cost)}</span></label>`}).join('')}</div>`).join('');
   $('#list-meta').textContent=`${w.items.length} items · ${money(w.shop)} + ${money(STAPLES,0)} staples`;
   const buyable=w.items.filter(x=>!x.pan);const checked=buyable.filter(x=>x.real).length;
-  $('#price-note').textContent=checked?`${checked} of ${buyable.length} prices checked at ${STORE_NAME[S.store]} this week. The rest are Docket estimates.`:`Prices are Docket's estimates for ${STORE_NAME[S.store]}, so expect the shelf to be within a few dollars either way.`;
+  const upd=PRICES.updated?new Date(PRICES.updated+'T12:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}):'';const sp=buyable.filter(x=>x.sp).length;
+  $('#price-note').textContent=checked?`${checked===buyable.length?'Every price':`${checked} of ${buyable.length} prices`} on this list ${checked===1?'is':'are'} ${STORE_NAME[S.store]}'s shelf price${upd?`, updated ${upd}`:' this week'}.${sp?` ${sp} on special.`:''}${checked<buyable.length?' The rest are Docket estimates.':''}`:`Prices are Docket's estimates for ${STORE_NAME[S.store]}, so expect the shelf to be within a few dollars either way.`;
 }
 function useItUp(w){
   const left={};w.items.forEach(x=>{if(!x.pan&&x.left>0&&x.bought)left[x.id]=x.left});
