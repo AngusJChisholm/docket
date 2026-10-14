@@ -2,9 +2,7 @@
 // Recipes: recipe id -> photo name. Collections: homepage collection cards.
 window.DOCKET_IMG = {
   recipes: {
-    poke: 'poke-bowl',
-    wagyuburger: 'burger',
-    smash: 'burger'
+    // e.g. poke: 'poke-bowl'
   },
   collections: {
     lighter: 'poke-bowl',

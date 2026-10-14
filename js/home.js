@@ -41,16 +41,59 @@
 
   // Hero: an example week, set like a menu
   const tierOf = r => r.tier || 'everyday';
-  const pick = ['chook', 'misosalmon', 'butter', 'poke', 'carnitas'].map(id => R.find(r => r.id === id)).filter(Boolean);
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'];
-  const menuServes = 10 * pick.length;
-  const menuTotal = pick.reduce((s, r) => s + serveCost(r) * 10, 0) + STAPLES;
-  const hfTotal = menuServes * KITS_DEFAULT[0].ps + KITS_DEFAULT[0].del * Math.ceil(10 / KITS_DEFAULT[0].max);
-  $('#menu-card').innerHTML = `<p class="mc-eyebrow">This week's menu</p><p class="mc-sub">5 people · dinners + next-day lunches</p>
-    <ol class="mc-list">${pick.map((r, i) => `<li><span class="mc-day">${days[i]}</span><span class="mc-dish">${esc(r.n)}${tierOf(r) !== 'everyday' ? ` <span class="tier ${tierOf(r) === 'premium' ? 'prem' : 'light'}">${tierOf(r) === 'premium' ? 'Premium' : 'Lighter'}</span>` : ''}</span><span class="mc-lead" aria-hidden="true"></span><span class="mc-pr num">${money(serveCost(r))}</span></li>`).join('')}</ol>
-    <div class="mc-foot"><span>Estimated shop</span><b class="num">${money(menuTotal, 0)}</b></div>
-    <div class="mc-dodge"><span>Kit Tax dodged</span><b class="num">${money(hfTotal - menuTotal, 0)}</b></div>`;
-  $('#hero-serve').textContent = money(menuTotal / menuServes);
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hf = KITS_DEFAULT[0];
+  function weekOf(pick) {
+    const serves = 10 * pick.length;
+    const total = pick.reduce((s, r) => s + serveCost(r) * 10, 0) + STAPLES;
+    const kit = serves * hf.ps + hf.del * Math.ceil(10 / hf.max);
+    return { total, kit, serves };
+  }
+  function renderMenu(pick, animate) {
+    const w = weekOf(pick);
+    $('#menu-card').innerHTML = `<p class="mc-eyebrow">This week's menu</p><p class="mc-sub">5 people · dinners + next-day lunches</p>
+      <ol class="mc-list${animate ? ' deal' : ''}">${pick.map((r, i) => `<li style="--i:${i}"><span class="mc-day">${days[i]}</span><span class="mc-dish">${esc(r.n)}${tierOf(r) !== 'everyday' ? ` <span class="tier ${tierOf(r) === 'premium' ? 'prem' : 'light'}">${tierOf(r) === 'premium' ? 'Premium' : 'Lighter'}</span>` : ''}</span><span class="mc-lead" aria-hidden="true"></span><span class="mc-pr num">${money(serveCost(r))}</span></li>`).join('')}</ol>
+      <div class="mc-foot"><span>Estimated shop</span><b class="num">${money(w.total, 0)}</b></div>
+      <div class="mc-dodge"><span>Kit Tax dodged</span><b class="num">${money(w.kit - w.total, 0)}</b></div>`;
+    $('#hero-serve').textContent = money(w.total / w.serves);
+    const tk = document.querySelector('.hang .ticket'); if (animate && tk && !reduce) { tk.classList.remove('bump'); void tk.offsetWidth; tk.classList.add('bump'); }
+  }
+  // A balanced random week: one premium, one lighter, three everyday, under $400 for five
+  function randomWeek() {
+    const by = t => R.filter(r => tierOf(r) === t && serveProt(r) >= 40);
+    const sample = (arr, n) => arr.slice().sort(() => Math.random() - .5).slice(0, n);
+    for (let tries = 0; tries < 40; tries++) {
+      const pick = sample([...sample(by('premium'), 1), ...sample(by('lighter'), 1), ...sample(by('everyday'), 3)], 5);
+      if (weekOf(pick).total < 400) return pick;
+    }
+    return sample(by('everyday'), 5);
+  }
+  const start = ['chook', 'misosalmon', 'butter', 'poke', 'carnitas'].map(id => R.find(r => r.id === id)).filter(Boolean);
+  renderMenu(start, false);
+  $('#shuffle').onclick = () => renderMenu(randomWeek(), true);
+
+  // Ribbon of dinners
+  const pill = r => `<span class="rb-pill rb-${tierOf(r)}">${esc(r.n)}</span>`;
+  const half = Math.ceil(R.length / 2);
+  const rowA = R.slice(0, half), rowB = R.slice(half);
+  $('#ribbon-a').innerHTML = `<div class="rb-track">${rowA.map(pill).join('')}${rowA.map(pill).join('')}</div>`;
+  $('#ribbon-b').innerHTML = `<div class="rb-track">${rowB.map(pill).join('')}${rowB.map(pill).join('')}</div>`;
+
+  // Numbers band
+  const flat = weekOf(start);
+  const N = { 'n-dinners': R.length, 'n-cheap': Math.min(...R.map(serveCost)), 'n-prot': Math.round(R.reduce((s, r) => s + serveProt(r), 0) / R.length), 'n-year': Math.round((flat.kit - flat.total) * 52) };
+  const fmtN = (el, v) => { const dp = el.dataset.dp != null ? +el.dataset.dp : (el.dataset.money ? 2 : 0); el.textContent = el.dataset.money ? money(v, dp) : Math.round(v).toLocaleString('en-AU') + (el.dataset.suffix || ''); };
+  Object.entries(N).forEach(([id, v]) => { const el = document.getElementById(id); el.dataset.to = v; fmtN(el, v); });
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return; io.unobserve(e.target);
+      const el = e.target, to = +el.dataset.to, t0 = performance.now(), dur = 1100;
+      const step = t => { const k = Math.min(1, (t - t0) / dur), ease = 1 - Math.pow(1 - k, 3); fmtN(el, to * ease); if (k < 1) requestAnimationFrame(step); else fmtN(el, to); };
+      requestAnimationFrame(step);
+    }), { threshold: .6 });
+    document.querySelectorAll('.count').forEach(el => io.observe(el));
+  }
 
   // Collections
   const COLS = [

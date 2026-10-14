@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Docket · Meal kit dinners at supermarket prices</title>
+<title>Docket · Proper dinners, minus the meal kit markup</title>
 <meta name="description" content="Pick your dinners, set your budget, and Docket builds the shopping list from your local Coles, Woolies or Aldi. Same food as the meal kits, bigger serves, no box.">
 <meta property="og:title" content="Docket · Meal kit dinners at supermarket prices">
 <meta property="og:description" content="Pick your dinners, set your budget, and Docket builds the shopping list from your local Coles, Woolies or Aldi. Same food as the meal kits, bigger serves, no box.">
@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,700..900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap">
-<link rel="stylesheet" href="assets/css/docket.css?v=202610142229">
+<link rel="stylesheet" href="assets/css/docket.css?v=202610142231">
 </head>
 <body class="home">
 <a class="skip" href="#main">Skip to content</a>
@@ -34,20 +34,36 @@
 <main id="main" class="home">
   <section class="hero">
     <div>
-      <span class="hero-eyebrow">Weekly dinner planning, done properly</span>
-      <h1>Meal kit dinners. <em>Supermarket prices.</em></h1>
+      <span class="hero-eyebrow">Dinner, sorted for the week</span>
+      <h1>Proper dinners, <em>minus the meal kit markup.</em></h1>
       <p class="lead">Choose from everyday favourites, restaurant-style premium nights and lighter dinners. Set your budget, and Docket builds the shopping list from your local Coles, Woolies or Aldi. Same food as the meal kits, bigger serves, no box.</p>
       <div class="cta"><a class="btn lg" href="plan.html">Plan my week</a><a class="btn ghost lg" href="#kit-tax">What's the Kit Tax?</a></div>
       <p class="trust">Free while we're in beta. No sign-up needed.</p>
     </div>
     <div class="hero-docket">
       <div class="hang" aria-hidden="true"><div class="ticket num"><b id="hero-serve">$5</b><small>per serve</small></div></div>
-      <div class="menu-card" id="menu-card" aria-label="An example week on Docket"></div>
+      <div class="menu-wrap">
+        <div class="menu-card" id="menu-card" aria-live="polite" aria-label="An example week on Docket"></div>
+        <button class="btn shuffle" id="shuffle" type="button"><span aria-hidden="true">↻</span> Shuffle the week</button>
+      </div>
     </div>
   </section>
 
+
+  <section class="ribbon" aria-label="Some of the dinners on Docket">
+    <div class="ribbon-row" id="ribbon-a"></div>
+    <div class="ribbon-row rev" id="ribbon-b"></div>
+  </section>
+
+  <section class="numbers" aria-label="Docket in numbers">
+    <div class="num-item"><b class="num count" data-to="0" id="n-dinners">0</b><span>dinners to choose from</span></div>
+    <div class="num-item"><b class="num count" data-to="0" data-money="1" id="n-cheap">$0</b><span>a serve, cheapest dinner</span></div>
+    <div class="num-item"><b class="num count" data-to="0" data-suffix="g" id="n-prot">0g</b><span>average protein a serve</span></div>
+    <div class="num-item hl"><b class="num count" data-to="0" data-money="1" data-dp="0" id="n-year">$0</b><span>a year a share house of five keeps vs HelloFresh</span></div>
+  </section>
+
   <section class="sec" id="how">
-    <div class="sec-title"><h2>How it works</h2><p>Ten minutes on a Sunday, sorted for the week.</p></div>
+    <div class="sec-title"><h2>Sorted in ten minutes</h2><p>Do it Sunday arvo. Eat well all week.</p></div>
     <div class="steps-grid">
       <div class="step"><div class="n">1</div><h3>Set your week</h3><p>How many people, how many dinners, your budget, your store, and anything you won't eat. Gluten free sorted with simple swaps.</p></div>
       <div class="step"><div class="n">2</div><h3>Pick your dinners</h3><p>Over 60 dinners, from butter chicken and roast chook to miso salmon, lamb cutlets and poke bowls. Every one priced per serve and packed with protein.</p></div>
@@ -57,12 +73,12 @@
 
 
   <section class="sec" id="collections">
-    <div class="sec-title"><h2>Three ways to eat</h2><p>Mix and match every week. All of it priced at your supermarket, all of it well under the meal kits.</p></div>
+    <div class="sec-title"><h2>Cheap and cheerful. Fancy. Fresh.</h2><p>Mix all three into your week. Every dinner priced at your supermarket, every one under what the meal kits charge.</p></div>
     <div class="col-grid" id="col-grid"></div>
   </section>
 
   <section class="sec" id="kit-tax">
-    <div class="sec-title"><h2>The Kit Tax</h2><p>What meal kits charge you for the box, the sachets and the delivery. Plug in your household and see what you'd keep.</p></div>
+    <div class="sec-title"><h2>What the meal kits are really charging you</h2><p>We call it the Kit Tax: what you pay for the box, the little sachets and the delivery. Plug in your house and see what you'd keep.</p></div>
     <div class="calc">
       <div class="panel calc-in">
         <div class="ctrl"><span class="lbl" id="c-l-people">People you're feeding</span>
@@ -78,7 +94,7 @@
   </section>
 
   <section class="sec" id="dinners">
-    <div class="sec-title"><h2>This week's cheap wins</h2><p>A taste of the menu, priced at Coles. Prices change with the specials.</p></div>
+    <div class="sec-title"><h2>The cheap wins</h2><p>Big serves, big protein, small bill. Priced at Coles, and they move with the specials.</p></div>
     <div class="dinners" id="dinner-cards"></div>
     <div><a class="btn lg" href="plan.html">See all the dinners</a></div>
   </section>
@@ -86,7 +102,7 @@
   <section class="story" id="story">
     <div>
       <span class="eyebrow">Our story</span>
-      <h2>Started in a share house of five</h2>
+      <h2>Five blokes, one kitchen, no more meal kits</h2>
       <p>We were five blokes in a Melbourne share house paying a meal kit to feed us. One night someone did the maths: about ten bucks a serve, plus delivery, plus a mountain of cardboard.</p>
       <p>So we started doing it ourselves. Same sort of dinners, bigger serves, cooked Sunday to Thursday with leftovers for lunch. All five of us eat well for under $400 a week.</p>
       <p>Docket is that system, built so anyone can use it.</p>
@@ -100,7 +116,7 @@
   </section>
 
   <section class="sec" id="faq">
-    <div class="sec-title"><h2>Questions</h2></div>
+    <div class="sec-title"><h2>The fine print</h2></div>
     <div class="faq">
       <details><summary>Is it free?</summary><p>Yes, while we're in beta. You plan, we build the list. No account, no card.</p></details>
       <details><summary>How accurate are the prices?</summary><p>Right now they're our estimates for Melbourne stores. Live weekly Coles and Woolies prices are on the way, refreshed every Wednesday when the specials change.</p></details>
@@ -112,7 +128,7 @@
   </section>
 
   <section class="join" id="join">
-    <div><h2>Get the weekly docket</h2><p>Five cheap dinners, this week's best specials and the shopping list, in your inbox every Wednesday.</p></div>
+    <div><h2>Dinner ideas, every Wednesday</h2><p>Five dinners built around this week's specials, with the shopping list ready to go. Straight to your inbox.</p></div>
     <form id="join-form" novalidate>
       <label for="join-email" class="skip">Email address</label>
       <input id="join-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
@@ -126,10 +142,10 @@
   <div class="foot-links"><a href="plan.html">Plan my week</a><a href="index.html#kit-tax">The Kit Tax</a><a href="index.html#faq">FAQ</a><a href="index.html#join">Get the weekly docket</a></div>
   <p class="fine">Prices are estimates while Docket is in beta. Meal-kit comparisons use each kit's published "from" price per serve plus delivery, checked October 2026. Docket isn't affiliated with HelloFresh, Marley Spoon, Dinnerly, Coles, Woolworths or Aldi. © 2026 Docket.</p>
 </div></footer>
-<script src="js/config.js?v=202610142229"></script>
-<script src="js/data.js?v=202610142229"></script>
-<script src="js/prices.js?v=202610142229"></script>
-<script src="js/images.js?v=202610142229"></script>
-<script src="js/home.js?v=202610142229"></script>
+<script src="js/config.js?v=202610142231"></script>
+<script src="js/data.js?v=202610142231"></script>
+<script src="js/prices.js?v=202610142231"></script>
+<script src="js/images.js?v=202610142231"></script>
+<script src="js/home.js?v=202610142231"></script>
 </body>
 </html>
