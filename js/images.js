@@ -5,7 +5,6 @@ window.DOCKET_IMG = {
     // e.g. poke: 'poke-bowl'
   },
   collections: {
-    lighter: 'poke-bowl',
-    premium: 'burger'
+    // e.g. lighter: 'poke-bowl'
   }
 };
