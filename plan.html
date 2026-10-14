@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plan your week · Docket</title>
+<meta name="description" content="Plan the week's dinners, get a priced shopping list for Coles, Woolies or Aldi, and see what you save against meal kits.">
+<meta property="og:title" content="Docket · Meal kit dinners at supermarket prices">
+<meta property="og:description" content="Pick your dinners, set your budget, and Docket builds the shopping list from your local Coles, Woolies or Aldi. Same food as the meal kits, bigger serves, no box.">
+<meta property="og:image" content="assets/img/og.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#CFEBD8">
+<link rel="icon" href="assets/img/favicon.ico" sizes="any">
+<link rel="icon" href="assets/img/docket-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/docket-icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,700..900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/docket.css">
+</head>
+<body class="planner">
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav" aria-label="Main"><div class="nav-in">
+  <a class="logo" href="index.html" aria-label="Docket home"><svg viewBox="0 0 911.01 216" role="img" aria-label="Docket"><path fill="currentColor" d="M84.88 204.83C145.52 204.83 184.49 166.26 184.49 106.55C184.49 46.71 144.86 8 84.09 8L8 8L8 204.83ZM62.95 159.39L62.95 53.44L80.66 53.44C113.81 53.44 129 70.48 129 106.55C129 142.35 114.34 159.39 82.24 159.39ZM266.53 208C311.97 208 342.62 179.73 342.62 135.08C342.62 90.56 311.97 62.16 266.53 62.16C221.22 62.16 190.44 90.56 190.44 135.08C190.44 179.86 221.22 208 266.53 208ZM266.53 166.78C253.98 166.78 243.8 156.08 243.8 135.08C243.8 114.08 253.98 103.38 266.53 103.38C279.08 103.38 289.25 114.08 289.25 135.08C289.25 156.08 279.08 166.78 266.53 166.78ZM423.86 208C465.87 208 495.2 182.64 495.2 146.44L444.73 146.44C443.81 159.12 436.15 167.05 424.92 167.05C411.05 167.05 402.73 155.03 402.73 135.08C402.73 115 410.92 103.11 424.92 103.11C436.15 103.11 443.81 110.77 444.73 123.19L495.2 123.19C493.88 87 464.81 62.16 423.86 62.16C379.21 62.16 349.36 91.49 349.36 135.08C349.36 178.81 379.08 208 423.86 208ZM506.96 204.83L559.8 204.83L559.8 166.12L567.46 156.61L597.05 204.83L657.03 204.83L606.3 126.63L655.44 65.33L595.73 65.33L560.33 110.77L559.8 110.77L559.8 8L506.96 8ZM723.08 208C759.8 208 789.39 187.79 794.55 159.25L747.78 159.25C744.88 166.78 736.42 171.28 725.19 171.28C709.87 171.28 700.62 162.56 700.23 147.76L795.08 147.76L795.08 133.63C795.08 91.75 764.82 62.16 722.02 62.16C679.22 62.16 648.97 92.41 648.97 135.08C648.97 177.75 679.62 208 723.08 208ZM700.62 118.17C702.47 106.68 710.66 99.94 723.48 99.94C736.29 99.94 744.48 106.68 746.33 118.17ZM903.01 65.33L874.21 65.33L874.21 27.29L821.37 27.29L821.37 65.33L797.85 65.33L797.85 105.49L821.37 105.49L821.37 163.09C821.37 192.15 837.35 204.83 873.94 204.83L903.01 204.83L903.01 164.67L886.36 164.67C876.72 164.67 874.21 162.16 874.21 153.84L874.21 105.49L903.01 105.49Z"/></svg></a>
+  <div class="nav-links">
+    <a href="index.html#how">How it works</a>
+    <a href="index.html#kit-tax">The Kit Tax</a>
+    <a href="index.html#story">Our story</a>
+    <a class="btn" href="plan.html">Plan my week</a>
+  </div>
+</div></nav>
+
+<div class="page-head"><h1>Plan your week</h1><p>Set your household, pick your dinners, and your list builds itself below.</p></div>
+
+
+<main class="wrap" id="main">
+  <section class="plan panel" aria-labelledby="plan-h">
+    <div class="sec-head"><h2 id="plan-h">Plan your week</h2><span class="eyebrow">Step 1</span></div>
+    <div class="ctrls">
+      <div class="ctrl"><span class="lbl" id="l-people">Who's eating</span>
+        <div class="stepper" role="group" aria-labelledby="l-people"><button id="people-dn" aria-label="Fewer people">−</button><output id="people-v" class="num">5</output><button id="people-up" aria-label="More people">+</button></div></div>
+      <div class="ctrl"><span class="lbl" id="l-gf">Gluten free eaters</span>
+        <div class="stepper" role="group" aria-labelledby="l-gf"><button id="gf-dn" aria-label="Fewer gluten free">−</button><output id="gf-v" class="num">2</output><button id="gf-up" aria-label="More gluten free">+</button></div></div>
+      <div class="ctrl"><span class="lbl" id="l-din">Dinners this week</span>
+        <div class="stepper" role="group" aria-labelledby="l-din"><button id="din-dn" aria-label="Fewer dinners">−</button><output id="din-v" class="num">5</output><button id="din-up" aria-label="More dinners">+</button></div></div>
+      <div class="ctrl"><label for="budget">Weekly budget</label>
+        <div class="money"><span>$</span><input id="budget" type="number" inputmode="numeric" min="0" step="10" value="400"></div></div>
+      <div class="ctrl"><span class="lbl">Lunches</span>
+        <label class="toggle"><input type="checkbox" id="lunch" checked> Cook double for next-day lunches</label></div>
+      <div class="ctrl"><label for="prot">Min protein per serve</label>
+        <div class="range-row"><input type="range" id="prot" min="0" max="60" step="5" value="40"><output id="prot-v" class="num">40g</output></div></div>
+      <div class="ctrl"><span class="lbl" id="l-store">Your supermarket</span>
+        <div class="seg" role="group" aria-labelledby="l-store" id="store">
+          <button data-s="coles" aria-pressed="true">Coles</button><button data-s="woolies" aria-pressed="false">Woolies</button><button data-s="aldi" aria-pressed="false">Aldi</button></div></div>
+      <div class="ctrl"><span class="lbl">Leave out</span>
+        <div class="chips" id="skips">
+          <button class="chip" data-k="pork" aria-pressed="false">Pork</button><button class="chip" data-k="seafood" aria-pressed="false">Seafood</button><button class="chip" data-k="red" aria-pressed="false">Red meat</button></div></div>
+    </div>
+  </section>
+
+  <section class="menu" aria-labelledby="menu-h">
+    <div class="sec-head">
+      <div><span class="eyebrow">Step 2</span><h2 id="menu-h">Pick your dinners</h2></div>
+      <div class="menu-tools">
+        <select id="sort" aria-label="Sort dinners"><option value="cost">Cheapest first</option><option value="prot">Most protein</option><option value="time">Quickest</option></select>
+        <button class="btn ghost" id="fill">Fill the rest for me</button>
+        <button class="btn ghost" id="clear">Clear</button>
+      </div>
+    </div>
+    <div class="cards" id="cards"></div>
+    <p class="hidden-note" id="hidden-note"></p>
+  </section>
+
+  <aside class="week" aria-labelledby="week-h">
+    <div class="docket">
+      <p class="dk-brand" aria-hidden="true"><svg viewBox="0 0 911.01 216" role="img" aria-label="Docket"><path fill="currentColor" d="M84.88 204.83C145.52 204.83 184.49 166.26 184.49 106.55C184.49 46.71 144.86 8 84.09 8L8 8L8 204.83ZM62.95 159.39L62.95 53.44L80.66 53.44C113.81 53.44 129 70.48 129 106.55C129 142.35 114.34 159.39 82.24 159.39ZM266.53 208C311.97 208 342.62 179.73 342.62 135.08C342.62 90.56 311.97 62.16 266.53 62.16C221.22 62.16 190.44 90.56 190.44 135.08C190.44 179.86 221.22 208 266.53 208ZM266.53 166.78C253.98 166.78 243.8 156.08 243.8 135.08C243.8 114.08 253.98 103.38 266.53 103.38C279.08 103.38 289.25 114.08 289.25 135.08C289.25 156.08 279.08 166.78 266.53 166.78ZM423.86 208C465.87 208 495.2 182.64 495.2 146.44L444.73 146.44C443.81 159.12 436.15 167.05 424.92 167.05C411.05 167.05 402.73 155.03 402.73 135.08C402.73 115 410.92 103.11 424.92 103.11C436.15 103.11 443.81 110.77 444.73 123.19L495.2 123.19C493.88 87 464.81 62.16 423.86 62.16C379.21 62.16 349.36 91.49 349.36 135.08C349.36 178.81 379.08 208 423.86 208ZM506.96 204.83L559.8 204.83L559.8 166.12L567.46 156.61L597.05 204.83L657.03 204.83L606.3 126.63L655.44 65.33L595.73 65.33L560.33 110.77L559.8 110.77L559.8 8L506.96 8ZM723.08 208C759.8 208 789.39 187.79 794.55 159.25L747.78 159.25C744.88 166.78 736.42 171.28 725.19 171.28C709.87 171.28 700.62 162.56 700.23 147.76L795.08 147.76L795.08 133.63C795.08 91.75 764.82 62.16 722.02 62.16C679.22 62.16 648.97 92.41 648.97 135.08C648.97 177.75 679.62 208 723.08 208ZM700.62 118.17C702.47 106.68 710.66 99.94 723.48 99.94C736.29 99.94 744.48 106.68 746.33 118.17ZM903.01 65.33L874.21 65.33L874.21 27.29L821.37 27.29L821.37 65.33L797.85 65.33L797.85 105.49L821.37 105.49L821.37 163.09C821.37 192.15 837.35 204.83 873.94 204.83L903.01 204.83L903.01 164.67L886.36 164.67C876.72 164.67 874.21 162.16 874.21 153.84L874.21 105.49L903.01 105.49Z"/></svg></p>
+      <p class="dk-meta" id="week-h">Your week · <span id="store-name">Coles</span> · <span id="serves-line"></span></p>
+      <hr class="rule">
+      <ul class="picked" id="picked"></ul>
+      <hr class="rule">
+      <div class="total-row"><div><span class="eyebrow">Your big shop</span><div class="big num" id="total">$0</div></div></div>
+      <div class="meter" id="meter"><i style="width:0"></i></div>
+      <div class="budget-line num" id="budget-line"></div>
+      <div class="stats">
+        <div class="stat"><b class="num" id="st-serve">$0</b><span>per serve</span></div>
+        <div class="stat"><b class="num" id="st-prot">0g</b><span>protein/serve</span></div>
+        <div class="stat"><b class="num" id="st-picked">0/5</b><span>dinners</span></div>
+      </div>
+      <hr class="rule">
+      <p class="kt-head">THE KIT TAX · SAME SERVES</p>
+      <div class="lines" id="bars"></div>
+      <div id="dodged"></div>
+      <p class="kt-save num" id="kt-save"></p>
+      <p class="kt-note">Each kit's published "from" price per serve plus delivery. Kit boxes top out at 4 people, so bigger households need more than one box.</p>
+      <details class="kitcfg"><summary>Kit prices used (edit if they change)</summary>
+        <div class="kitgrid" id="kitgrid"></div>
+        <p class="hint" style="margin-top:8px">HelloFresh $9.50 + $11.99 and Marley Spoon $9.99 + $10.99 per published AU pricing, Oct 2026. Dinnerly $5.99 is its published "from" price; its delivery fee is an estimate.</p>
+      </details>
+    </div>
+  </aside>
+
+  <section class="list panel" aria-labelledby="list-h">
+    <div class="sec-head"><div><span class="eyebrow">Step 3</span><h2 id="list-h">Your shopping list</h2></div><span class="meta" id="list-meta"></span></div>
+    <div class="aisles" id="aisles"></div>
+    <div class="list-foot">
+      <div>
+        <div class="emailbox"><label for="email" class="eyebrow">Send to</label><input id="email" type="email" placeholder="you@example.com" autocomplete="email"><button class="btn" id="send">Email my plan</button></div>
+        <div class="foot-actions" style="margin-top:10px"><button class="btn ghost" id="copy">Copy plan</button><button class="btn ghost" id="share" hidden>Share</button><button class="btn ghost" id="print">Print list + recipes</button></div>
+        <p class="msg" id="msg" role="status"></p>
+      </div>
+    </div>
+    <div class="print-recipes" id="print-recipes"></div>
+  </section>
+</main>
+
+
+<dialog id="dlg"><div class="dlg-in" id="dlg-in"></div></dialog>
+<footer class="site-foot"><div class="foot-in">
+  <div><a class="logo" href="index.html" aria-label="Docket home"><svg viewBox="0 0 911.01 216" role="img" aria-label="Docket"><path fill="currentColor" d="M84.88 204.83C145.52 204.83 184.49 166.26 184.49 106.55C184.49 46.71 144.86 8 84.09 8L8 8L8 204.83ZM62.95 159.39L62.95 53.44L80.66 53.44C113.81 53.44 129 70.48 129 106.55C129 142.35 114.34 159.39 82.24 159.39ZM266.53 208C311.97 208 342.62 179.73 342.62 135.08C342.62 90.56 311.97 62.16 266.53 62.16C221.22 62.16 190.44 90.56 190.44 135.08C190.44 179.86 221.22 208 266.53 208ZM266.53 166.78C253.98 166.78 243.8 156.08 243.8 135.08C243.8 114.08 253.98 103.38 266.53 103.38C279.08 103.38 289.25 114.08 289.25 135.08C289.25 156.08 279.08 166.78 266.53 166.78ZM423.86 208C465.87 208 495.2 182.64 495.2 146.44L444.73 146.44C443.81 159.12 436.15 167.05 424.92 167.05C411.05 167.05 402.73 155.03 402.73 135.08C402.73 115 410.92 103.11 424.92 103.11C436.15 103.11 443.81 110.77 444.73 123.19L495.2 123.19C493.88 87 464.81 62.16 423.86 62.16C379.21 62.16 349.36 91.49 349.36 135.08C349.36 178.81 379.08 208 423.86 208ZM506.96 204.83L559.8 204.83L559.8 166.12L567.46 156.61L597.05 204.83L657.03 204.83L606.3 126.63L655.44 65.33L595.73 65.33L560.33 110.77L559.8 110.77L559.8 8L506.96 8ZM723.08 208C759.8 208 789.39 187.79 794.55 159.25L747.78 159.25C744.88 166.78 736.42 171.28 725.19 171.28C709.87 171.28 700.62 162.56 700.23 147.76L795.08 147.76L795.08 133.63C795.08 91.75 764.82 62.16 722.02 62.16C679.22 62.16 648.97 92.41 648.97 135.08C648.97 177.75 679.62 208 723.08 208ZM700.62 118.17C702.47 106.68 710.66 99.94 723.48 99.94C736.29 99.94 744.48 106.68 746.33 118.17ZM903.01 65.33L874.21 65.33L874.21 27.29L821.37 27.29L821.37 65.33L797.85 65.33L797.85 105.49L821.37 105.49L821.37 163.09C821.37 192.15 837.35 204.83 873.94 204.83L903.01 204.83L903.01 164.67L886.36 164.67C876.72 164.67 874.21 162.16 874.21 153.84L874.21 105.49L903.01 105.49Z"/></svg></a><p style="margin:8px 0 0">Meal kit dinners. Supermarket prices.</p></div>
+  <div class="foot-links"><a href="plan.html">Plan my week</a><a href="index.html#kit-tax">The Kit Tax</a><a href="index.html#faq">FAQ</a><a href="index.html#join">Get the weekly docket</a></div>
+  <p class="fine">Prices are estimates while Docket is in beta. Meal-kit comparisons use each kit's published "from" price per serve plus delivery, checked October 2026. Docket isn't affiliated with HelloFresh, Marley Spoon, Dinnerly, Coles, Woolworths or Aldi. © 2026 Docket.</p>
+</div></footer>
+<script src="js/config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/planner.js"></script>
+</body>
+</html>
