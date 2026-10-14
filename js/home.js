@@ -14,12 +14,13 @@
   const serveCost = r => r.i.reduce((s, [id, q]) => { const c = cp(id); return s + q / c.pk * c.p; }, 0);
   const serveProt = r => r.i.reduce((s, [id, q]) => { const it = ING[id]; return s + (it.u === 'ea' ? q * it.pr : q * it.pr / 100); }, 0);
   const AVG = R.reduce((s, r) => s + serveCost(r), 0) / R.length;
+  const AVGP = Math.round(R.reduce((s, r) => s + serveProt(r), 0) / R.length);
 
   function week(people, dinners, lunch) {
     const perMeal = people * (lunch ? 2 : 1);
     const serves = perMeal * dinners;
     const docket = serves * AVG + STAPLES;
-    const kits = KITS_DEFAULT.map(k => ({ n: k.n, v: (() => { const m = Math.max(2, 2 * Math.ceil(perMeal / 2)); return dinners * m * k.ps + k.del * Math.ceil(m / k.max); })() }));
+    const kits = KITS.filter(k => !k.ready).map(k => ({ n: k.n, v: kitCost(k, perMeal, dinners) }));
     return { serves, docket, kits, perMeal };
   }
 
@@ -37,16 +38,15 @@
       </div>
       ${saved > 0 ? `<div class="dodged"><span>KIT TAX DODGED</span><b class="num">${money(saved)}</b></div>
       <p class="kt-save num">vs ${esc(hf.n)}. That's ${money(saved * 52, 0)} a year.</p>` : ''}
-      ${cheaper.length ? `<p class="kt-note">${cheaper.join(', ')} is cheaper on price alone, with smaller serves and less protein.</p>` : ''}`;
+      ${cheaper.length ? `<p class="kt-note">${cheaper.join(' and ')} ${cheaper.length > 1 ? 'are' : 'is'} cheaper on price alone. Docket dinners average ${AVGP}g protein a serve.</p>` : ''}`;
   }
 
   // Hero: an example week, set like a menu
   const tierOf = r => r.tier || 'everyday';
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'];
   const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const hf = KITS_DEFAULT[0];
+  const hf = KITS[0];
   // Meal kits sell 2- or 4-person boxes, so small households still pay for at least 2 serves a meal
-  const kitCost = (k, perMeal, dinners) => { const m = Math.max(2, 2 * Math.ceil(perMeal / 2)); return dinners * m * k.ps + k.del * Math.ceil(m / k.max); };
   let HH = 4;
   function weekOf(pick, people = HH) {
     const perMeal = people * 2, serves = perMeal * pick.length;

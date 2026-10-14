@@ -1,8 +1,8 @@
 // ---------- State ----------
-const S={people:2,gf:0,dinners:4,lunch:true,budget:120,budgetAuto:true,minProt:40,store:'coles',skip:{pork:false,seafood:false,red:false},sel:['butter','tuscan','carnitas','friedrice'],sort:'cost',col:'all',kits:KITS_DEFAULT.map(k=>({...k})),done:{}};
+const S={people:2,gf:0,dinners:4,lunch:true,budget:120,budgetAuto:true,minProt:40,store:'coles',skip:{pork:false,seafood:false,red:false},sel:['butter','tuscan','carnitas','friedrice'],sort:'cost',col:'all',done:{}};
 const STAPLES=(window.DOCKET_CONFIG||{}).staplesPerWeek??15;
 let fresh=true;try{const s=JSON.parse(localStorage.getItem('docket-state')||'null');if(s)fresh=false;if(s&&typeof s==='object'){Object.assign(S,s,{skip:{...S.skip,...(s.skip||{})}});if(s.budgetAuto===undefined)S.budgetAuto=false}}catch(e){}
-S.sel=S.sel.filter(id=>R.some(r=>r.id===id));
+delete S.kits;S.sel=S.sel.filter(id=>R.some(r=>r.id===id));
 S.people=Math.min(8,Math.max(1,S.people));S.gf=Math.min(S.gf,S.people);
 if(['picks','quick','everyday','premium','lighter'].includes(location.hash.slice(1)))S.col=location.hash.slice(1);
 function save(){try{localStorage.setItem('docket-state',JSON.stringify(S))}catch(e){}}
@@ -22,7 +22,6 @@ function price(id,store=S.store){
   return{p:+(base.p*(0.79+hash(id+'a')*0.09)).toFixed(2),pk:base.pk,fb:false};
 }
 // Meal kits sell boxes for 2 or 4 people, so small households still pay for at least 2 serves a meal
-function kitCost(k,perMeal,dinners){if(!dinners)return 0;const kitPerMeal=Math.max(2,2*Math.ceil(perMeal/2));return dinners*kitPerMeal*k.ps+k.del*Math.ceil(kitPerMeal/k.max)}
 // A realistic starting budget: small households carry some fixed costs (whole packs, jars) that larger ones spread out
 // Tested against 4,000 random weeks: covers about 4 in 5 weeks at every household size
 // When live prices land, scale by how this week's shelf prices compare with the estimates the formula was tuned on
@@ -164,8 +163,8 @@ function renderWeek(w){
   $('#st-picked').textContent=`${S.sel.length}/${S.dinners}`;
   $('#picked').innerHTML=S.sel.map(id=>{const r=R.find(x=>x.id===id);return`<li class="pk-${tierOf(r)}"><span>${esc(r.n)}</span><span class="num">${money(serveCost(r))}</span></li>`}).join('');
   // Kit tax
-  const n=spm();const rows=S.kits.map(k=>({n:k.n,v:kitCost(k,n,S.sel.length)}));
-  $('#bars').innerHTML=[`<div class="ln us"><span>Docket (food eaten)</span><span>${money(w.eaten)}</span></div>`,...rows.map(x=>`<div class="ln kit"><span>${esc(x.n)}</span><span>${money(x.v)}</span></div>`)].join('');
+  const n=spm();const rows=KITS.map(k=>({n:kitLabel(k),v:kitCost(k,n,S.sel.length),ready:!!k.ready}));
+  $('#bars').innerHTML=[`<div class="ln us"><span>Docket (food eaten)</span><span>${money(w.eaten)}</span></div>`,...rows.map(x=>`<div class="ln kit${x.ready?' ready':''}"><span>${esc(x.n)}</span><span>${money(x.v)}</span></div>`)].join('');
   const hf=rows[0];
   if(!S.sel.length){$('#dodged').innerHTML='';$('#kt-save').textContent='Pick some dinners to see what the kits would charge.';}
   else{
@@ -173,12 +172,14 @@ function renderWeek(w){
     const cheaper=rows.filter(r=>r.v<w.eaten);
     $('#dodged').innerHTML=s>0?`<div class="dodged"><span>KIT TAX DODGED</span><b class="num">${money(s)}</b></div>`:`<div class="dodged"><span>${esc(hf.n)} is cheaper</span><b class="num">${money(-s)}</b></div>`;
     let txt=s>0?`vs ${esc(hf.n)}. That's ${money(s*52,0)} a year.`:'';
-    if(cheaper.length)txt+=` ${cheaper.map(c=>esc(c.n)).join(', ')} is cheaper on price alone this week, with smaller serves and less protein.`;
+    if(cheaper.length)txt+=` ${cheaper.map(c=>esc(c.n)).join(' and ')} ${cheaper.length>1?'are':'is'} cheaper on price alone this week. Docket dinners average ${Math.round(w.prot)}g protein a serve.`;
+    else{const lo=rows.reduce((a,b)=>b.v<a.v?b:a);if(lo!==hf&&lo.v>w.eaten)txt+=` Even the cheapest, ${esc(lo.n)}, costs ${money(lo.v-w.eaten,0)} more.`}
     $('#kt-save').innerHTML=txt.trim();
   }
 }
 function renderKitCfg(){
-  $('#kitgrid').innerHTML=`<span class="h">Kit</span><span class="h">$/serve</span><span class="h">Delivery</span>`+S.kits.map((k,i)=>`<span>${esc(k.n)}</span><input type="number" step="0.01" min="0" id="kps-${i}" data-i="${i}" data-f="ps" value="${k.ps}" aria-label="${esc(k.n)} price per serve"><input type="number" step="0.01" min="0" id="kdel-${i}" data-i="${i}" data-f="del" value="${k.del}" aria-label="${esc(k.n)} delivery fee">`).join('');
+  const n=spm();const box=k=>{if(k.ready)return'single serves';const sz=Object.keys(k.t).map(Number);return sz.join(', ')+'-person boxes'};
+  $('#kitgrid').innerHTML=KITS.map(k=>`<div class="kitsrc"><b>${esc(kitLabel(k))}</b> <span>${k.ready?money(k.ps)+' a meal':box(k)+', '+money(k.del)+' delivery'}</span><small>${esc(k.src)}</small></div>`).join('');
 }
 function renderList(w){
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
@@ -265,7 +266,6 @@ $('#fill').onclick=()=>{
   render();
 };
 $('#clear').onclick=()=>{S.sel=[];render()};
-$('#kitgrid').addEventListener('input',e=>{const i=e.target.dataset.i;if(i==null)return;S.kits[i][e.target.dataset.f]=Math.max(0,+e.target.value||0);renderWeek(week());save()});
 $('#aisles').addEventListener('change',e=>{const id=e.target.dataset.id;if(!id)return;S.done[id]=e.target.checked;e.target.closest('.item').classList.toggle('done',e.target.checked);save()});
 function copyText(t,okMsg){
   const done=()=>{$('#msg').textContent=okMsg};

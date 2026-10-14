@@ -148,7 +148,7 @@ const DocketPDF = (function () {
   async function build(state) {
     await loadLogo();
     const w = week(); const n = spm();
-    const kit = state.kits[0]; const kitTotal = kitCost(kit, n, state.sel.length);
+    const kit = KITS[0]; const kitTotal = kitCost(kit, n, state.sel.length);
     const meta = { store: STORE_NAME[state.store], people: state.people, lunch: state.lunch, dinners: state.sel.map(id => R.find(r => r.id === id).n), saved: kitTotal - w.eaten, kit: kit.n };
     const files = [{ filename: '01-docket-shopping-list.pdf', doc: shoppingList(w, meta) }];
     state.sel.forEach((id, k) => { const r = R.find(x => x.id === id); files.push({ filename: `${String(k + 2).padStart(2, '0')}-${slug(r.n)}.pdf`, doc: recipe(r, n, Math.min(state.gf, state.people)) }); });

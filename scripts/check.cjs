@@ -46,7 +46,7 @@ eval(rd('js/data.js') + rd('js/prices.js') + rd('js/season.js') + rd('js/planner
     Object.assign(S, { people: 1 + (t % 8), lunch: t % 3 !== 0, gf: t % 4 === 0 ? 2 : 0, dinners: 3 + (t % 5), store: ['coles', 'woolies', 'aldi'][t % 3] });
     S.gf = Math.min(S.gf, S.people);
     S.sel = R.slice().sort(() => Math.random() - .5).slice(0, S.dinners).map(r => r.id);
-    const w = week(); if (w.total > autoBudget()) over++; if (kitCost(S.kits[0], spm(), S.sel.length) > w.eaten) beats++;
+    const w = week(); if (w.total > autoBudget()) over++; if (kitCost(KITS[0], spm(), S.sel.length) > w.eaten) beats++;
   }
   if (over / N > .3) fail('suggested budget too low: ' + Math.round(over / N * 100) + '% of random weeks go over');
   if (beats / N < .95) fail('Docket only beats HelloFresh in ' + Math.round(beats / N * 100) + '% of weeks');

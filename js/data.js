@@ -593,5 +593,31 @@ const R=[
   g:'GF bread for the croutons, baked on a separate tray. Check the Worcestershire, as some contain malt vinegar.'}
 ];
 
-// ---------- Meal-kit prices for the Kit Tax ----------
-const KITS_DEFAULT=[{n:'HelloFresh',ps:9.50,del:11.99,max:4},{n:'Marley Spoon',ps:9.99,del:10.99,max:4},{n:'Dinnerly',ps:5.99,del:10.99,max:4}];
+// ---------- Meal kit and ready meal prices for the Kit Tax ----------
+// t = price per serve by box size (people) then meals per week, ongoing prices (not first-box offers).
+// del = delivery per box. Where sources differ we use the lower fee, so we never overstate what a kit costs.
+const KITS=[
+ {n:'HelloFresh',del:9.99,t:{2:{2:14.99,3:12.99,4:12.29,5:11.69,6:11.29},3:{2:14.19,3:11.99,4:11.49,5:10.59,6:9.99},4:{2:13.59,3:11.29,4:10.39,5:9.59,6:8.99},5:{2:12.99,3:10.99,4:10.29,5:9.49,6:8.89},6:{2:12.49,3:10.49,4:9.69,5:8.89,6:8.59}},
+  src:'hellofresh.com.au/meal-kits/meal-plans (checked 14 Oct 2026); delivery $9.99 per deliveryrank.com Apr 2026 (Tom\'s Guide reports $11.99)'},
+ {n:'Marley Spoon',del:11.99,t:{2:{2:13.99,3:12.99,4:11.99,5:11.49,6:10.99},4:{2:11.99,3:10.99,4:9.99,5:8.99,6:7.99}},
+  src:'deliveryrank.com Marley Spoon AU review (Dec 2025); delivery $11.99 per Marley Spoon help centre'},
+ {n:'Dinnerly',del:11.99,t:{2:{2:9.85,3:8.49,4:7.99,5:7.49,6:7.28},4:{2:7.79,3:6.99,4:6.69,5:6.49,6:5.49}},
+  src:'deliveryrank.com Dinnerly AU review (Nov 2025); delivery $11.99 per Dinnerly help centre'},
+ {n:'EveryPlate',del:9.99,t:{2:{3:10.33,4:9.37,5:8.50,6:7.92},4:{3:7.50,4:6.87,5:6.50,6:6.04},6:{3:6.67,4:6.04,5:5.67,6:5.00}},
+  src:'deliveryrank.com EveryPlate AU review (Apr 2026), metro delivery'},
+ {n:'My Muscle Chef',ready:1,ps:10.95,del:0,src:'standard main meal price, weightloss.com.au (checked Aug 2026); delivery not counted'},
+ {n:'Youfoodz',ready:1,ps:10.99,del:0,src:'standard meal price, foodboxmate.com (Jan 2026); delivery not counted'}
+];
+const KITS_DEFAULT=KITS;
+// What a kit charges for this many serves a meal (people, plus lunches) and dinners a week.
+// Kits only sell set box sizes, so you buy the smallest box (or boxes) that covers everyone, each with its own delivery.
+// Fewer dinners than a plan's minimum are priced pro rata at the minimum plan's rate; more than 6 at the 6-meal rate.
+function kitCost(k,perMeal,dinners){
+  if(!dinners||!perMeal)return 0;
+  if(k.ready)return dinners*perMeal*k.ps+k.del;
+  const rate=(b,d)=>{const row=k.t[b];const ms=Object.keys(row).map(Number).sort((a,c)=>a-c);return row[ms.find(m=>m>=d)??ms[ms.length-1]]};
+  const sizes=Object.keys(k.t).map(Number);let best=Infinity;
+  const go=(boxes,serves,cost)=>{if(serves>=perMeal){best=Math.min(best,cost);return}if(boxes>=4)return;for(const b of sizes)go(boxes+1,serves+b,cost+dinners*b*rate(b,dinners)+k.del)};
+  go(0,0,0);return best;
+}
+const kitLabel=k=>k.ready?k.n+' (ready meals)':k.n;
