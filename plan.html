@@ -105,8 +105,8 @@
     <div class="aisles" id="aisles"></div>
     <div class="list-foot">
       <div>
-        <div class="emailbox"><label for="email" class="eyebrow">Send to</label><input id="email" type="email" placeholder="you@example.com" autocomplete="email"><button class="btn" id="send">Email my plan</button></div>
-        <div class="foot-actions" style="margin-top:10px"><button class="btn ghost" id="copy">Copy plan</button><button class="btn ghost" id="share" hidden>Share</button><button class="btn ghost" id="print">Print list + recipes</button></div>
+        <div class="emailbox"><label for="email" class="eyebrow">Send to</label><input id="email" type="email" placeholder="you@example.com" autocomplete="email"><button class="btn" id="send">Send my plan</button></div>
+        <div class="foot-actions" style="margin-top:10px"><button class="btn ghost" id="copy">Copy plan</button><button class="btn ghost" id="share" hidden>Share</button><button class="btn ghost" id="pdfs">Download PDFs</button><button class="btn ghost" id="print">Print</button></div>
         <p class="msg" id="msg" role="status"></p>
       </div>
     </div>
@@ -124,5 +124,7 @@
 <script src="js/config.js"></script>
 <script src="js/data.js"></script>
 <script src="js/planner.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="js/pdf.js"></script>
 </body>
 </html>

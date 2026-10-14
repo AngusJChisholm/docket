@@ -66,6 +66,7 @@
   $('#dinner-cards').innerHTML = wins.map(r => `<article class="card">
       <div class="card-top"><div><h3>${esc(r.n)}</h3><div class="meta">${esc(r.c)} · ${time(r)}</div></div>
       <div class="ticket num"><b>${money(serveCost(r))}</b><small>per serve</small></div></div>
+      ${r.d ? `<p class="blurb">${esc(r.d)}</p>` : ''}
       <div class="badges"><span class="badge p num">${Math.round(serveProt(r))}g protein</span><span class="badge">${r.i.some(([id]) => GFSWAP[id]) ? 'GF swap' : 'Gluten free'}</span></div>
     </article>`).join('');
 

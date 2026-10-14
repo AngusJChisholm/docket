@@ -1,7 +1,8 @@
 // ---------- State ----------
-const S={people:5,gf:2,dinners:5,lunch:true,budget:400,minProt:40,store:'coles',skip:{pork:false,seafood:false,red:false},sel:['butter','bol','shawarma','korean','chook'],sort:'cost',kits:KITS_DEFAULT.map(k=>({...k})),done:{}};
+const S={people:5,gf:2,dinners:5,lunch:true,budget:400,minProt:40,store:'coles',skip:{pork:false,seafood:false,red:false},sel:['chook','butter','carnitas','chorizo','friedrice'],sort:'cost',kits:KITS_DEFAULT.map(k=>({...k})),done:{}};
 const STAPLES=(window.DOCKET_CONFIG||{}).staplesPerWeek??15;
 try{const s=JSON.parse(localStorage.getItem('docket-state')||'null');if(s&&typeof s==='object')Object.assign(S,s,{skip:{...S.skip,...(s.skip||{})}});}catch(e){}
+S.sel=S.sel.filter(id=>R.some(r=>r.id===id));
 function save(){try{localStorage.setItem('docket-state',JSON.stringify(S))}catch(e){}}
 
 // ---------- Pricing ----------
@@ -35,7 +36,7 @@ function allowed(r){const t=tags(r);return!Object.keys(S.skip).some(k=>S.skip[k]
 function week(){
   const agg={};const n=spm();
   S.sel.forEach(sid=>{const r=R.find(x=>x.id===sid);if(!r)return;splitLines(r,n).forEach(([id,a])=>{agg[id]=(agg[id]||0)+a})});
-  const items=Object.entries(agg).map(([id,amt])=>{const it=ING[id];const packs=Math.max(1,Math.ceil(amt/it.pk-1e-6));const pr=price(id);return{id,amt,packs,cost:packs*pr.p,fb:pr.fb}});
+  const items=Object.entries(agg).map(([id,amt])=>{const it=ING[id];const packs=Math.max(1,Math.ceil(amt/it.pk-1e-6));const pr=price(id);return{id,amt,packs,pan:!!it.pan,pack:pr.p,cost:it.pan?amt/it.pk*pr.p:packs*pr.p,fb:pr.fb}});
   const shop=items.reduce((s,x)=>s+x.cost,0);
   const serves=S.sel.length*n;
   const prot=S.sel.length?S.sel.reduce((s,id)=>s+serveProt(R.find(r=>r.id===id)),0)/S.sel.length:0;
@@ -49,6 +50,21 @@ function fmtAmt(id,a){const u=ING[id].u;
   if(u==='g')return a>=1000?(+(a/1000).toFixed(2))+'kg':Math.ceil(a/10)*10+'g';
   if(u==='ml')return a>=1000?(+(a/1000).toFixed(2))+'L':Math.ceil(a/10)*10+'ml';
   const v=Math.ceil(a*2)/2;return(ING[id].pl==='bunch'?v+(v===1?' bunch':' bunches'):v+'');}
+const FR={0:'',0.25:'¼',0.5:'½',0.75:'¾'};
+function frac(v){const q=Math.round(v*4)/4||0.25;const w=Math.floor(q),f=+(q-w).toFixed(2);return (w?w:'')+(FR[f]??'')||'¼'}
+function half(v){const q=Math.max(.5,Math.ceil(v*2)/2);const w=Math.floor(q);return (w?w:'')+(q-w?'½':'')}
+function spoons(ml){if(ml>=60)return`${frac(ml/250)} cup${ml>=375?'s':''}`;if(ml>=12)return`${half(ml/15)} tbsp`;return`${half(ml/5)} tsp`}
+function kAmt(id,a){const it=ING[id];
+  if(it.cl)return`${Math.max(1,Math.round(a*it.cl))} cloves`;
+  if(it.ea&&it.u==='g'){const n=a/it.ea[0];return`${half(n)} ${it.ea[1]}${n>1?'s':''} (${fmtAmt(id,a)})`}
+  if(it.pl==='tin'||it.pl==='can')return`${half(a/it.pk)} tin${a/it.pk>1?'s':''}`;
+  if(it.ea&&it.u==='ea'){const v=a<1?Math.max(.25,Math.round(a*4)/4):Math.ceil(a*2)/2;const w=it.ea[1];return /bunch$/.test(w)?`${frac(v)} bunch${v>1?'es':''}`:frac(v)}
+  if(it.u==='ml')return spoons(a);
+  if(it.tsp){const t=a/it.tsp;return t>=3?`${half(t/3)} tbsp`:`${half(t)} tsp`}
+  if(it.tbsp){const t=a/it.tbsp;return t>6?fmtAmt(id,a):`${half(t)} tbsp`}
+  if(it.cup&&a/it.cup>=.25){const c=a/it.cup;return`${frac(c)} cup${c>1.1?'s':''} (${fmtAmt(id,a)})`}
+  return fmtAmt(id,a)}
+const iname=id=>ING[id].n.replace(/\s*\([^)]*\)$/,'');
 function packLabel(id){const it=ING[id];if(it.pl)return it.pl;if(it.u==='g')return it.pk>=1000?(it.pk/1000)+'kg':it.pk+'g';if(it.u==='ml')return it.pk>=1000?(it.pk/1000)+'L':it.pk+'ml';return'each'}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const timeLabel=r=>r.t>=120?`${+(r.t/60).toFixed(1)} hr · ${r.h} min hands-on`:`${r.t} min`;
@@ -76,6 +92,7 @@ function renderCards(){
     return`<article class="card${sel?' sel':''}${!sel&&full?' off':''}">
       <div class="card-top"><div><h3>${esc(r.n)}</h3><div class="meta">${esc(r.c)} · ${timeLabel(r)}</div></div>
       <div class="ticket num"><b>${money(serveCost(r))}</b><small>per serve</small></div></div>
+      ${r.d?`<p class="blurb">${esc(r.d)}</p>`:''}
       <div class="badges"><span class="badge p num">${Math.round(p)}g protein</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span></div>
       <div class="card-actions"><button class="btn ghost view" data-id="${r.id}">Recipe</button>
       <button class="btn ghost pick" data-id="${r.id}" ${!sel&&full?'disabled':''} aria-pressed="${sel}">${sel?'✓ Picked':'Add'}</button></div></article>`}).join('');
@@ -117,11 +134,12 @@ function renderKitCfg(){
 }
 function renderList(w){
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
-  const order=['M','F','D','Z','P','B','G'];
+  const order=['M','F','D','Z','P','B','G','K'];
   if(!w.items.length){$('#aisles').innerHTML='<p class="hint">Pick a dinner and your list builds itself here, merged and sorted by aisle.</p>';$('#list-meta').textContent='';return}
   $('#aisles').innerHTML=order.filter(a=>by[a]).map(a=>`<div class="aisle"><h3>${AISLE[a]}</h3>${by[a].sort((x,y)=>ING[x.id].n.localeCompare(ING[y.id].n)).map(x=>{
     const it=ING[x.id];const k='i-'+x.id;const done=!!S.done[x.id];
-    return`<label class="item${done?' done':''}" for="${k}"><input type="checkbox" id="${k}" data-id="${x.id}" ${done?'checked':''}><span class="what">${esc(it.n)}<small>${fmtAmt(x.id,x.amt)} needed · ${x.packs} × ${packLabel(x.id)}${x.fb?' · <span class="flag">Not at Aldi, priced at Coles</span>':''}${it.ck?' · check label for GF':''}</small></span><span class="c num">${money(x.cost)}</span></label>`}).join('')}</div>`).join('');
+    const detail=x.pan?`you'll use ${kAmt(x.id,x.amt)} · if you're out: ${packLabel(x.id)} ${money(x.pack)}`:`${fmtAmt(x.id,x.amt)} needed · ${x.packs} × ${packLabel(x.id)}`;
+    return`<label class="item${done?' done':''}" for="${k}"><input type="checkbox" id="${k}" data-id="${x.id}" ${done?'checked':''}><span class="what">${esc(it.n)}<small>${detail}${x.fb?' · <span class="flag">Not at Aldi, priced at Coles</span>':''}${it.ck?' · check label for GF':''}</small></span><span class="c num">${x.pan?'≈':''}${money(x.cost)}</span></label>`}).join('')}</div>`).join('');
   $('#list-meta').textContent=`${w.items.length} items · ${money(w.shop)} + ${money(STAPLES,0)} staples`;
 }
 function render(){renderControls();renderCards();const w=week();renderWeek(w);renderList(w);save()}
@@ -129,14 +147,15 @@ function render(){renderControls();renderCards();const w=week();renderWeek(w);re
 // ---------- Recipe dialog ----------
 function openRecipe(id){
   const r=R.find(x=>x.id===id);const n=spm();const lines=splitLines(r,n);const g=gfType(r);
-  const swaps=r.i.filter(([i])=>GFSWAP[i]).map(([i])=>ING[GFSWAP[i]].n);
-  const checks=r.i.filter(([i])=>ING[i].ck).map(([i])=>ING[i].n);
+  const checks=[...new Set(r.i.filter(([i])=>ING[i].ck).map(([i])=>ING[i].n))];
   $('#dlg-in').innerHTML=`<div class="dlg-head"><div><span class="eyebrow">${esc(r.c)} · ${timeLabel(r)}</span><h2>${esc(r.n)}</h2></div><button class="x" id="dlg-x" aria-label="Close">×</button></div>
+   ${r.d?`<p class="lead-sm">${esc(r.d)}</p>`:''}
    <div class="badges" style="margin-top:10px"><span class="badge p num">${Math.round(serveProt(r))}g protein/serve</span><span class="badge num">${money(serveCost(r))}/serve at ${STORE_NAME[S.store]}</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span></div>
-   <div class="dlg-cols"><div><h3>For ${n} serves</h3><ul class="ing">${lines.map(([i,a])=>`<li><span>${esc(ING[i].n)}</span><b class="num">${fmtAmt(i,a)}</b></li>`).join('')}</ul><p class="hint" style="margin-top:8px">Plus oil, salt and pepper.</p></div>
+   <div class="dlg-cols"><div><h3>For ${n} serves</h3><ul class="ing">${lines.map(([i,a])=>`<li><span>${esc(iname(i))}</span><b class="num">${kAmt(i,a)}</b></li>`).join('')}</ul><p class="hint" style="margin-top:8px">Plus oil, salt and pepper.</p></div>
    <div><h3>Method</h3><ol class="steps">${r.m.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div></div>
-   ${g==='swap'&&S.gf>0?`<div class="gfnote"><b>Gluten free:</b> ${esc(swaps.join(', '))} for the ${Math.min(S.gf,S.people)} GF serve${S.gf>1?'s':''}${S.lunch?' (doubled for lunches)':''}. Cook their portion first or in a separate pan.${r.tip?' '+esc(r.tip):''}</div>`:''}
-   ${checks.length?`<div class="gfnote" style="background:var(--warn-soft)">Check the label on: ${esc(checks.join(', '))}.</div>`:''}`;
+   ${r.l?`<div class="gfnote"><b>Lunch:</b> ${esc(r.l)}</div>`:''}
+   ${r.g&&S.gf>0?`<div class="gfnote"><b>Gluten free (${Math.min(S.gf,S.people)}):</b> ${esc(r.g)}</div>`:''}
+   ${checks.length?`<div class="gfnote" style="background:var(--peach)">Check the label on: ${esc(checks.join(', '))}.</div>`:''}`;
   const d=$('#dlg');d.showModal();$('#dlg-x').onclick=()=>d.close();
 }
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')e.target.close()});
@@ -146,9 +165,9 @@ function planText(){
   const w=week();const n=spm();
   let t=`DOCKET · Your week at ${STORE_NAME[S.store]}\n${S.people} people${S.lunch?' + lunches':''} · ${S.sel.length} dinners · ${w.serves} serves\nEstimated shop: ${money(w.total)} (${money(w.total/Math.max(1,w.serves))} per serve)\n\nSHOPPING LIST\n`;
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
-  ['M','F','D','Z','P','B','G'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=`[ ] ${ING[x.id].n}: ${x.packs} x ${packLabel(x.id)} (${money(x.cost)})\n`})});
+  ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=x.pan?`[ ] ${ING[x.id].n} (check pantry, using ${kAmt(x.id,x.amt)})\n`:`[ ] ${ING[x.id].n}: ${x.packs} x ${packLabel(x.id)} (${money(x.cost)})\n`})});
   t+=`\nRECIPES\n`;
-  S.sel.forEach(id=>{const r=R.find(x=>x.id===id);t+=`\n${r.n.toUpperCase()} (${timeLabel(r)})\n`;splitLines(r,n).forEach(([i,a])=>{t+=`- ${fmtAmt(i,a)} ${ING[i].n}\n`});r.m.forEach((s,k)=>{t+=`${k+1}. ${s}\n`})});
+  S.sel.forEach(id=>{const r=R.find(x=>x.id===id);t+=`\n${r.n.toUpperCase()} (${timeLabel(r)})\n`;splitLines(r,n).forEach(([i,a])=>{t+=`- ${kAmt(i,a)} ${iname(i)}\n`});r.m.forEach((s,k)=>{t+=`${k+1}. ${s}\n`});if(r.l)t+=`Lunch: ${r.l}\n`;if(r.g&&S.gf>0)t+=`Gluten free: ${r.g}\n`});
   return t;
 }
 
@@ -184,28 +203,45 @@ function copyText(t,okMsg){
   function fallback(t){const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();$('#msg').textContent=ok?okMsg:'Copy was blocked here. Select the list above and copy it manually.'}
 }
 $('#copy').onclick=()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}copyText(planText(),'Plan copied: shopping list plus every recipe. Paste it into an email or the group chat.')};
-$('#send').onclick=()=>{
+async function makePdfs(){
+  if(!window.jspdf||!window.DocketPDF){$('#msg').textContent='The PDF maker is still loading. Give it a second and try again.';return null}
+  $('#msg').textContent='Building your PDFs...';
+  return DocketPDF.build(S);
+}
+$('#send').onclick=async()=>{
   const v=$('#email').value.trim();
   if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){$('#msg').textContent='Enter an email address like you@example.com.';return}
   try{localStorage.setItem('docket-email',v)}catch(e){}
-  let body=planText();
-  if(body.length>1800){body=listText()+'\n\nFull recipes: open Docket and tap "Copy plan".'}
-  location.href=`mailto:${encodeURIComponent(v)}?subject=${encodeURIComponent('Your Docket for the week')}&body=${encodeURIComponent(body)}`;
-  $('#msg').textContent='Opening your email app with the plan ready to send.';
+  const btn=$('#send');btn.disabled=true;
+  try{
+    const out=await makePdfs();if(!out)return;
+    const endpoint=(window.DOCKET_CONFIG||{}).emailEndpoint;
+    if(!endpoint){DocketPDF.download(out.files);$('#msg').textContent='Email sending switches on soon, so your PDFs have downloaded instead.';return}
+    $('#msg').textContent='Sending your Docket...';
+    const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      to:v,store:out.meta.store,people:S.people,serves:out.serves,total:Math.round(out.total*100)/100,
+      saved:Math.round(out.meta.saved*100)/100,kit:out.meta.kit,dinners:out.meta.dinners,
+      attachments:out.files.map(f=>({filename:f.filename,content:DocketPDF.toBase64(f.doc)}))})});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok)throw new Error(data.error||res.status);
+    $('#msg').textContent=`Sent. Check ${v} for your shopping list and ${out.files.length-1} recipe${out.files.length>2?'s':''}.`;
+  }catch(e){$('#msg').textContent=`That didn't send (${e.message}). Try again, or tap "Download PDFs".`}
+  finally{btn.disabled=false}
 };
+$('#pdfs').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}const out=await makePdfs();if(!out)return;DocketPDF.download(out.files);$('#msg').textContent=`Downloading ${out.files.length} PDFs.`};
 function listText(){
   const w=week();
   let t=`DOCKET · ${STORE_NAME[S.store]} · est. ${money(w.total)}\n`;
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
-  ['M','F','D','Z','P','B','G'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=`[ ] ${ING[x.id].n}: ${x.packs} x ${packLabel(x.id)}\n`})});
+  ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=`[ ] ${ING[x.id].n}: ${x.packs} x ${packLabel(x.id)}\n`})});
   t+=`\nDINNERS: ${S.sel.map(id=>R.find(r=>r.id===id).n).join(', ')}`;
   return t;
 }
 if(navigator.share){$('#share').hidden=false;$('#share').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}try{await navigator.share({title:'Our Docket for the week',text:planText()})}catch(e){}}}
 function fillPrint(){
   const n=spm();
-  $('#print-recipes').innerHTML='<h2>Recipes</h2>'+S.sel.map(id=>{const r=R.find(x=>x.id===id);return`<article><h3>${esc(r.n)} · ${timeLabel(r)} · ${n} serves</h3><ul>${splitLines(r,n).map(([i,a])=>`<li>${fmtAmt(i,a)} ${esc(ING[i].n)}</li>`).join('')}</ul><ol>${r.m.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></article>`}).join('');
+  $('#print-recipes').innerHTML='<h2>Recipes</h2>'+S.sel.map(id=>{const r=R.find(x=>x.id===id);return`<article><h3>${esc(r.n)} · ${timeLabel(r)} · ${n} serves</h3><ul>${splitLines(r,n).map(([i,a])=>`<li>${kAmt(i,a)} ${esc(iname(i))}</li>`).join('')}</ul><ol>${r.m.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></article>`}).join('');
 }
 window.addEventListener('beforeprint',fillPrint);
 $('#print').onclick=()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}fillPrint();window.print()};
