@@ -3,6 +3,7 @@ const S={people:2,gf:0,dinners:4,lunch:true,budget:120,budgetAuto:true,minProt:4
 const STAPLES=(window.DOCKET_CONFIG||{}).staplesPerWeek??15;
 try{const s=JSON.parse(localStorage.getItem('docket-state')||'null');if(s&&typeof s==='object'){Object.assign(S,s,{skip:{...S.skip,...(s.skip||{})}});if(s.budgetAuto===undefined)S.budgetAuto=false}}catch(e){}
 S.sel=S.sel.filter(id=>R.some(r=>r.id===id));
+S.people=Math.min(8,Math.max(1,S.people));S.gf=Math.min(S.gf,S.people);
 if(['everyday','premium','lighter'].includes(location.hash.slice(1)))S.col=location.hash.slice(1);
 function save(){try{localStorage.setItem('docket-state',JSON.stringify(S))}catch(e){}}
 
@@ -99,7 +100,7 @@ const timeLabel=r=>r.t>=120?`${+(r.t/60).toFixed(1)} hr · ${r.h} min hands-on`:
 // ---------- Render ----------
 function renderControls(){
   $('#people-v').textContent=S.people;$('#gf-v').textContent=Math.min(S.gf,S.people);$('#din-v').textContent=S.dinners;
-  $('#people-dn').disabled=S.people<=1;$('#people-up').disabled=S.people>=10;
+  $('#people-dn').disabled=S.people<=1;$('#people-up').disabled=S.people>=8;
   $('#gf-dn').disabled=S.gf<=0;$('#gf-up').disabled=S.gf>=S.people;
   $('#din-dn').disabled=S.dinners<=1;$('#din-up').disabled=S.dinners>=7;
   if(S.budgetAuto)S.budget=autoBudget();$('#budget').value=S.budget;$('#budget-hint').hidden=!S.budgetAuto;$('#budget-reset').hidden=S.budgetAuto;$('#lunch').checked=S.lunch;$('#prot').value=S.minProt;$('#prot-v').textContent=S.minProt+'g';
@@ -225,8 +226,8 @@ function planText(){
 
 // ---------- Events ----------
 const step=(k,d,min,max)=>()=>{S[k]=Math.max(min,Math.min(max,S[k]+d));if(k==='people')S.gf=Math.min(S.gf,S.people);if(k==='dinners'&&S.sel.length>S.dinners)S.sel=S.sel.slice(0,S.dinners);render()};
-$('#people-dn').onclick=step('people',-1,1,10);$('#people-up').onclick=step('people',1,1,10);
-$('#gf-dn').onclick=step('gf',-1,0,10);$('#gf-up').onclick=()=>{if(S.gf<S.people){S.gf++;render()}};
+$('#people-dn').onclick=step('people',-1,1,10);$('#people-up').onclick=step('people',1,1,8);
+$('#gf-dn').onclick=step('gf',-1,0,8);$('#gf-up').onclick=()=>{if(S.gf<S.people){S.gf++;render()}};
 $('#din-dn').onclick=step('dinners',-1,1,7);$('#din-up').onclick=step('dinners',1,1,7);
 $('#budget-reset').onclick=()=>{S.budgetAuto=true;render()};
 $('#budget').addEventListener('input',e=>{S.budgetAuto=false;$('#budget-hint').hidden=true;$('#budget-reset').hidden=false;S.budget=Math.max(0,+e.target.value||0);const w=week();renderWeek(w);save()});

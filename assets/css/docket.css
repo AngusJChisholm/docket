@@ -418,3 +418,6 @@ body{margin:0}
 @keyframes rise{from{transform:translateY(14px)}to{transform:none}}
 @keyframes settle{from{transform:rotate(2deg) translateY(10px)}to{transform:rotate(-1deg)}}
 @media (prefers-reduced-motion:reduce){.hero h1,.hero .lead,.hero .cta,.menu-card{animation:none}}
+.hh{align-items:center;gap:4px}
+.hh-l{font-size:12px;font-weight:700;color:var(--muted);margin-right:4px}
+.hh button{width:30px;height:30px;padding:0;display:grid;place-items:center;font-size:13px}

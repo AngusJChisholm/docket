@@ -58,7 +58,7 @@
     const w = weekOf(pick);
     current = pick;
     $('#menu-card').innerHTML = `<p class="mc-eyebrow">This week's menu</p>
-      <div class="hh" role="group" aria-label="How many people">${[1, 2, 4, 6].map(n => `<button type="button" data-n="${n}" aria-pressed="${n === HH}">${n === 1 ? 'Just me' : n + ' people'}</button>`).join('')}</div>
+      <div class="hh" role="group" aria-label="How many people are you cooking for"><span class="hh-l">Cooking for</span>${[1, 2, 3, 4, 5, 6, 7, 8].map(n => `<button type="button" data-n="${n}" aria-pressed="${n === HH}" aria-label="${n} ${n === 1 ? 'person' : 'people'}">${n}</button>`).join('')}</div>
       <p class="mc-sub">Dinners + next-day lunches</p>
       <ol class="mc-list${animate ? ' deal' : ''}">${pick.map((r, i) => `<li style="--i:${i}"><span class="mc-day">${days[i]}</span><span class="mc-dish">${esc(r.n)}${tierOf(r) !== 'everyday' ? ` <span class="tier ${tierOf(r) === 'premium' ? 'prem' : 'light'}">${tierOf(r) === 'premium' ? 'Premium' : 'Lighter'}</span>` : ''}</span><span class="mc-lead" aria-hidden="true"></span><span class="mc-pr num">${money(serveCost(r))}</span></li>`).join('')}</ol>
       <div class="mc-foot"><span>Food for the week</span><b class="num">${money(w.total, 0)}</b></div>
@@ -120,7 +120,7 @@
   const C = { people: 5, dinners: 5, lunch: true };
   function renderCalc() {
     $('#c-people').textContent = C.people; $('#c-din').textContent = C.dinners;
-    $('#c-people-dn').disabled = C.people <= 1; $('#c-people-up').disabled = C.people >= 10;
+    $('#c-people-dn').disabled = C.people <= 1; $('#c-people-up').disabled = C.people >= 8;
     $('#c-din-dn').disabled = C.dinners <= 1; $('#c-din-up').disabled = C.dinners >= 7;
     const w = week(C.people, C.dinners, C.lunch);
     $('#calc-docket').innerHTML = docketHTML(w, `${C.people} ${C.people === 1 ? 'person' : 'people'} · ${C.dinners} dinners${C.lunch ? ' + lunches' : ''}`);
@@ -129,7 +129,7 @@
     $('#c-year-sub').textContent = saved > 0 ? `That's ${money(saved, 0)} a week compared with ${w.kits[0].n}.` : '';
   }
   const bump = (k, d, lo, hi) => () => { C[k] = Math.max(lo, Math.min(hi, C[k] + d)); renderCalc(); };
-  $('#c-people-dn').onclick = bump('people', -1, 1, 10); $('#c-people-up').onclick = bump('people', 1, 1, 10);
+  $('#c-people-dn').onclick = bump('people', -1, 1, 10); $('#c-people-up').onclick = bump('people', 1, 1, 8);
   $('#c-din-dn').onclick = bump('dinners', -1, 1, 7); $('#c-din-up').onclick = bump('dinners', 1, 1, 7);
   $('#c-lunch').onchange = e => { C.lunch = e.target.checked; renderCalc(); };
   renderCalc();
