@@ -102,6 +102,14 @@ const ING={
  quinoa:{n:'Quinoa',a:'K',u:'g',pk:500,p:5.00,pr:14,cup:170,pan:1},
  brownrice:{n:'Brown rice',a:'K',u:'g',pk:1000,p:3.50,pr:8,cup:190,pan:1},
  miso:{n:'White miso paste',a:'K',u:'g',pk:300,p:5.50,pr:12,ck:1,tbsp:17,pan:1},
+ pork_cutlets:{n:'Pork cutlets',a:'M',u:'g',pk:1000,p:22.00,pr:18,t:'pork'},
+ beef_cheek:{n:'Beef cheeks',a:'M',u:'g',pk:1000,p:24.00,pr:20,t:'red'},
+ lamb_shanks:{n:'Lamb shanks',a:'M',u:'g',pk:1000,p:16.00,pr:13,t:'red'},
+ duck:{n:'Duck breast fillets',a:'M',u:'g',pk:1000,p:38.00,pr:19},
+ rocket:{n:'Rocket',a:'F',u:'g',pk:120,p:3.50,pr:2.6},
+ bokchoy:{n:'Baby bok choy',a:'F',u:'ea',pk:1,p:2.50,pr:1.5,pl:'bunch',ea:[1,'bunch']},
+ ricepaper:{n:'Rice paper sheets',a:'P',u:'g',pk:200,p:3.00,pr:1},
+ fivespice:{n:'Chinese five spice',a:'K',u:'g',pk:30,p:2.80,pr:0,tsp:2.2,pan:1},
  // Freezer
  peas:{n:'Frozen peas',a:'Z',u:'g',pk:1000,p:3.50,pr:5,cup:140},
  edamame:{n:'Frozen shelled edamame',a:'Z',u:'g',pk:500,p:4.50,pr:11,cup:150},
@@ -495,7 +503,60 @@ const R=[
   i:[['prawns',170],['broccoli',100],['greenbeans',60],['capsicum',.3],['garlic',.1],['ginger',8],['soy',15],['oyster',6],['cornflour',3],['brownrice',75],['springonion',.15]],
   m:['Cook the brown rice (25 to 30 minutes).','Sauce: soy, oyster sauce and cornflour whisked with 3 tbsp water per serve.','Get a wok smoking hot. Stir-fry the prawns 1 minute a side until just pink, then set aside.','Add the broccoli, beans and capsicum with a splash of water and stir-fry 3 minutes until bright and just tender.','Add the garlic and ginger for 30 seconds, then the sauce. Bubble until glossy.','Toss the prawns back in with the spring onion and serve over rice.'],
   l:'Reheat until just hot so the prawns don\'t go rubbery.',
-  g:'Tamari instead of soy, a GF oyster sauce, 100% maize cornflour, and a separate wok for the GF batch.'}
+  g:'Tamari instead of soy, a GF oyster sauce, 100% maize cornflour, and a separate wok for the GF batch.'},
+ {id:'cotoletta',n:'Pork Cotoletta, Rocket & Parmesan',c:'Italian',tier:'premium',t:40,d:'Golden crumbed pork cutlets, Milanese style, with a peppery rocket, parmesan and lemon salad.',
+  i:[['pork_cutlets',260],['flour',10],['eggs',.4],['panko',35],['parm',20],['butter',12],['lemon',.4],['rocket',40],['cherrytom',60],['potato',180],['rosemary',.05]],
+  m:['Potatoes: oven to 220°C. Cut into small chunks, toss with oil, salt and rosemary, roast 35 minutes.','Bash the cutlets out to about 1cm thick between baking paper, leaving the bone on. Season both sides.','Mix the panko with half the parmesan. Dust the cutlets in flour, dip in beaten egg, then press firmly into the crumbs.','Shallow-fry in oil with a knob of butter over medium-high heat, 3 to 4 minutes a side, until deep golden and just cooked through. Rest on a rack so the bottom stays crisp.','Salad: rocket and halved tomatoes with lemon juice, oil and the rest of the parmesan shaved over.','Serve each cutlet with a big lemon wedge, the salad piled on top and potatoes alongside.'],
+  l:'Slice the cutlet and pack with the salad. Reheat in the oven or air fryer to keep it crisp.',
+  g:'GF flour and crumbs, crumbed and fried first in fresh oil.'},
+
+ {id:'beefcheek',n:'Braised Beef Cheek Pappardelle',c:'Pasta',tier:'premium',t:240,h:30,d:'Beef cheeks braised for hours until they melt into a deep, glossy sauce, tossed through wide pasta.',
+  i:[['beef_cheek',230],['onion',60],['carrot',50],['garlic',.1],['tompaste',20],['tintom',150],['stockpowder',3],['rosemary',.08],['pasta',120],['parm',20],['butter',8],['parsley',.05]],
+  m:['Trim any thick silverskin off the cheeks, season well and brown hard on all sides in a heavy pot. Set aside.','Soften the diced onion and carrot 10 minutes, add the garlic and tomato paste and cook 2 minutes until dark.','Add the crushed tomatoes, rosemary, stock powder and enough water to just cover the cheeks. Return the beef.','Lid on, low simmer or 150°C oven for 3½ hours until a spoon cuts straight through the meat.','Lift out the cheeks and shred. Reduce the sauce, uncovered, for 10 to 15 minutes until glossy, then stir in the butter and the beef.','Cook the pasta, toss with the sauce and a splash of pasta water, and finish with parmesan and parsley.'],
+  l:'Even better the next day. Loosen with pasta water when reheating.',
+  g:'GF pasta in its own pot. Check the stock powder.'},
+
+ {id:'lambshanks',n:'Rosemary Lamb Shanks & Creamy Mash',c:'Roasts',tier:'premium',t:210,h:25,d:'Fall-off-the-bone shanks in a rich tomato and rosemary gravy, over buttery mash with greens.',
+  i:[['lamb_shanks',380],['onion',50],['carrot',60],['garlic',.1],['tompaste',15],['tintom',120],['stockpowder',3],['rosemary',.1],['potato',280],['butter',20],['milk',50],['greenbeans',80],['cornflour',3]],
+  m:['Oven to 160°C. Season the shanks and brown all over in a heavy ovenproof pot. Set aside.','Soften the onion and carrot 8 minutes, add the garlic and tomato paste for 2 minutes.','Add the crushed tomatoes, rosemary and stock powder with 1 cup water per 2 shanks. Nestle the shanks in.','Lid on and braise 3 hours, turning once, until the meat is falling off the bone.','Mash: boil the potatoes until soft, then mash with butter, warm milk and salt until smooth.','Lift out the shanks, thicken the sauce with cornflour mixed into a little cold water. Serve over mash with the beans and plenty of sauce.'],
+  l:'Pull the meat off the bone and pack over the mash with the sauce. Reheats beautifully.',
+  g:'Check the stock powder and use 100% maize cornflour. Naturally GF otherwise.'},
+
+ {id:'duck',n:'Five-Spice Duck Breast, Bok Choy & Rice',c:'Asian',tier:'premium',t:35,d:'Crispy-skinned duck breast, pink in the middle, with a sticky orange-soy glaze and garlic bok choy.',
+  i:[['duck',200],['fivespice',1.5],['soy',20],['honey',12],['ginger',5],['garlic',.1],['bokchoy',.5],['rice',90],['springonion',.1],['sesameseeds',2]],
+  m:['Score the duck skin in a crisscross without cutting into the meat. Rub with five spice and salt. Leave 20 minutes.','Cook the rice.','Place the duck skin side down in a cold pan, then turn the heat to medium. Cook 8 to 10 minutes, pouring off the fat as it renders, until the skin is deep golden and crisp.','Flip and cook 3 to 4 minutes for pink. Rest 8 minutes on a board.','Glaze: soy, honey and grated ginger bubbled in the pan for 1 minute. Stir-fry the halved bok choy with garlic in a little of the duck fat for 2 minutes.','Slice the duck, spoon over the glaze, and serve with rice, bok choy, spring onion and sesame seeds.'],
+  l:'Slice the duck thin over rice and greens. Good cold or barely warm.',
+  g:'Tamari instead of soy for the GF glaze, made in a separate pan. Check the five spice.'},
+
+ {id:'thaibeef',n:'Thai Beef Salad',c:'Bowls',tier:'lighter',t:30,d:'Seared rump sliced over crunchy veg and herbs with a hot-sour lime and chilli dressing.',
+  i:[['beef_rump',200],['fishsauce',12],['lime',.5],['brownsugar',5],['chilli',.4],['garlic',.05],['cucumber',.35],['cherrytom',70],['red_onion',.15],['mint',.12],['coriander',.12],['cos',.15],['peanuts',10],['brownrice',55]],
+  m:['Cook the brown rice (25 to 30 minutes).','Dressing: fish sauce, lime juice, sugar, finely chopped chilli and garlic. Taste: hot, sour, salty, a little sweet.','Season the steak and sear in a smoking hot pan 2 to 3 minutes a side for medium-rare. Rest 5 minutes, then slice thin across the grain.','Toss the sliced steak and its juices with half the dressing.','Salad: torn lettuce, cucumber, halved tomatoes, thin red onion and a big handful of herbs.','Pile the beef on the salad, pour over the rest of the dressing and finish with crushed peanuts. Rice on the side.'],
+  l:'Pack the dressing separately and toss just before eating.',
+  g:'Naturally gluten free. Check the fish sauce.'},
+
+ {id:'moroccan',n:'Moroccan Chicken & Chickpea Stew',c:'Curry',tier:'lighter',t:45,d:'Warmly spiced chicken, chickpeas and tomato with lemon and herbs, over fluffy quinoa.',
+  i:[['chk_breast',200],['onion',50],['garlic',.08],['ginger',4],['cumin',1.2],['cinnamon',.4],['smokedpaprika',.6],['turmeric',.3],['tintom',150],['chickpeas',100],['zucchini',80],['stockpowder',2],['lemon',.2],['quinoa',50],['parsley',.1],['yoghurt',30]],
+  m:['Rinse the quinoa and simmer in 2 parts water for 12 minutes. Drain and fluff.','Cut the chicken into chunks and brown in a little oil. Set aside.','Soften the onion 5 minutes, then the garlic, ginger and all the spices for 1 minute.','Add the crushed tomatoes, drained chickpeas, zucchini in chunks and stock powder with ½ cup water per 2 serves. Simmer 10 minutes.','Return the chicken and simmer 8 minutes more until cooked through. Finish with lemon juice and salt.','Serve over quinoa with parsley and a spoon of yoghurt.'],
+  l:'Freezes and reheats well. Pack the yoghurt separately.',
+  g:'Naturally gluten free. Check the stock powder.'},
+
+ {id:'lemonfish',n:'Lemon Pepper Fish, Greens & Quinoa',c:'Seafood',tier:'lighter',t:25,d:'Pan-fried lemon pepper fish over herby quinoa with garlicky greens. Light, quick and clean.',
+  i:[['whitefish',200],['lemon',.4],['garlic',.08],['quinoa',55],['broccoli',100],['greenbeans',60],['spinach',30],['parsley',.1],['cherrytom',50]],
+  m:['Rinse the quinoa and simmer in 2 parts water for 12 minutes. Drain, then stir through chopped parsley, lemon zest and halved tomatoes.','Season the fish generously with cracked pepper, lemon zest and salt.','Pan-fry in a little oil over medium-high heat, 2 to 3 minutes a side, until opaque and flaking.','Same pan: the broccoli and beans with a splash of water for 3 minutes, then the garlic and spinach until wilted.','Squeeze lemon over everything and serve the fish on the quinoa with the greens.'],
+  l:'Fish over quinoa and greens. Eat within a day.',
+  g:'Naturally gluten free.'},
+
+ {id:'souvsalad',n:'Chicken Souvlaki Salad Bowls',c:'Bowls',tier:'lighter',t:35,d:'Lemon-oregano chicken over a big Greek salad and quinoa, with a light tzatziki.',
+  i:[['chk_breast',210],['oregano',1],['lemon',.35],['garlic',.08],['yoghurt',50],['cucumber',.35],['cherrytom',80],['red_onion',.12],['fetta',15],['cos',.15],['quinoa',45],['mint',.05]],
+  m:['Marinate the chicken in oregano, lemon juice, half the garlic, a little oil and salt for 15 minutes.','Rinse and simmer the quinoa in 2 parts water for 12 minutes. Drain.','Tzatziki: grated cucumber (squeezed dry), yoghurt, the rest of the garlic, mint, lemon and salt.','Grill or pan-fry the chicken 5 to 6 minutes a side. Rest, then slice.','Salad: lettuce, chopped cucumber, tomatoes, red onion and crumbled fetta with lemon and a drizzle of oil.','Build bowls: quinoa, salad, chicken and tzatziki.'],
+  l:'Built for lunch. Tzatziki on the side.',
+  g:'Naturally gluten free.'},
+
+ {id:'ricepaper',n:'Prawn Rice Paper Rolls',c:'Seafood',tier:'lighter',t:40,d:'Fresh rolls packed with prawns, vermicelli, crunchy veg and herbs, with a zingy dipping sauce.',
+  i:[['prawns',185],['ricepaper',35],['vermicelli',40],['cos',.15],['carrot',50],['cucumber',.3],['mint',.12],['coriander',.12],['fishsauce',10],['lime',.35],['brownsugar',5],['chilli',.3],['peanuts',10]],
+  m:['Cook the prawns in simmering salted water for 2 minutes until pink. Cool and halve lengthways.','Cook the vermicelli per the packet, rinse cold and drain well.','Cut the carrot and cucumber into thin matchsticks and shred the lettuce. Pick the herbs.','Dipping sauce: fish sauce, lime juice, sugar, chopped chilli and 2 tbsp water per serve, with crushed peanuts on top.','Dip one rice paper sheet in warm water for a few seconds until just soft. Lay prawns cut side down, then herbs, noodles and veg, and roll up tight, tucking in the sides.','Serve straight away with the dipping sauce. About 4 rolls per person.'],
+  l:'Wrap each roll in a damp paper towel so they don\'t dry out. Sauce in a separate container.',
+  g:'Naturally gluten free with rice paper and rice noodles. Check the fish sauce.'}
 ];
 
 // ---------- Meal-kit prices for the Kit Tax ----------

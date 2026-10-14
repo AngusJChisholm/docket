@@ -314,3 +314,30 @@ body{font-size:15.5px;-webkit-font-smoothing:antialiased}
 .card h3{font-size:17px;letter-spacing:-.01em}
 .panel{border-radius:28px;padding:24px}
 @media (prefers-reduced-motion:reduce){.card:hover,.col-card:hover,.btn:hover{transform:none}}
+
+/* ---------- Colour-coded collections ---------- */
+.card.tier-premium{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.card.tier-premium .meta,.card.tier-premium .blurb,.card.tier-premium .card-eyebrow{color:color-mix(in srgb,var(--bg) 72%,transparent)}
+.card.tier-premium .ticket::before{background:var(--ink)}
+.card.tier-premium .badge{background:color-mix(in srgb,var(--bg) 14%,transparent);color:var(--bg)}
+.card.tier-premium .badge.p{background:var(--mint);color:var(--green)}
+.card.tier-premium .tier.prem{background:var(--ticket);color:var(--on-ticket)}
+.card.tier-premium .btn.ghost{background:transparent;color:var(--bg);border-color:color-mix(in srgb,var(--bg) 30%,transparent)}
+.card.tier-lighter{background:var(--mint);border-color:var(--mint)}
+.card.tier-lighter .ticket::before{background:var(--mint)}
+.card.tier-lighter .badge,.card.tier-lighter .tier.light{background:var(--surface)}
+.card.tier-lighter .btn.ghost{background:var(--surface);border-color:transparent}
+.card.tier-everyday.sel{background:var(--surface)}
+.card.tier-everyday.sel .ticket::before{background:var(--surface)}
+.card.tier-premium.sel{background:var(--ink)}
+.card.tier-lighter.sel{background:var(--mint)}
+.card.sel{border:2px solid var(--green);padding:17px;box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 22%,transparent)}
+.card.sel .pick,.card.tier-premium.sel .pick,.card.tier-lighter.sel .pick{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.collections button::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:-1px;border:1.5px solid var(--line);background:var(--surface)}
+.collections button[data-c="all"]::before{display:none}
+.collections button[data-c="premium"]::before{background:var(--ink);border-color:var(--ink)}
+.collections button[data-c="lighter"]::before{background:var(--mint);border-color:var(--green)}
+.picked li{position:relative;padding-left:14px}
+.picked li::before{content:"";position:absolute;left:0;top:.45em;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface)}
+.picked li.pk-premium::before{background:var(--ink);border-color:var(--ink)}
+.picked li.pk-lighter::before{background:var(--mint);border-color:var(--green)}

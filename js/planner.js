@@ -98,7 +98,7 @@ function renderCards(){
   list.sort((a,b)=>key(a)-key(b));
   $('#cards').innerHTML=list.map(r=>{
     const sel=S.sel.includes(r.id);const p=serveProt(r);const g=gfType(r);
-    return`<article class="card${sel?' sel':''}${!sel&&full?' off':''}">
+    return`<article class="card tier-${tierOf(r)}${sel?' sel':''}${!sel&&full?' off':''}">
       <div class="card-top"><div><div class="card-eyebrow">${tierOf(r)==='premium'?'<span class="tier prem">Premium</span>':tierOf(r)==='lighter'?'<span class="tier light">Lighter</span>':''}${esc(r.c)}</div><h3>${esc(r.n)}</h3><div class="meta">${timeLabel(r)}</div></div>
       <div class="ticket num"><b>${money(serveCost(r))}</b><small>per serve</small></div></div>
       ${r.d?`<p class="blurb">${esc(r.d)}</p>`:''}
@@ -123,7 +123,7 @@ function renderWeek(w){
   $('#st-serve').textContent=w.serves?money(w.total/w.serves):'$0';
   $('#st-prot').textContent=Math.round(w.prot)+'g';
   $('#st-picked').textContent=`${S.sel.length}/${S.dinners}`;
-  $('#picked').innerHTML=S.sel.map(id=>{const r=R.find(x=>x.id===id);return`<li><span>${esc(r.n)}</span><span class="num">${money(serveCost(r))}</span></li>`}).join('');
+  $('#picked').innerHTML=S.sel.map(id=>{const r=R.find(x=>x.id===id);return`<li class="pk-${tierOf(r)}"><span>${esc(r.n)}</span><span class="num">${money(serveCost(r))}</span></li>`}).join('');
   // Kit tax
   const n=spm();const rows=S.kits.map(k=>({n:k.n,v:w.serves*k.ps+(S.sel.length?k.del*Math.ceil(n/k.max):0)}));
   $('#bars').innerHTML=[`<div class="ln us"><span>Docket</span><span>${money(w.total)}</span></div>`,...rows.map(x=>`<div class="ln kit"><span>${esc(x.n)}</span><span>${money(x.v)}</span></div>`)].join('');
