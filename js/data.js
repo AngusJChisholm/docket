@@ -85,6 +85,23 @@ const ING={
  turkish:{n:'Turkish rolls (4)',a:'B',u:'ea',pk:4,p:4.50,pr:9,pl:'4 pack',ea:[1,'roll']},
  currypowder:{n:'Curry powder',a:'K',u:'g',pk:40,p:2.50,pr:0,ck:1,tsp:2.5,pan:1},
  worcestershire:{n:'Worcestershire sauce',a:'K',u:'ml',pk:250,p:3.00,pr:0,ck:1,pan:1},
+ scotch:{n:'Scotch fillet steak',a:'M',u:'g',pk:1000,p:45.00,pr:21,t:'red'},
+ lambcutlets:{n:'Lamb cutlets (frenched)',a:'M',u:'g',pk:1000,p:42.00,pr:16,t:'red'},
+ barra:{n:'Barramundi fillets, skin on',a:'M',u:'g',pk:1000,p:32.00,pr:20,t:'seafood'},
+ shortribs:{n:'Korean-cut beef short ribs',a:'M',u:'g',pk:1000,p:26.00,pr:15,t:'red'},
+ wagyu:{n:'Wagyu beef mince',a:'M',u:'g',pk:500,p:11.00,pr:18,t:'red'},
+ prosciutto:{n:'Prosciutto',a:'M',u:'g',pk:100,p:5.50,pr:25,t:'pork'},
+ chk_mince:{n:'Chicken mince',a:'M',u:'g',pk:500,p:7.00,pr:20},
+ pumpkin:{n:'Butternut pumpkin',a:'F',u:'g',pk:1000,p:3.50,pr:1},
+ iceberg:{n:'Iceberg lettuce',a:'F',u:'ea',pk:1,p:3.50,pr:1,ea:[1,'iceberg lettuce']},
+ corncob:{n:'Corn cobs',a:'F',u:'ea',pk:1,p:1.20,pr:3,ea:[1,'corn cob']},
+ rosemary:{n:'Rosemary',a:'F',u:'ea',pk:1,p:3.00,pr:0,pl:'bunch',ea:[1,'bunch']},
+ sage:{n:'Sage',a:'F',u:'ea',pk:1,p:3.00,pr:0,pl:'bunch',ea:[1,'bunch']},
+ harissa:{n:'Harissa paste',a:'P',u:'g',pk:190,p:4.50,pr:2,ck:1,pl:'jar',tbsp:16},
+ capers:{n:'Capers',a:'P',u:'g',pk:100,p:3.00,pr:2,pl:'jar',tsp:5},
+ quinoa:{n:'Quinoa',a:'K',u:'g',pk:500,p:5.00,pr:14,cup:170,pan:1},
+ brownrice:{n:'Brown rice',a:'K',u:'g',pk:1000,p:3.50,pr:8,cup:190,pan:1},
+ miso:{n:'White miso paste',a:'K',u:'g',pk:300,p:5.50,pr:12,ck:1,tbsp:17,pan:1},
  // Freezer
  peas:{n:'Frozen peas',a:'Z',u:'g',pk:1000,p:3.50,pr:5,cup:140},
  edamame:{n:'Frozen shelled edamame',a:'Z',u:'g',pk:500,p:4.50,pr:11,cup:150},
@@ -162,7 +179,7 @@ const ING={
 const GFSWAP={panko:'gf_crumbs',flour:'gf_flour',pasta:'gf_pasta',lasagne:'gf_lasagne',buns:'gf_buns',wraps:'gf_wraps',pita:'gf_wraps',naan:'gf_wraps',tortillas:'corn_tortillas',soy:'tamari',gochujang:'sriracha',turkish:'gf_buns'};
 
 // ---------- Recipes (quantities per serve) ----------
-// c category · t total minutes · h hands-on minutes (slow cooks) · d one-line description
+// c category · tier 'premium' or 'lighter' (blank = everyday) · t total minutes · h hands-on minutes (slow cooks) · d one-line description
 // i ingredients · m method · l lunch note · g gluten free note
 const R=[
  {id:'bulgogi',n:'Korean Beef Bulgogi Bowls',c:'Bowls',t:40,d:'Sticky soy-garlic beef, quick-pickled cucumber, kimchi and gochujang mayo over rice.',
@@ -219,7 +236,7 @@ const R=[
   l:'Slice the parma into strips and pack with salad. Reheat in the oven or air fryer, never the microwave, to keep it crunchy.',
   g:'GF flour and breadcrumbs, crumbed first and fried in fresh oil or a separate pan. Check the ham.'},
 
- {id:'bun',n:'Vietnamese Pork Noodle Salad',c:'Bowls',t:35,d:'Lemongrass pork over vermicelli with herbs, crunchy veg, peanuts and nuoc cham.',
+ {id:'bun',n:'Vietnamese Pork Noodle Salad',c:'Bowls',tier:'lighter',t:35,d:'Lemongrass pork over vermicelli with herbs, crunchy veg, peanuts and nuoc cham.',
   i:[['pork_mince',240],['lemongrass',8],['fishsauce',14],['brownsugar',10],['garlic',.12],['vermicelli',80],['cos',.15],['cucumber',.25],['carrot',50],['mint',.1],['coriander',.1],['peanuts',15],['lime',.35],['chilli',.3]],
   m:['Pork: mix the mince with lemongrass paste, half the garlic, half the fish sauce, half the sugar and pepper. Roll into small flat patties.','Nuoc cham: the rest of the fish sauce and sugar with lime juice, the rest of the garlic, sliced chilli and 2 tbsp water per serve. Taste: it should be salty, sweet and sour.','Cook the vermicelli per the packet (usually 3 to 4 minutes), rinse under cold water and drain well.','Pan-fry the patties in a hot pan 3 minutes a side until caramelised.','Prep the salad: shredded lettuce, cucumber and carrot matchsticks, a pile of mint and coriander, crushed peanuts.','Bowls: noodles, salad, pork, herbs and peanuts. Pour the nuoc cham over at the table.'],
   l:'A great cold lunch. Pack the dressing separately and pour it on just before eating.',
@@ -396,7 +413,89 @@ const R=[
   i:[['whitefish',220],['flour',15],['smokedpaprika',1],['cumin',.6],['tortillas',2.5],['cabbage',.1],['lime',.4],['mayo',20],['sriracha',6],['avocado',.3],['coriander',.12],['sourcream',20]],
   m:['Slaw: shred the cabbage thin and toss with the juice of half the limes, coriander and salt.','Sauce: mayo, sriracha, sour cream and a squeeze of lime.','Cut the fish into fingers. Mix the flour with the paprika, cumin and 1 tsp salt, and toss the fish in it.','Shallow-fry in hot oil 2 to 3 minutes a side until golden and flaky. Drain on paper towel.','Warm the tortillas in a dry pan.','Load each taco with slaw, fish, avocado and sauce. Lime wedges on the side.'],
   l:'Turn it into a bowl: fish over rice and slaw, sauce on the side.',
-  g:'GF flour for the GF fish (fried first in fresh oil), and corn tortillas.'}
+  g:'GF flour for the GF fish (fried first in fresh oil), and corn tortillas.'},
+ {id:'scotch',n:'Scotch Fillet, Chimichurri & Crispy Potatoes',c:'Steak night',tier:'premium',t:60,d:'Thick-cut scotch fillet, rested and sliced, with sharp chimichurri, rosemary potatoes and charred greens.',
+  i:[['scotch',230],['parsley',.2],['garlic',.12],['chilliflakes',.3],['oregano',.4],['whitevinegar',10],['potato',250],['rosemary',.1],['butter',15],['greenbeans',90],['lemon',.15]],
+  m:['Take the steaks out of the fridge 45 minutes before cooking and salt them well. Room-temperature steak cooks evenly.','Potatoes: oven to 220°C. Halve small potatoes, boil 10 minutes, drain, then crush lightly on an oiled tray with chopped rosemary and salt. Roast 35 minutes until deep golden.','Chimichurri: finely chop the parsley and garlic, mix with the chilli flakes, oregano, vinegar, a pinch of salt and enough oil to loosen (about 3 tbsp per 2 serves). Leave it to sit while you cook.','Get a heavy pan smoking hot. Sear the steaks 3 to 4 minutes a side for medium-rare, turning once.','In the last minute add the butter and a sprig of rosemary, and spoon the foaming butter over the steaks. Rest 8 minutes on a board. Don\'t skip this.','Blister the beans in the same pan for 3 minutes with a squeeze of lemon.','Slice the steak against the grain, spoon over the chimichurri, and serve with the potatoes and beans.'],
+  l:'Slice the steak thin and pack over the potatoes and beans, chimichurri in a little container. Great cold or barely warm.',
+  g:'Naturally gluten free.'},
+
+ {id:'misosalmon',n:'Miso-Glazed Salmon, Sesame Greens',c:'Seafood',tier:'premium',t:35,d:'Sweet-salty miso salmon caramelised under the grill, with sesame greens and seasoned rice.',
+  i:[['salmon',200],['miso',20],['mirin',10],['honey',6],['soy',8],['rice',90],['ricevinegar',8],['broccoli',90],['greenbeans',50],['sesameoil',4],['sesameseeds',2],['springonion',.1],['lime',.15]],
+  m:['Glaze: whisk the miso, mirin, honey and soy until smooth.','Cook the rice, then stir through the rice vinegar and a pinch of salt and sugar while it\'s hot.','Heat the grill to high. Lay the salmon skin side down on a lined tray, pat dry, and spread the glaze thickly over the tops.','Grill 7 to 9 minutes, without turning, until the glaze is blistered and dark in spots and the salmon just flakes. Watch it closely at the end: miso catches fast.','Meanwhile steam the broccoli and beans 4 minutes, then toss with the sesame oil, a pinch of salt and sesame seeds.','Serve the salmon on the rice with the greens, spring onion and a wedge of lime.'],
+  l:'Flake the salmon over rice and greens. Best eaten cold or barely warm.',
+  g:'Use a GF miso (many contain barley, so check) and tamari instead of soy, glazing the GF fillets separately.'},
+
+ {id:'lambcutlets',n:'Lamb Cutlets, Salsa Verde & Smashed Potatoes',c:'Steak night',tier:'premium',t:45,d:'Pink, charred lamb cutlets with a punchy herb salsa verde, crispy smashed potatoes and a crisp salad.',
+  i:[['lambcutlets',240],['garlic',.1],['rosemary',.08],['lemon',.3],['parsley',.15],['mint',.1],['capers',6],['potato',230],['cos',.12],['cucumber',.2]],
+  m:['Rub the cutlets with crushed garlic, chopped rosemary, lemon zest, oil and salt. Leave 20 minutes.','Potatoes: boil small potatoes whole for 15 minutes until tender. Drain, smash flat on an oiled tray, oil and salt the tops, roast at 230°C for 25 to 30 minutes until crisp.','Salsa verde: finely chop the parsley, mint and capers. Mix with the lemon juice, a little more garlic, salt and enough oil to make it spoonable.','Cook the cutlets in a very hot pan or on the BBQ, 2 to 3 minutes a side, holding them fat-side down for the first minute to render it. Rest 5 minutes.','Salad: lettuce and cucumber with lemon and oil.','Serve the cutlets with salsa verde spooned over, potatoes and salad.'],
+  l:'Pack the cutlets with potatoes and salad, salsa verde on the side. Eat at room temp, not reheated.',
+  g:'Naturally gluten free.'},
+
+ {id:'prawnlinguine',n:'Chilli Prawn Linguine',c:'Seafood',tier:'premium',t:25,d:'Garlicky chilli prawns tossed through pasta with lemon, parsley and a little butter. Restaurant-quick.',
+  i:[['prawns',170],['pasta',120],['garlic',.15],['chilli',.4],['cherrytom',60],['butter',12],['lemon',.3],['parsley',.12],['chilliflakes',.2]],
+  m:['Get a big pot of well-salted water boiling and cook the pasta. Keep a mug of the cooking water.','Meanwhile, sizzle the sliced garlic and fresh chilli in a generous glug of oil over medium heat for 1 minute. Don\'t let the garlic brown.','Add the halved tomatoes and cook 2 minutes until they start to burst.','Turn the heat up, add the prawns and cook 1 to 2 minutes a side until just pink.','Add the drained pasta, butter, lemon zest and juice and a splash of pasta water. Toss hard for a minute until glossy.','Finish with parsley and chilli flakes and serve straight away.'],
+  l:'Reheat gently with a splash of water. Prawns are best eaten within a day.',
+  g:'GF pasta in a separate pot, tossed in its own pan with a share of the prawns.'},
+
+ {id:'saltimbocca',n:'Chicken Saltimbocca, Crispy Potatoes',c:'Italian',tier:'premium',t:45,d:'Chicken wrapped in prosciutto and sage, pan-fried golden with a butter-lemon sauce.',
+  i:[['chk_breast',230],['prosciutto',25],['sage',.15],['flour',8],['butter',15],['lemon',.25],['stockpowder',2],['potato',230],['rosemary',.05],['spinach',40]],
+  m:['Potatoes: oven to 220°C. Cut into chunks, toss with oil, salt and rosemary, roast 35 to 40 minutes.','Slice each breast in half horizontally and flatten slightly between baking paper.','Season, lay a sage leaf on each, wrap with a slice of prosciutto and lightly dust the outside in flour.','Pan-fry in oil and a little butter, prosciutto side down first, 3 minutes a side until golden and cooked through. Set aside.','Sauce: add the rest of the butter, lemon juice and stock powder dissolved in ¼ cup water per 2 serves. Bubble 1 minute, scraping up the bits.','Wilt the spinach in the pan for 1 minute. Serve the chicken on the spinach with the sauce spooned over and potatoes alongside.'],
+  l:'Chicken and potatoes together, sauce poured over. Reheat in the oven.',
+  g:'GF flour for dusting (or skip it) and check the stock powder. Cook the GF ones first.'},
+
+ {id:'barra',n:'Crispy-Skin Barramundi, Charred Corn Salad',c:'Seafood',tier:'premium',t:35,d:'Shatteringly crisp-skinned barra with lime herb butter and a smoky charred corn and avocado salad.',
+  i:[['barra',200],['butter',15],['lime',.4],['coriander',.12],['corncob',.6],['avocado',.3],['cherrytom',60],['red_onion',.1],['smokedpaprika',.5],['rice',80]],
+  m:['Cook the rice. Herb butter: soften the butter and mash in lime zest, chopped coriander and a pinch of salt.','Char the corn cobs directly over a gas flame, on a BBQ or in a dry pan until blackened in spots. Slice the kernels off.','Salad: corn, diced avocado, tomatoes and red onion with lime juice, paprika, oil and salt.','Pat the fish skin bone dry and salt it. Heat a pan with oil until shimmering and lay the fish in skin side down, pressing with a spatula for 30 seconds so it stays flat.','Cook 4 to 5 minutes without moving until the skin is crisp and the flesh is mostly opaque, then flip for 1 minute.','Serve skin side up with a knob of herb butter melting on top, the corn salad and rice.'],
+  l:'Pack the fish over rice with the salad on the side. Eat within a day.',
+  g:'Naturally gluten free.'},
+
+ {id:'galbi',n:'Korean BBQ Short Ribs (Galbi)',c:'Fakeaway',tier:'premium',t:40,d:'Thin-cut short ribs in a pear-sweet soy marinade, charred hot, with rice, kimchi and lettuce wraps.',
+  i:[['shortribs',300],['soy',25],['brownsugar',10],['apple',.25],['garlic',.15],['ginger',6],['sesameoil',6],['springonion',.15],['rice',90],['kimchi',40],['cos',.15],['sesameseeds',2],['gochujang',6]],
+  m:['Marinade: grate the apple, garlic and ginger and mix with the soy, brown sugar, sesame oil and sliced spring onion. Coat the ribs and marinate at least 1 hour, ideally overnight.','Cook the rice.','Get a BBQ, grill pan or heavy pan very hot. Cook the ribs in a single layer, 2 minutes a side, until caramelised and charred at the edges.','Rest 2 minutes, then cut between the bones into bite-size pieces with scissors.','Ssamjang-style sauce: gochujang loosened with a little sesame oil and water.','Serve with rice, kimchi, lettuce leaves for wrapping, sauce and sesame seeds.'],
+  l:'Ribs over rice, kimchi on the side. Reheat in a hot pan to bring back the char.',
+  g:'Tamari instead of soy, sriracha instead of gochujang, and marinate the GF ribs separately. Check the kimchi.'},
+
+ {id:'wagyuburger',n:'Wagyu Double Cheeseburgers',c:'Fakeaway',tier:'premium',t:45,d:'Rich wagyu smash patties, melted cheese, caramelised onion and burger sauce on brioche, with rosemary fries.',
+  i:[['wagyu',200],['slices',2],['buns',1],['onion',60],['brownsugar',3],['pickles',15],['mayo',15],['ketchup',8],['mustard',4],['cos',.08],['potato',250],['rosemary',.05]],
+  m:['Fries: oven to 220°C. Cut potatoes into thin fries, toss with oil, salt and chopped rosemary, roast 35 to 40 minutes, turning once.','Caramelised onion: slice thin and cook low in oil for 20 minutes until jammy, adding the sugar at the end.','Burger sauce: mayo, tomato sauce, mustard and chopped pickles.','Roll the wagyu into 100g balls. Smash flat on a smoking hot plate, season hard, cook 2 minutes until a deep crust forms.','Flip, add cheese, cook 1 minute. Stack two per burger.','Toast the brioche. Sauce, lettuce, patties, onion, pickles. Fries on the side.'],
+  l:'Patties and onion over shredded lettuce with sauce on the side. Skip the bun.',
+  g:'GF buns, and cook the GF patties first on a clean surface. Check the mustard and pickles.'},
+ {id:'poke',n:'Teriyaki Chicken Poke Bowls',c:'Bowls',tier:'lighter',t:30,d:'Lean teriyaki chicken over brown rice with edamame, crunchy veg, avocado and pickled ginger-style dressing.',
+  i:[['chk_breast',210],['soy',18],['mirin',10],['honey',5],['ginger',6],['brownrice',75],['edamame',60],['cucumber',.3],['carrot',50],['avocado',.25],['ricevinegar',10],['springonion',.1],['sesameseeds',2],['lime',.15]],
+  m:['Cook the brown rice: rinse, then simmer in plenty of water for 25 to 30 minutes like pasta, drain and steam with the lid on for 5 minutes.','Teriyaki: soy, mirin, honey and grated ginger. Pour half over the chicken and leave 10 minutes.','Pan-fry the chicken 5 to 6 minutes a side until cooked. Pour in the rest of the teriyaki for the last minute and let it glaze. Rest and slice.','Cook the edamame 3 minutes in boiling water. Ribbon the carrot and cucumber with a peeler and toss with the rice vinegar and a pinch of salt.','Build bowls: rice, chicken, edamame, pickled veg, avocado. Finish with spring onion, sesame and lime.'],
+  l:'Made for lunch. Pack the avocado whole and slice on the day.',
+  g:'Tamari instead of soy in the teriyaki, cooked in a separate pan. Check the mirin.'},
+
+ {id:'larb',n:'Thai Chicken Larb Lettuce Cups',c:'Bowls',tier:'lighter',t:25,d:'Zingy minced chicken with lime, chilli and loads of fresh herbs, scooped into crisp lettuce cups.',
+  i:[['chk_mince',230],['lemongrass',5],['garlic',.08],['fishsauce',12],['lime',.5],['brownsugar',3],['chilli',.3],['red_onion',.2],['mint',.15],['coriander',.15],['iceberg',.25],['cucumber',.2],['brownrice',60]],
+  m:['Cook the brown rice (25 to 30 minutes).','Fry the lemongrass and garlic in a little oil for 30 seconds, then add the chicken mince. Break it up and cook 5 to 6 minutes until cooked and a little golden.','Off the heat, stir in the fish sauce, lime juice, sugar and sliced chilli. Taste: it should be sour, salty and hot.','Toss through the thinly sliced red onion and a big handful of torn mint and coriander.','Separate the iceberg into cups and slice the cucumber.','Spoon the larb into the lettuce cups, with rice and cucumber on the side.'],
+  l:'Pack the larb with rice, lettuce leaves in a separate bag to stay crisp.',
+  g:'Naturally gluten free. Check the fish sauce.'},
+
+ {id:'harissaquinoa',n:'Harissa Chicken, Roast Pumpkin & Quinoa',c:'Bowls',tier:'lighter',t:45,d:'Smoky harissa chicken over roast pumpkin, spinach and quinoa, with fetta and minty yoghurt.',
+  i:[['chk_breast',220],['harissa',15],['lemon',.3],['pumpkin',150],['cumin',.6],['quinoa',55],['spinach',40],['red_onion',.1],['fetta',20],['yoghurt',40],['mint',.08]],
+  m:['Oven to 210°C. Cube the pumpkin, toss with oil, cumin and salt, roast 30 minutes until caramelised.','Mix the harissa with a squeeze of lemon and a little oil, and coat the chicken. Leave 15 minutes.','Rinse the quinoa and simmer in 2 parts water for 12 minutes. Drain and fluff.','Pan-fry or grill the chicken 5 to 6 minutes a side. Rest and slice.','Toss the quinoa with the spinach, pumpkin, thinly sliced red onion, lemon juice and a little oil.','Top with chicken, crumbled fetta and yoghurt mixed with chopped mint.'],
+  l:'Built for lunch. Good warm or cold, yoghurt on the side.',
+  g:'Naturally gluten free. Check the harissa label.'},
+
+ {id:'salmontray',n:'Lemon Herb Salmon Tray Bake',c:'Seafood',tier:'lighter',t:35,d:'Salmon roasted on a tray of zucchini, beans, tomatoes and baby potatoes with lemon, garlic and herbs.',
+  i:[['salmon',180],['potato',120],['zucchini',100],['greenbeans',60],['cherrytom',70],['lemon',.35],['garlic',.08],['oregano',.4],['parsley',.08]],
+  m:['Oven to 220°C. Halve the potatoes and roast with a little oil and salt for 15 minutes.','Add the zucchini in chunks, the beans and tomatoes, crushed garlic, oregano, salt and a little oil. Toss and roast 5 minutes.','Nestle the salmon in among the veg, season, and lay lemon slices on top.','Roast 10 to 12 minutes until the salmon just flakes.','Squeeze over the rest of the lemon and scatter parsley.'],
+  l:'Salmon and veg together. Eat cold with a squeeze of lemon, or warm gently.',
+  g:'Naturally gluten free.'},
+
+ {id:'vietsalad',n:'Vietnamese Chicken & Cabbage Salad',c:'Bowls',tier:'lighter',t:30,d:'Poached chicken with crunchy cabbage, carrot and herbs, tossed in a sweet-sour lime dressing with peanuts.',
+  i:[['chk_breast',210],['cabbage',.15],['carrot',60],['cucumber',.25],['mint',.12],['coriander',.12],['peanuts',15],['fishsauce',12],['lime',.4],['brownsugar',6],['chilli',.3],['garlic',.05],['brownrice',60]],
+  m:['Cook the brown rice (25 to 30 minutes).','Poach the chicken: cover with cold salted water, bring to a gentle simmer, then turn off the heat and leave covered for 15 minutes. Cool a little and shred.','Dressing: fish sauce, lime juice, sugar, finely chopped garlic and chilli, plus 1 tbsp water per serve.','Shred the cabbage as thin as you can. Cut the carrot and cucumber into matchsticks.','Toss the veg, chicken and torn herbs with the dressing.','Serve over rice, topped with crushed peanuts.'],
+  l:'Pack the dressing separately and toss just before eating so the salad stays crunchy.',
+  g:'Naturally gluten free. Check the fish sauce.'},
+
+ {id:'prawnstirfry',n:'Ginger Prawn & Greens Stir-Fry',c:'Seafood',tier:'lighter',t:25,d:'Quick-fire prawns with broccoli, beans and capsicum in a light ginger-garlic sauce over brown rice.',
+  i:[['prawns',170],['broccoli',100],['greenbeans',60],['capsicum',.3],['garlic',.1],['ginger',8],['soy',15],['oyster',6],['cornflour',3],['brownrice',75],['springonion',.15]],
+  m:['Cook the brown rice (25 to 30 minutes).','Sauce: soy, oyster sauce and cornflour whisked with 3 tbsp water per serve.','Get a wok smoking hot. Stir-fry the prawns 1 minute a side until just pink, then set aside.','Add the broccoli, beans and capsicum with a splash of water and stir-fry 3 minutes until bright and just tender.','Add the garlic and ginger for 30 seconds, then the sauce. Bubble until glossy.','Toss the prawns back in with the spring onion and serve over rice.'],
+  l:'Reheat until just hot so the prawns don\'t go rubbery.',
+  g:'Tamari instead of soy, a GF oyster sauce, 100% maize cornflour, and a separate wok for the GF batch.'}
 ];
 
 // ---------- Meal-kit prices for the Kit Tax ----------

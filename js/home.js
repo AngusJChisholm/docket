@@ -39,10 +39,30 @@
       ${cheaper.length ? `<p class="kt-note">${cheaper.join(', ')} is cheaper on price alone, with smaller serves and less protein.</p>` : ''}`;
   }
 
-  // Hero: the share house week
-  const heroW = week(5, 5, true);
-  $('#hero-docket').innerHTML = docketHTML(heroW, '5 people · 5 dinners + lunches');
-  $('#hero-serve').textContent = money(heroW.docket / heroW.serves);
+  // Hero: an example week, set like a menu
+  const tierOf = r => r.tier || 'everyday';
+  const pick = ['chook', 'misosalmon', 'butter', 'poke', 'carnitas'].map(id => R.find(r => r.id === id)).filter(Boolean);
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'];
+  const menuServes = 10 * pick.length;
+  const menuTotal = pick.reduce((s, r) => s + serveCost(r) * 10, 0) + STAPLES;
+  const hfTotal = menuServes * KITS_DEFAULT[0].ps + KITS_DEFAULT[0].del * Math.ceil(10 / KITS_DEFAULT[0].max);
+  $('#menu-card').innerHTML = `<p class="mc-eyebrow">This week's menu</p><p class="mc-sub">5 people · dinners + next-day lunches</p>
+    <ol class="mc-list">${pick.map((r, i) => `<li><span class="mc-day">${days[i]}</span><span class="mc-dish">${esc(r.n)}${tierOf(r) !== 'everyday' ? ` <span class="tier ${tierOf(r) === 'premium' ? 'prem' : 'light'}">${tierOf(r) === 'premium' ? 'Premium' : 'Lighter'}</span>` : ''}</span><span class="mc-lead" aria-hidden="true"></span><span class="mc-pr num">${money(serveCost(r))}</span></li>`).join('')}</ol>
+    <div class="mc-foot"><span>Estimated shop</span><b class="num">${money(menuTotal, 0)}</b></div>
+    <div class="mc-dodge"><span>Kit Tax dodged</span><b class="num">${money(hfTotal - menuTotal, 0)}</b></div>`;
+  $('#hero-serve').textContent = money(menuTotal / menuServes);
+
+  // Collections
+  const COLS = [
+    { k: 'everyday', t: 'Everyday', d: 'The staples. Big flavour, big serves, best value.' },
+    { k: 'premium', t: 'Premium', d: 'Restaurant nights at home: scotch fillet, lamb cutlets, miso salmon.' },
+    { k: 'lighter', t: 'Lighter', d: 'Lean protein and loads of veg. Nothing fried or creamy.' }];
+  $('#col-grid').innerHTML = COLS.map(c => {
+    const rs = R.filter(r => tierOf(r) === c.k); const costs = rs.map(serveCost);
+    const eg = rs.slice().sort((a, b) => serveCost(b) - serveCost(a)).slice(0, 3).map(r => esc(r.n));
+    return `<a class="col-card col-${c.k}" href="plan.html#${c.k}"><span class="col-count">${rs.length} dinners</span><h3>${c.t}</h3><p>${c.d}</p>
+      <ul>${eg.map(n => `<li>${n}</li>`).join('')}</ul><span class="col-from">From <b class="num">${money(Math.min(...costs))}</b> a serve</span></a>`;
+  }).join('');
 
   // Calculator
   const C = { people: 5, dinners: 5, lunch: true };
@@ -63,7 +83,7 @@
   renderCalc();
 
   // Cheap wins: the six cheapest dinners with 40g+ protein
-  const wins = R.filter(r => serveProt(r) >= 40).sort((a, b) => serveCost(a) - serveCost(b)).slice(0, 6);
+  const wins = R.filter(r => serveProt(r) >= 40 && !r.tier).sort((a, b) => serveCost(a) - serveCost(b)).slice(0, 6);
   const time = r => r.t >= 120 ? `${+(r.t / 60).toFixed(1)} hr · ${r.h} min hands-on` : `${r.t} min`;
   $('#dinner-cards').innerHTML = wins.map(r => `<article class="card">
       <div class="card-top"><div><h3>${esc(r.n)}</h3><div class="meta">${esc(r.c)} · ${time(r)}</div></div>

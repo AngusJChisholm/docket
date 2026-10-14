@@ -1,8 +1,9 @@
 // ---------- State ----------
-const S={people:5,gf:2,dinners:5,lunch:true,budget:400,minProt:40,store:'coles',skip:{pork:false,seafood:false,red:false},sel:['chook','butter','carnitas','chorizo','friedrice'],sort:'cost',kits:KITS_DEFAULT.map(k=>({...k})),done:{}};
+const S={people:5,gf:2,dinners:5,lunch:true,budget:400,minProt:40,store:'coles',skip:{pork:false,seafood:false,red:false},sel:['chook','butter','carnitas','chorizo','friedrice'],sort:'cost',col:'all',kits:KITS_DEFAULT.map(k=>({...k})),done:{}};
 const STAPLES=(window.DOCKET_CONFIG||{}).staplesPerWeek??15;
 try{const s=JSON.parse(localStorage.getItem('docket-state')||'null');if(s&&typeof s==='object')Object.assign(S,s,{skip:{...S.skip,...(s.skip||{})}});}catch(e){}
 S.sel=S.sel.filter(id=>R.some(r=>r.id===id));
+if(['everyday','premium','lighter'].includes(location.hash.slice(1)))S.col=location.hash.slice(1);
 function save(){try{localStorage.setItem('docket-state',JSON.stringify(S))}catch(e){}}
 
 // ---------- Pricing ----------
@@ -84,9 +85,13 @@ function renderControls(){
   document.querySelectorAll('#skips .chip').forEach(b=>b.setAttribute('aria-pressed',!!S.skip[b.dataset.k]));
   $('#sort').value=S.sort;
 }
+const tierOf=r=>r.tier||'everyday';
+const COL_NOTE={all:'',everyday:'Our staples: big flavour, big serves, best value.',premium:'Restaurant-style nights at home. Better cuts, a few more steps, still well under meal-kit prices.',lighter:'Lean protein, loads of veg, nothing fried or creamy. Still properly filling.'};
 function renderCards(){
   const full=S.sel.length>=S.dinners;
-  let list=R.filter(allowed);
+  document.querySelectorAll('#cols button').forEach(b=>b.setAttribute('aria-selected',b.dataset.c===S.col));
+  $('#col-note').textContent=COL_NOTE[S.col]||'';
+  let list=R.filter(allowed).filter(r=>S.col==='all'||tierOf(r)===S.col||S.sel.includes(r.id));
   const low=list.filter(r=>serveProt(r)<S.minProt&&!S.sel.includes(r.id));
   list=list.filter(r=>serveProt(r)>=S.minProt||S.sel.includes(r.id));
   const key={cost:r=>serveCost(r),prot:r=>-serveProt(r),time:r=>r.t}[S.sort];
@@ -94,7 +99,7 @@ function renderCards(){
   $('#cards').innerHTML=list.map(r=>{
     const sel=S.sel.includes(r.id);const p=serveProt(r);const g=gfType(r);
     return`<article class="card${sel?' sel':''}${!sel&&full?' off':''}">
-      <div class="card-top"><div><h3>${esc(r.n)}</h3><div class="meta">${esc(r.c)} · ${timeLabel(r)}</div></div>
+      <div class="card-top"><div><div class="card-eyebrow">${tierOf(r)==='premium'?'<span class="tier prem">Premium</span>':tierOf(r)==='lighter'?'<span class="tier light">Lighter</span>':''}${esc(r.c)}</div><h3>${esc(r.n)}</h3><div class="meta">${timeLabel(r)}</div></div>
       <div class="ticket num"><b>${money(serveCost(r))}</b><small>per serve</small></div></div>
       ${r.d?`<p class="blurb">${esc(r.d)}</p>`:''}
       <div class="badges"><span class="badge p num">${Math.round(p)}g protein</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span></div>
@@ -186,13 +191,14 @@ $('#prot').addEventListener('input',e=>{S.minProt=+e.target.value;render()});
 $('#store').addEventListener('click',e=>{const b=e.target.closest('button');if(b){S.store=b.dataset.s;render()}});
 $('#skips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;S.skip[b.dataset.k]=!S.skip[b.dataset.k];S.sel=S.sel.filter(id=>allowed(R.find(r=>r.id===id)));render()});
 $('#sort').onchange=e=>{S.sort=e.target.value;render()};
+$('#cols').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.col=b.dataset.c;try{history.replaceState(null,'',S.col==='all'?location.pathname:'#'+S.col)}catch(err){}render()});
 $('#cards').addEventListener('click',e=>{
   const v=e.target.closest('.view');if(v){openRecipe(v.dataset.id);return}
   const p=e.target.closest('.pick');if(!p)return;const id=p.dataset.id;
   if(S.sel.includes(id))S.sel=S.sel.filter(x=>x!==id);else if(S.sel.length<S.dinners)S.sel.push(id);render();
 });
 $('#fill').onclick=()=>{
-  const pool=R.filter(r=>allowed(r)&&serveProt(r)>=S.minProt&&!S.sel.includes(r.id)).sort((a,b)=>serveCost(a)-serveCost(b));
+  const pool=R.filter(r=>allowed(r)&&serveProt(r)>=S.minProt&&!S.sel.includes(r.id)&&(S.col==='all'||tierOf(r)===S.col)).sort((a,b)=>serveCost(a)-serveCost(b));
   const cats=new Set(S.sel.map(id=>R.find(r=>r.id===id).c));
   for(const r of pool){if(S.sel.length>=S.dinners)break;if(!cats.has(r.c)){S.sel.push(r.id);cats.add(r.c)}}
   for(const r of pool){if(S.sel.length>=S.dinners)break;if(!S.sel.includes(r.id))S.sel.push(r.id)}
