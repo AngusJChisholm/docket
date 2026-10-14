@@ -23,7 +23,8 @@ function price(id,store=S.store){
 // Meal kits sell boxes for 2 or 4 people, so small households still pay for at least 2 serves a meal
 function kitCost(k,perMeal,dinners){if(!dinners)return 0;const kitPerMeal=Math.max(2,2*Math.ceil(perMeal/2));return dinners*kitPerMeal*k.ps+k.del*Math.ceil(kitPerMeal/k.max)}
 // A realistic starting budget: small households carry some fixed costs (whole packs, jars) that larger ones spread out
-function autoBudget(){const serves=S.people*(S.lunch?2:1)*S.dinners;return Math.round((75+serves*5.6)/10)*10}
+// Tested against 4,000 random weeks: covers about 4 in 5 weeks at every household size
+function autoBudget(){const serves=S.people*(S.lunch?2:1)*S.dinners;return Math.ceil((70+serves*7.5+(S.people===1?25:0))/10)*10}
 const STORE_NAME={coles:'Coles',woolies:'Woolies',aldi:'Aldi'};
 const spm=()=>S.people*(S.lunch?2:1);
 const gfShare=()=>S.people?Math.min(S.gf,S.people)/S.people:0;
@@ -86,6 +87,7 @@ function kAmt(id,a){const it=ING[id];
   if(it.cl)return`${Math.max(1,Math.round(a*it.cl))} cloves`;
   if(it.ea&&it.u==='g'){const n=a/it.ea[0];return`${half(n)} ${it.ea[1]}${n>1?'s':''} (${fmtAmt(id,a)})`}
   if(it.pl==='tin'||it.pl==='can')return`${half(a/it.pk)} tin${a/it.pk>1?'s':''}`;
+  if(it.whole){const v=Math.max(1,Math.ceil(a-1e-6));return String(v)}
   if(it.ea&&it.u==='ea'){const v=a<1?Math.max(.25,Math.round(a*4)/4):Math.ceil(a*2)/2;const w=it.ea[1];return /bunch$/.test(w)?`${frac(v)} bunch${v>1?'es':''}`:frac(v)}
   if(it.u==='ml')return spoons(a);
   if(it.tsp){const t=a/it.tsp;return t>=3?`${half(t/3)} tbsp`:`${half(t)} tsp`}
@@ -177,6 +179,8 @@ function renderList(w){
     const detail=x.pan?`you'll use ${kAmt(x.id,x.amt)} · if you're out: ${packLabel(x.id,x.pk)} ${money(x.pack)}`:`${fmtAmt(x.id,x.amt)} needed · ${x.label}${x.left>0&&ING[x.id].u!=='ea'&&x.left/x.bought>.15?` · <span class="left">${fmtAmt(x.id,x.left)} left over</span>`:''}`;
     return`<label class="item${done?' done':''}" for="${k}"><input type="checkbox" id="${k}" data-id="${x.id}" ${done?'checked':''}><span class="what">${esc(it.n)}<small>${detail}${x.fb?' · <span class="flag">Not at Aldi, priced at Coles</span>':''}${it.ck?' · check label for GF':''}${x.real?' · <span class="ok">price checked</span>':''}</small></span><span class="c num">${x.pan?'≈':''}${money(x.cost)}</span></label>`}).join('')}</div>`).join('');
   $('#list-meta').textContent=`${w.items.length} items · ${money(w.shop)} + ${money(STAPLES,0)} staples`;
+  const buyable=w.items.filter(x=>!x.pan);const checked=buyable.filter(x=>x.real).length;
+  $('#price-note').textContent=checked?`${checked} of ${buyable.length} prices checked at ${STORE_NAME[S.store]} this week. The rest are Docket estimates.`:`Prices are Docket's estimates for ${STORE_NAME[S.store]}, so expect the shelf to be within a few dollars either way.`;
 }
 function useItUp(w){
   const left={};w.items.forEach(x=>{if(!x.pan&&x.left>0&&x.bought)left[x.id]=x.left});

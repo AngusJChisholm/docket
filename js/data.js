@@ -7,7 +7,7 @@
 //   n name · a aisle · u unit (g, ml, ea) · pk pack size · p pack price · pr protein per 100g/ml (or per each)
 //   t tag for filters (red, pork, seafood) · pl pack label · ck check the label for gluten
 //   alt [pack size, price] a smaller pack the planner can choose · wt sold by weight (buy what you need)
-//   noAldi not stocked at Aldi · pan pantry item (costed by what you use; listed under "Pantry check")
+//   whole: always use whole ones (eggs, buns, wraps) · noAldi not stocked at Aldi · pan pantry item (costed by what you use; listed under "Pantry check")
 //   Kitchen display: tsp/tbsp = grams per teaspoon/tablespoon · cup = grams per cup
 //                    ea = [grams each, "word"] · cl = cloves per bulb
 // ============================================================================
@@ -32,7 +32,7 @@ const ING={
  ham:{n:'Shaved ham',a:'M',u:'g',pk:200,p:4.50,pr:18,t:'pork'},
 
  // Dairy, eggs & fridge
- eggs:{n:'Free-range eggs',a:'D',u:'ea',pk:12,p:6.50,pr:6.5,pl:'dozen',ea:[1,'egg'],alt:[6,4.00]},
+ eggs:{n:'Free-range eggs',a:'D',u:'ea',pk:12,p:6.50,pr:6.5,pl:'dozen',ea:[1,'egg'],alt:[6,4.00],whole:1},
  cream:{n:'Thickened cream',a:'D',u:'ml',pk:600,p:4.50,pr:2,alt:[300,2.80]},
  milk:{n:'Full cream milk',a:'D',u:'ml',pk:2000,p:3.10,pr:3.4,alt:[1000,1.80]},
  butter:{n:'Butter',a:'D',u:'g',pk:250,p:4.50,pr:.8,tbsp:14},
@@ -40,7 +40,7 @@ const ING={
  mozz:{n:'Grated mozzarella',a:'D',u:'g',pk:500,p:7.00,pr:22,cup:100,alt:[250,4.20]},
  parm:{n:'Parmesan',a:'D',u:'g',pk:250,p:6.50,pr:35},
  fetta:{n:'Fetta',a:'D',u:'g',pk:200,p:4.50,pr:17},
- slices:{n:'Burger cheese slices (12)',a:'D',u:'ea',pk:12,p:4.50,pr:3.5,pl:'12 pack',ea:[1,'slice']},
+ slices:{n:'Burger cheese slices (12)',a:'D',u:'ea',pk:12,p:4.50,pr:3.5,pl:'12 pack',ea:[1,'slice'],whole:1},
  sourcream:{n:'Sour cream',a:'D',u:'ml',pk:300,p:2.60,pr:3},
  yoghurt:{n:'Greek yoghurt',a:'D',u:'g',pk:1000,p:6.00,pr:9,cup:250,alt:[500,4.00]},
  kimchi:{n:'Kimchi',a:'D',u:'g',pk:400,p:7.50,pr:1.5,ck:1},
@@ -83,7 +83,7 @@ const ING={
  massaman:{n:'Massaman curry paste',a:'P',u:'g',pk:195,p:3.80,pr:2,ck:1,pl:'jar',tbsp:16},
  ricenoodles:{n:'Flat rice noodles',a:'P',u:'g',pk:375,p:2.80,pr:6},
  cornchips:{n:'Plain corn chips',a:'P',u:'g',pk:230,p:3.50,pr:7,ck:1},
- turkish:{n:'Turkish rolls (4)',a:'B',u:'ea',pk:4,p:4.50,pr:9,pl:'4 pack',ea:[1,'roll']},
+ turkish:{n:'Turkish rolls (4)',a:'B',u:'ea',pk:4,p:4.50,pr:9,pl:'4 pack',ea:[1,'roll'],whole:1},
  currypowder:{n:'Curry powder',a:'K',u:'g',pk:40,p:2.50,pr:0,ck:1,tsp:2.5,pan:1},
  worcestershire:{n:'Worcestershire sauce',a:'K',u:'ml',pk:250,p:3.00,pr:0,ck:1,pan:1},
  scotch:{n:'Scotch fillet steak',a:'M',u:'g',pk:1000,p:45.00,pr:21,t:'red',wt:1},
@@ -137,19 +137,19 @@ const ING={
  panko:{n:'Panko breadcrumbs',a:'P',u:'g',pk:200,p:2.50,pr:12,cup:60},
 
  // Bakery
- buns:{n:'Brioche burger buns (6)',a:'B',u:'ea',pk:6,p:4.50,pr:8,pl:'6 pack',ea:[1,'bun']},
- wraps:{n:'Wraps (8)',a:'B',u:'ea',pk:8,p:3.50,pr:6,pl:'8 pack',ea:[1,'wrap']},
- tortillas:{n:'Mini flour tortillas (12)',a:'B',u:'ea',pk:12,p:3.50,pr:4,pl:'12 pack',ea:[1,'tortilla']},
- pita:{n:'Lebanese bread (6)',a:'B',u:'ea',pk:6,p:3.50,pr:9,pl:'6 pack',ea:[1,'pita']},
- naan:{n:'Garlic naan (4)',a:'B',u:'ea',pk:4,p:4.50,pr:8,pl:'4 pack',ea:[1,'naan']},
+ buns:{n:'Brioche burger buns (6)',a:'B',u:'ea',pk:6,p:4.50,pr:8,pl:'6 pack',ea:[1,'bun'],whole:1},
+ wraps:{n:'Wraps (8)',a:'B',u:'ea',pk:8,p:3.50,pr:6,pl:'8 pack',ea:[1,'wrap'],whole:1},
+ tortillas:{n:'Mini flour tortillas (12)',a:'B',u:'ea',pk:12,p:3.50,pr:4,pl:'12 pack',ea:[1,'tortilla'],whole:1},
+ pita:{n:'Lebanese bread (6)',a:'B',u:'ea',pk:6,p:3.50,pr:9,pl:'6 pack',ea:[1,'pita'],whole:1},
+ naan:{n:'Garlic naan (4)',a:'B',u:'ea',pk:4,p:4.50,pr:8,pl:'4 pack',ea:[1,'naan'],whole:1},
 
  // Gluten free swaps
  gf_pasta:{n:'GF pasta',a:'G',u:'g',pk:500,p:3.80,pr:7},
  gf_lasagne:{n:'GF lasagne sheets',a:'G',u:'g',pk:250,p:4.80,pr:6,noAldi:1},
  gf_crumbs:{n:'GF breadcrumbs',a:'G',u:'g',pk:200,p:4.50,pr:7,noAldi:1,cup:80},
- gf_buns:{n:'GF burger buns (4)',a:'G',u:'ea',pk:4,p:7.50,pr:5,pl:'4 pack',noAldi:1,ea:[1,'GF bun']},
- gf_wraps:{n:'GF wraps (6)',a:'G',u:'ea',pk:6,p:7.00,pr:3,pl:'6 pack',ea:[1,'GF wrap']},
- corn_tortillas:{n:'Corn tortillas',a:'G',u:'ea',pk:12,p:4.50,pr:2,pl:'12 pack',ck:1,noAldi:1,ea:[1,'corn tortilla']},
+ gf_buns:{n:'GF burger buns (4)',a:'G',u:'ea',pk:4,p:7.50,pr:5,pl:'4 pack',noAldi:1,ea:[1,'GF bun'],whole:1},
+ gf_wraps:{n:'GF wraps (6)',a:'G',u:'ea',pk:6,p:7.00,pr:3,pl:'6 pack',ea:[1,'GF wrap'],whole:1},
+ corn_tortillas:{n:'Corn tortillas',a:'G',u:'ea',pk:12,p:4.50,pr:2,pl:'12 pack',ck:1,noAldi:1,ea:[1,'corn tortilla'],whole:1},
  tamari:{n:'Tamari (GF soy sauce)',a:'G',u:'ml',pk:250,p:5.00,pr:10,pan:1},
  gf_flour:{n:'GF plain flour',a:'G',u:'g',pk:1000,p:4.00,pr:3,cup:150,pan:1},
  sriracha:{n:'Sriracha',a:'K',u:'ml',pk:435,p:4.50,pr:0,pan:1},
