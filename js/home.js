@@ -18,7 +18,7 @@
     const perMeal = people * (lunch ? 2 : 1);
     const serves = perMeal * dinners;
     const docket = serves * AVG + STAPLES;
-    const kits = KITS_DEFAULT.map(k => ({ n: k.n, v: serves * k.ps + k.del * Math.ceil(perMeal / k.max) }));
+    const kits = KITS_DEFAULT.map(k => ({ n: k.n, v: (() => { const m = Math.max(2, 2 * Math.ceil(perMeal / 2)); return dinners * m * k.ps + k.del * Math.ceil(m / k.max); })() }));
     return { serves, docket, kits, perMeal };
   }
 
@@ -44,17 +44,24 @@
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'];
   const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hf = KITS_DEFAULT[0];
-  function weekOf(pick) {
-    const serves = 10 * pick.length;
-    const total = pick.reduce((s, r) => s + serveCost(r) * 10, 0) + STAPLES;
-    const kit = serves * hf.ps + hf.del * Math.ceil(10 / hf.max);
+  // Meal kits sell 2- or 4-person boxes, so small households still pay for at least 2 serves a meal
+  const kitCost = (k, perMeal, dinners) => { const m = Math.max(2, 2 * Math.ceil(perMeal / 2)); return dinners * m * k.ps + k.del * Math.ceil(m / k.max); };
+  let HH = 4;
+  function weekOf(pick, people = HH) {
+    const perMeal = people * 2, serves = perMeal * pick.length;
+    const total = pick.reduce((s, r) => s + serveCost(r) * perMeal, 0) + STAPLES;
+    const kit = kitCost(hf, perMeal, pick.length);
     return { total, kit, serves };
   }
+  let current = null;
   function renderMenu(pick, animate) {
     const w = weekOf(pick);
-    $('#menu-card').innerHTML = `<p class="mc-eyebrow">This week's menu</p><p class="mc-sub">5 people · dinners + next-day lunches</p>
+    current = pick;
+    $('#menu-card').innerHTML = `<p class="mc-eyebrow">This week's menu</p>
+      <div class="hh" role="group" aria-label="How many people">${[1, 2, 4, 6].map(n => `<button type="button" data-n="${n}" aria-pressed="${n === HH}">${n === 1 ? 'Just me' : n + ' people'}</button>`).join('')}</div>
+      <p class="mc-sub">Dinners + next-day lunches</p>
       <ol class="mc-list${animate ? ' deal' : ''}">${pick.map((r, i) => `<li style="--i:${i}"><span class="mc-day">${days[i]}</span><span class="mc-dish">${esc(r.n)}${tierOf(r) !== 'everyday' ? ` <span class="tier ${tierOf(r) === 'premium' ? 'prem' : 'light'}">${tierOf(r) === 'premium' ? 'Premium' : 'Lighter'}</span>` : ''}</span><span class="mc-lead" aria-hidden="true"></span><span class="mc-pr num">${money(serveCost(r))}</span></li>`).join('')}</ol>
-      <div class="mc-foot"><span>Estimated shop</span><b class="num">${money(w.total, 0)}</b></div>
+      <div class="mc-foot"><span>Food for the week</span><b class="num">${money(w.total, 0)}</b></div>
       <div class="mc-dodge"><span>Kit Tax dodged</span><b class="num">${money(w.kit - w.total, 0)}</b></div>`;
     $('#hero-serve').textContent = money(w.total / w.serves);
     const tk = document.querySelector('.hang .ticket'); if (animate && tk && !reduce) { tk.classList.remove('bump'); void tk.offsetWidth; tk.classList.add('bump'); }
@@ -65,13 +72,14 @@
     const sample = (arr, n) => arr.slice().sort(() => Math.random() - .5).slice(0, n);
     for (let tries = 0; tries < 40; tries++) {
       const pick = sample([...sample(by('premium'), 1), ...sample(by('lighter'), 1), ...sample(by('everyday'), 3)], 5);
-      if (weekOf(pick).total < 400) return pick;
+      if (weekOf(pick, 5).total < 400) return pick;
     }
     return sample(by('everyday'), 5);
   }
   const start = ['chook', 'misosalmon', 'butter', 'poke', 'carnitas'].map(id => R.find(r => r.id === id)).filter(Boolean);
   renderMenu(start, false);
   $('#shuffle').onclick = () => renderMenu(randomWeek(), true);
+  $('#menu-card').addEventListener('click', e => { const b = e.target.closest('.hh button'); if (!b) return; HH = +b.dataset.n; renderMenu(current, false); });
 
   // Ribbon of dinners
   const pill = r => `<span class="rb-pill rb-${tierOf(r)}">${esc(r.n)}</span>`;
@@ -81,7 +89,7 @@
   $('#ribbon-b').innerHTML = `<div class="rb-track">${rowB.map(pill).join('')}${rowB.map(pill).join('')}</div>`;
 
   // Numbers band
-  const flat = weekOf(start);
+  const flat = weekOf(start, 5);
   const N = { 'n-dinners': R.length, 'n-cheap': Math.min(...R.map(serveCost)), 'n-prot': Math.round(R.reduce((s, r) => s + serveProt(r), 0) / R.length), 'n-year': Math.round((flat.kit - flat.total) * 52) };
   const fmtN = (el, v) => { const dp = el.dataset.dp != null ? +el.dataset.dp : (el.dataset.money ? 2 : 0); el.textContent = el.dataset.money ? money(v, dp) : Math.round(v).toLocaleString('en-AU') + (el.dataset.suffix || ''); };
   Object.entries(N).forEach(([id, v]) => { const el = document.getElementById(id); el.dataset.to = v; fmtN(el, v); });

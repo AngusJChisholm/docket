@@ -392,3 +392,16 @@ html{scroll-behavior:smooth}
 section[id]{scroll-margin-top:96px}
 @media (max-width:860px){.nav-links{gap:20px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.nav-links a::after{transition:none}}
+
+/* ---------- Every household size ---------- */
+.linkish{border:0;background:none;padding:0;color:var(--green);font-weight:700;font-size:12.5px;text-decoration:underline;text-align:left;width:max-content}
+.item .left{color:var(--markup);font-weight:600}
+.useitup{background:var(--mint);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:18px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px}
+.useitup p{margin:0;flex:1 1 260px}
+.useitup .eyebrow{flex-basis:100%;color:var(--green)}
+.carry{margin-top:6px}
+.carry b{color:var(--ink)}
+.badge.big{background:var(--peach);color:var(--markup)}
+.hh{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px}
+.hh button{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.hh button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}

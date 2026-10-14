@@ -1,7 +1,7 @@
 // ---------- State ----------
-const S={people:5,gf:2,dinners:5,lunch:true,budget:400,minProt:40,store:'coles',skip:{pork:false,seafood:false,red:false},sel:['chook','butter','carnitas','chorizo','friedrice'],sort:'cost',col:'all',kits:KITS_DEFAULT.map(k=>({...k})),done:{}};
+const S={people:2,gf:0,dinners:4,lunch:true,budget:120,budgetAuto:true,minProt:40,store:'coles',skip:{pork:false,seafood:false,red:false},sel:['butter','tuscan','carnitas','friedrice'],sort:'cost',col:'all',kits:KITS_DEFAULT.map(k=>({...k})),done:{}};
 const STAPLES=(window.DOCKET_CONFIG||{}).staplesPerWeek??15;
-try{const s=JSON.parse(localStorage.getItem('docket-state')||'null');if(s&&typeof s==='object')Object.assign(S,s,{skip:{...S.skip,...(s.skip||{})}});}catch(e){}
+try{const s=JSON.parse(localStorage.getItem('docket-state')||'null');if(s&&typeof s==='object'){Object.assign(S,s,{skip:{...S.skip,...(s.skip||{})}});if(s.budgetAuto===undefined)S.budgetAuto=false}}catch(e){}
 S.sel=S.sel.filter(id=>R.some(r=>r.id===id));
 if(['everyday','premium','lighter'].includes(location.hash.slice(1)))S.col=location.hash.slice(1);
 function save(){try{localStorage.setItem('docket-state',JSON.stringify(S))}catch(e){}}
@@ -19,6 +19,10 @@ function price(id,store=S.store){
   if(it.noAldi)return{...base,fb:true};
   return{p:+(base.p*(0.79+hash(id+'a')*0.09)).toFixed(2),pk:base.pk,fb:false};
 }
+// Meal kits sell boxes for 2 or 4 people, so small households still pay for at least 2 serves a meal
+function kitCost(k,perMeal,dinners){if(!dinners)return 0;const kitPerMeal=Math.max(2,2*Math.ceil(perMeal/2));return dinners*kitPerMeal*k.ps+k.del*Math.ceil(kitPerMeal/k.max)}
+// A realistic starting budget: small households carry some fixed costs (whole packs, jars) that larger ones spread out
+function autoBudget(){const serves=S.people*(S.lunch?2:1)*S.dinners;return Math.round((75+serves*5.6)/10)*10}
 const STORE_NAME={coles:'Coles',woolies:'Woolies',aldi:'Aldi'};
 const spm=()=>S.people*(S.lunch?2:1);
 const gfShare=()=>S.people?Math.min(S.gf,S.people)/S.people:0;
@@ -41,11 +45,29 @@ function allowed(r){const t=tags(r);return!Object.keys(S.skip).some(k=>S.skip[k]
 function week(){
   const agg={};const n=spm();
   S.sel.forEach(sid=>{const r=R.find(x=>x.id===sid);if(!r)return;splitLines(r,n).forEach(([id,a])=>{agg[id]=(agg[id]||0)+a})});
-  const items=Object.entries(agg).map(([id,amt])=>{const it=ING[id];const pr=price(id);const packs=Math.max(1,Math.ceil(amt/pr.pk-1e-6));return{id,amt,packs,pk:pr.pk,real:!!pr.real,at:pr.at,pan:!!it.pan,pack:pr.p,cost:it.pan?amt/pr.pk*pr.p:packs*pr.p,fb:pr.fb}});
+  const items=Object.entries(agg).map(([id,amt])=>{
+    const it=ING[id];const pr=price(id);
+    const base={id,amt,pk:pr.pk,real:!!pr.real,at:pr.at,pan:!!it.pan,pack:pr.p,fb:pr.fb};
+    if(it.pan)return{...base,packs:1,cost:amt/pr.pk*pr.p,label:'',left:0};
+    if(it.wt&&!pr.real){const buy=it.u==='ea'?Math.ceil(amt):Math.max(50,Math.ceil(amt/50)*50);return{...base,packs:1,cost:buy/pr.pk*pr.p,label:`about ${fmtAmt(id,buy)}`,left:buy-amt,bought:buy}}
+    // Cheapest mix of the big pack and (if there is one) a smaller pack
+    let best=null;const alt=!pr.real&&it.alt?{pk:it.alt[0],p:pr.p*(it.alt[1]/it.p)}:null;
+    const maxBig=Math.max(1,Math.ceil(amt/pr.pk-1e-6));
+    for(let nb=0;nb<=maxBig;nb++){
+      const rest=Math.max(0,amt-nb*pr.pk);let ns=0;
+      if(rest>1e-6){if(!alt)continue;ns=Math.ceil(rest/alt.pk-1e-6)}
+      if(nb===0&&ns===0)continue;
+      const cost=nb*pr.p+(alt?ns*alt.p:0);const bought=nb*pr.pk+(alt?ns*alt.pk:0);
+      if(!best||cost<best.cost-1e-6||(Math.abs(cost-best.cost)<1e-6&&bought<best.bought))best={nb,ns,cost,bought};
+    }
+    const parts=[];if(best.nb)parts.push(`${best.nb} × ${packLabel(id,pr.pk)}`);if(best.ns)parts.push(`${best.ns} × ${packLabel(id,alt.pk)}`);
+    return{...base,packs:best.nb+best.ns,cost:best.cost,label:parts.join(' + '),left:best.bought-amt,bought:best.bought};
+  });
   const shop=items.reduce((s,x)=>s+x.cost,0);
+  const eaten=items.reduce((s,x)=>s+(x.pan||!x.bought?x.cost:x.cost*Math.min(1,x.amt/x.bought)),0)+(S.sel.length?STAPLES:0);
   const serves=S.sel.length*n;
   const prot=S.sel.length?S.sel.reduce((s,id)=>s+serveProt(R.find(r=>r.id===id)),0)/S.sel.length:0;
-  return{items,shop,total:shop+(S.sel.length?STAPLES:0),serves,prot};
+  return{items,shop,eaten,total:shop+(S.sel.length?STAPLES:0),serves,prot};
 }
 
 // ---------- Formatting ----------
@@ -80,7 +102,7 @@ function renderControls(){
   $('#people-dn').disabled=S.people<=1;$('#people-up').disabled=S.people>=10;
   $('#gf-dn').disabled=S.gf<=0;$('#gf-up').disabled=S.gf>=S.people;
   $('#din-dn').disabled=S.dinners<=1;$('#din-up').disabled=S.dinners>=7;
-  $('#budget').value=S.budget;$('#lunch').checked=S.lunch;$('#prot').value=S.minProt;$('#prot-v').textContent=S.minProt+'g';
+  if(S.budgetAuto)S.budget=autoBudget();$('#budget').value=S.budget;$('#budget-hint').hidden=!S.budgetAuto;$('#budget-reset').hidden=S.budgetAuto;$('#lunch').checked=S.lunch;$('#prot').value=S.minProt;$('#prot-v').textContent=S.minProt+'g';
   document.querySelectorAll('#store button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===S.store));
   document.querySelectorAll('#skips .chip').forEach(b=>b.setAttribute('aria-pressed',!!S.skip[b.dataset.k]));
   $('#sort').value=S.sort;
@@ -105,7 +127,7 @@ function renderCards(){
       <div class="card-top"><div><div class="card-eyebrow">${tierOf(r)==='premium'?'<span class="tier prem">Premium</span>':tierOf(r)==='lighter'?'<span class="tier light">Lighter</span>':''}${esc(r.c)}</div><h3>${esc(r.n)}</h3><div class="meta">${timeLabel(r)}</div></div>
       <div class="ticket num"><b>${money(serveCost(r))}</b><small>per serve</small></div></div>
       ${r.d?`<p class="blurb">${esc(r.d)}</p>`:''}
-      <div class="badges"><span class="badge p num">${Math.round(p)}g protein</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span></div>
+      <div class="badges"><span class="badge p num">${Math.round(p)}g protein</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span>${r.big&&spm()<4?'<span class="badge big">Best for 4+ serves</span>':''}</div>
       <div class="card-actions"><button class="btn ghost view" data-id="${r.id}">Recipe</button>
       <button class="btn ghost pick" data-id="${r.id}" ${!sel&&full?'disabled':''} aria-pressed="${sel}">${sel?'✓ Picked':'Add'}</button></div></article>`}).join('');
   const blocked=R.length-R.filter(allowed).length;
@@ -123,18 +145,19 @@ function renderWeek(w){
   $('#meter').classList.toggle('over',pct>1);$('#meter i').style.width=Math.min(100,pct*100)+'%';
   const diff=S.budget-w.total;
   $('#budget-line').innerHTML=diff>=0?`<b>${money(diff,0)}</b> under your ${money(S.budget,0)} budget`:`<b class="over">${money(-diff,0)} over</b> your ${money(S.budget,0)} budget`;
-  $('#st-serve').textContent=w.serves?money(w.total/w.serves):'$0';
+  $('#st-serve').textContent=w.serves?money(w.eaten/w.serves):'$0';
+  const carry=w.total-w.eaten;$('#carry').innerHTML=S.sel.length&&carry>2?`Food you'll eat this week: <b>${money(w.eaten,0)}</b>. The other ${money(carry,0)} stays in the fridge and pantry for next week.`:'';
   $('#st-prot').textContent=Math.round(w.prot)+'g';
   $('#st-picked').textContent=`${S.sel.length}/${S.dinners}`;
   $('#picked').innerHTML=S.sel.map(id=>{const r=R.find(x=>x.id===id);return`<li class="pk-${tierOf(r)}"><span>${esc(r.n)}</span><span class="num">${money(serveCost(r))}</span></li>`}).join('');
   // Kit tax
-  const n=spm();const rows=S.kits.map(k=>({n:k.n,v:w.serves*k.ps+(S.sel.length?k.del*Math.ceil(n/k.max):0)}));
-  $('#bars').innerHTML=[`<div class="ln us"><span>Docket</span><span>${money(w.total)}</span></div>`,...rows.map(x=>`<div class="ln kit"><span>${esc(x.n)}</span><span>${money(x.v)}</span></div>`)].join('');
+  const n=spm();const rows=S.kits.map(k=>({n:k.n,v:kitCost(k,n,S.sel.length)}));
+  $('#bars').innerHTML=[`<div class="ln us"><span>Docket (food eaten)</span><span>${money(w.eaten)}</span></div>`,...rows.map(x=>`<div class="ln kit"><span>${esc(x.n)}</span><span>${money(x.v)}</span></div>`)].join('');
   const hf=rows[0];
   if(!S.sel.length){$('#dodged').innerHTML='';$('#kt-save').textContent='Pick some dinners to see what the kits would charge.';}
   else{
-    const s=hf.v-w.total;
-    const cheaper=rows.filter(r=>r.v<w.total);
+    const s=hf.v-w.eaten;
+    const cheaper=rows.filter(r=>r.v<w.eaten);
     $('#dodged').innerHTML=s>0?`<div class="dodged"><span>KIT TAX DODGED</span><b class="num">${money(s)}</b></div>`:`<div class="dodged"><span>${esc(hf.n)} is cheaper</span><b class="num">${money(-s)}</b></div>`;
     let txt=s>0?`vs ${esc(hf.n)}. That's ${money(s*52,0)} a year.`:'';
     if(cheaper.length)txt+=` ${cheaper.map(c=>esc(c.n)).join(', ')} is cheaper on price alone this week, with smaller serves and less protein.`;
@@ -150,11 +173,28 @@ function renderList(w){
   if(!w.items.length){$('#aisles').innerHTML='<p class="hint">Pick a dinner and your list builds itself here, merged and sorted by aisle.</p>';$('#list-meta').textContent='';return}
   $('#aisles').innerHTML=order.filter(a=>by[a]).map(a=>`<div class="aisle"><h3>${AISLE[a]}</h3>${by[a].sort((x,y)=>ING[x.id].n.localeCompare(ING[y.id].n)).map(x=>{
     const it=ING[x.id];const k='i-'+x.id;const done=!!S.done[x.id];
-    const detail=x.pan?`you'll use ${kAmt(x.id,x.amt)} · if you're out: ${packLabel(x.id,x.pk)} ${money(x.pack)}`:`${fmtAmt(x.id,x.amt)} needed · ${x.packs} × ${packLabel(x.id,x.pk)}`;
+    const detail=x.pan?`you'll use ${kAmt(x.id,x.amt)} · if you're out: ${packLabel(x.id,x.pk)} ${money(x.pack)}`:`${fmtAmt(x.id,x.amt)} needed · ${x.label}${x.left>0&&ING[x.id].u!=='ea'&&x.left/x.bought>.15?` · <span class="left">${fmtAmt(x.id,x.left)} left over</span>`:''}`;
     return`<label class="item${done?' done':''}" for="${k}"><input type="checkbox" id="${k}" data-id="${x.id}" ${done?'checked':''}><span class="what">${esc(it.n)}<small>${detail}${x.fb?' · <span class="flag">Not at Aldi, priced at Coles</span>':''}${it.ck?' · check label for GF':''}${x.real?' · <span class="ok">price checked</span>':''}</small></span><span class="c num">${x.pan?'≈':''}${money(x.cost)}</span></label>`}).join('')}</div>`).join('');
   $('#list-meta').textContent=`${w.items.length} items · ${money(w.shop)} + ${money(STAPLES,0)} staples`;
 }
-function render(){renderControls();renderCards();const w=week();renderWeek(w);renderList(w);save()}
+function useItUp(w){
+  const left={};w.items.forEach(x=>{if(!x.pan&&x.left>0&&x.bought)left[x.id]=x.left});
+  if(!Object.keys(left).length||!S.sel.length)return null;
+  const n=spm();let best=null;
+  R.filter(r=>!S.sel.includes(r.id)&&allowed(r)&&serveProt(r)>=S.minProt).forEach(r=>{
+    let save=0;const used=[];
+    splitLines(r,n).forEach(([id,a])=>{if(left[id]){const u=Math.min(a,left[id]);const pr=price(id);save+=u/pr.pk*pr.p;if(u/a>.3)used.push(iname(id).toLowerCase())}});
+    if(used.length&&(!best||save>best.save))best={r,save,used:[...new Set(used)]};
+  });
+  return best&&best.save>=3?best:null;
+}
+function renderUse(w){
+  const b=useItUp(w);const el=$('#useitup');if(!b){el.hidden=true;return}
+  const room=S.sel.length<S.dinners;
+  el.hidden=false;el.innerHTML=`<span class="eyebrow">Use it up</span><p><b>${esc(b.r.n)}</b> uses up your leftover ${esc(b.used.slice(0,3).join(', '))}, about ${money(b.save,0)} of food you've already bought.</p>${room?`<button class="btn" data-id="${b.r.id}" id="use-add">Add it</button>`:`<p class="hint">Your week's full. Swap a dinner out to fit it in.</p>`}`;
+  const btn=$('#use-add');if(btn)btn.onclick=()=>{if(S.sel.length<S.dinners){S.sel.push(btn.dataset.id);render()}};
+}
+function render(){renderControls();renderCards();const w=week();renderWeek(w);renderList(w);renderUse(w);save()}
 
 // ---------- Recipe dialog ----------
 function openRecipe(id){
@@ -177,7 +217,7 @@ function planText(){
   const w=week();const n=spm();
   let t=`DOCKET · Your week at ${STORE_NAME[S.store]}\n${S.people} people${S.lunch?' + lunches':''} · ${S.sel.length} dinners · ${w.serves} serves\nEstimated shop: ${money(w.total)} (${money(w.total/Math.max(1,w.serves))} per serve)\n\nSHOPPING LIST\n`;
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
-  ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=x.pan?`[ ] ${ING[x.id].n} (check pantry, using ${kAmt(x.id,x.amt)})\n`:`[ ] ${ING[x.id].n}: ${x.packs} x ${packLabel(x.id,x.pk)} (${money(x.cost)})\n`})});
+  ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=x.pan?`[ ] ${ING[x.id].n} (check pantry, using ${kAmt(x.id,x.amt)})\n`:`[ ] ${ING[x.id].n}: ${x.label} (${money(x.cost)})\n`})});
   t+=`\nRECIPES\n`;
   S.sel.forEach(id=>{const r=R.find(x=>x.id===id);t+=`\n${r.n.toUpperCase()} (${timeLabel(r)})\n`;splitLines(r,n).forEach(([i,a])=>{t+=`- ${kAmt(i,a)} ${iname(i)}\n`});r.m.forEach((s,k)=>{t+=`${k+1}. ${s}\n`});if(r.l)t+=`Lunch: ${r.l}\n`;if(r.g&&S.gf>0)t+=`Gluten free: ${r.g}\n`});
   return t;
@@ -188,7 +228,8 @@ const step=(k,d,min,max)=>()=>{S[k]=Math.max(min,Math.min(max,S[k]+d));if(k==='p
 $('#people-dn').onclick=step('people',-1,1,10);$('#people-up').onclick=step('people',1,1,10);
 $('#gf-dn').onclick=step('gf',-1,0,10);$('#gf-up').onclick=()=>{if(S.gf<S.people){S.gf++;render()}};
 $('#din-dn').onclick=step('dinners',-1,1,7);$('#din-up').onclick=step('dinners',1,1,7);
-$('#budget').addEventListener('input',e=>{S.budget=Math.max(0,+e.target.value||0);const w=week();renderWeek(w);save()});
+$('#budget-reset').onclick=()=>{S.budgetAuto=true;render()};
+$('#budget').addEventListener('input',e=>{S.budgetAuto=false;$('#budget-hint').hidden=true;$('#budget-reset').hidden=false;S.budget=Math.max(0,+e.target.value||0);const w=week();renderWeek(w);save()});
 $('#lunch').onchange=e=>{S.lunch=e.target.checked;render()};
 $('#prot').addEventListener('input',e=>{S.minProt=+e.target.value;render()});
 $('#store').addEventListener('click',e=>{const b=e.target.closest('button');if(b){S.store=b.dataset.s;render()}});
@@ -201,7 +242,7 @@ $('#cards').addEventListener('click',e=>{
   if(S.sel.includes(id))S.sel=S.sel.filter(x=>x!==id);else if(S.sel.length<S.dinners)S.sel.push(id);render();
 });
 $('#fill').onclick=()=>{
-  const pool=R.filter(r=>allowed(r)&&serveProt(r)>=S.minProt&&!S.sel.includes(r.id)&&(S.col==='all'||tierOf(r)===S.col)).sort((a,b)=>serveCost(a)-serveCost(b));
+  const pool=R.filter(r=>allowed(r)&&serveProt(r)>=S.minProt&&!S.sel.includes(r.id)&&(S.col==='all'||tierOf(r)===S.col)&&!(r.big&&spm()<4)).sort((a,b)=>serveCost(a)-serveCost(b));
   const cats=new Set(S.sel.map(id=>R.find(r=>r.id===id).c));
   for(const r of pool){if(S.sel.length>=S.dinners)break;if(!cats.has(r.c)){S.sel.push(r.id);cats.add(r.c)}}
   for(const r of pool){if(S.sel.length>=S.dinners)break;if(!S.sel.includes(r.id))S.sel.push(r.id)}
@@ -247,7 +288,7 @@ function listText(){
   const w=week();
   let t=`DOCKET · ${STORE_NAME[S.store]} · est. ${money(w.total)}\n`;
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
-  ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=`[ ] ${ING[x.id].n}: ${x.packs} x ${packLabel(x.id,x.pk)}\n`})});
+  ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=`[ ] ${ING[x.id].n}: ${x.label||'check pantry'}\n`})});
   t+=`\nDINNERS: ${S.sel.map(id=>R.find(r=>r.id===id).n).join(', ')}`;
   return t;
 }

@@ -84,7 +84,7 @@ const DocketPDF = (function () {
         const it = ING[x.id];
         draw(d, C.muted); d.setLineWidth(0.3); d.roundedRect(M + 1, y - 3.3, 3.8, 3.8, 0.8, 0.8, 'S');
         text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(10); d.text(clean(it.n), M + 8, y);
-        const detail = x.pan ? `you'll use ${kAmt(x.id, x.amt)} · if you're out: ${packLabel(x.id, x.pk)}` : `${fmtAmt(x.id, x.amt)} needed · ${x.packs} x ${packLabel(x.id, x.pk)}`;
+        const detail = x.pan ? `you'll use ${kAmt(x.id, x.amt)} · if you're out: ${packLabel(x.id, x.pk)}` : `${fmtAmt(x.id, x.amt)} needed · ${x.label}`;
         const extra = (x.fb ? ' · not at Aldi, priced at Coles' : '') + (it.ck ? ' · check label for GF' : '');
         text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(8.5); d.text(clean(detail + extra), M + 8, y + 4.2);
         text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(10); d.text((x.pan ? '~' : '') + money(x.cost), W - M, y, { align: 'right' });
@@ -148,8 +148,8 @@ const DocketPDF = (function () {
   async function build(state) {
     await loadLogo();
     const w = week(); const n = spm();
-    const kit = state.kits[0]; const kitTotal = w.serves * kit.ps + kit.del * Math.ceil(n / kit.max);
-    const meta = { store: STORE_NAME[state.store], people: state.people, lunch: state.lunch, dinners: state.sel.map(id => R.find(r => r.id === id).n), saved: kitTotal - w.total, kit: kit.n };
+    const kit = state.kits[0]; const kitTotal = kitCost(kit, n, state.sel.length);
+    const meta = { store: STORE_NAME[state.store], people: state.people, lunch: state.lunch, dinners: state.sel.map(id => R.find(r => r.id === id).n), saved: kitTotal - w.eaten, kit: kit.n };
     const files = [{ filename: '01-docket-shopping-list.pdf', doc: shoppingList(w, meta) }];
     state.sel.forEach((id, k) => { const r = R.find(x => x.id === id); files.push({ filename: `${String(k + 2).padStart(2, '0')}-${slug(r.n)}.pdf`, doc: recipe(r, n, Math.min(state.gf, state.people)) }); });
     return { files, meta, total: w.total, serves: w.serves };

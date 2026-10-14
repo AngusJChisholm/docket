@@ -6,6 +6,7 @@
 // Ingredient fields:
 //   n name · a aisle · u unit (g, ml, ea) · pk pack size · p pack price · pr protein per 100g/ml (or per each)
 //   t tag for filters (red, pork, seafood) · pl pack label · ck check the label for gluten
+//   alt [pack size, price] a smaller pack the planner can choose · wt sold by weight (buy what you need)
 //   noAldi not stocked at Aldi · pan pantry item (costed by what you use; listed under "Pantry check")
 //   Kitchen display: tsp/tbsp = grams per teaspoon/tablespoon · cup = grams per cup
 //                    ea = [grams each, "word"] · cl = cloves per bulb
@@ -15,46 +16,46 @@ const AISLE={M:'Meat & seafood',F:'Fruit & veg',D:'Dairy, eggs & fridge',Z:'Free
 
 const ING={
  // Meat & seafood
- chk_thigh:{n:'Chicken thigh fillets',a:'M',u:'g',pk:1000,p:15.00,pr:20},
- chk_breast:{n:'Chicken breast fillets',a:'M',u:'g',pk:1000,p:13.00,pr:23},
+ chk_thigh:{n:'Chicken thigh fillets',a:'M',u:'g',pk:1000,p:15.00,pr:20,alt:[500,8.50]},
+ chk_breast:{n:'Chicken breast fillets',a:'M',u:'g',pk:1000,p:13.00,pr:23,alt:[500,7.50]},
  chk_whole:{n:'Whole chicken (1.8kg)',a:'M',u:'g',pk:1800,p:13.50,pr:13,pl:'1.8kg bird'},
- beef_mince:{n:'Beef mince (3 star)',a:'M',u:'g',pk:1000,p:14.00,pr:19,t:'red'},
- beef_rump:{n:'Rump steak',a:'M',u:'g',pk:1000,p:27.00,pr:22,t:'red'},
- beef_chuck:{n:'Beef chuck (slow cook)',a:'M',u:'g',pk:1000,p:18.00,pr:20,t:'red'},
- pork_shoulder:{n:'Pork shoulder, boneless',a:'M',u:'g',pk:1000,p:12.00,pr:18,t:'pork'},
- pork_roast:{n:'Pork shoulder roast, rind on',a:'M',u:'g',pk:1000,p:11.00,pr:16,t:'pork'},
+ beef_mince:{n:'Beef mince (3 star)',a:'M',u:'g',pk:1000,p:14.00,pr:19,t:'red',alt:[500,7.50]},
+ beef_rump:{n:'Rump steak',a:'M',u:'g',pk:1000,p:27.00,pr:22,t:'red',wt:1},
+ beef_chuck:{n:'Beef chuck (slow cook)',a:'M',u:'g',pk:1000,p:18.00,pr:20,t:'red',wt:1},
+ pork_shoulder:{n:'Pork shoulder, boneless',a:'M',u:'g',pk:1000,p:12.00,pr:18,t:'pork',wt:1},
+ pork_roast:{n:'Pork shoulder roast, rind on',a:'M',u:'g',pk:1000,p:11.00,pr:16,t:'pork',wt:1},
  pork_mince:{n:'Pork mince',a:'M',u:'g',pk:500,p:7.50,pr:18,t:'pork'},
  lamb_sh:{n:'Lamb shoulder (bone-in)',a:'M',u:'g',pk:1000,p:15.00,pr:15,t:'red'},
- salmon:{n:'Salmon fillets, skin on',a:'M',u:'g',pk:1000,p:36.00,pr:20,t:'seafood'},
+ salmon:{n:'Salmon fillets, skin on',a:'M',u:'g',pk:1000,p:36.00,pr:20,t:'seafood',wt:1},
  chorizo:{n:'Chorizo',a:'M',u:'g',pk:250,p:6.00,pr:24,t:'pork',ck:1},
  bacon:{n:'Middle bacon',a:'M',u:'g',pk:250,p:5.50,pr:16,t:'pork'},
  ham:{n:'Shaved ham',a:'M',u:'g',pk:200,p:4.50,pr:18,t:'pork'},
 
  // Dairy, eggs & fridge
- eggs:{n:'Free-range eggs',a:'D',u:'ea',pk:12,p:6.50,pr:6.5,pl:'dozen',ea:[1,'egg']},
- cream:{n:'Thickened cream',a:'D',u:'ml',pk:600,p:4.50,pr:2},
- milk:{n:'Full cream milk',a:'D',u:'ml',pk:2000,p:3.10,pr:3.4},
+ eggs:{n:'Free-range eggs',a:'D',u:'ea',pk:12,p:6.50,pr:6.5,pl:'dozen',ea:[1,'egg'],alt:[6,4.00]},
+ cream:{n:'Thickened cream',a:'D',u:'ml',pk:600,p:4.50,pr:2,alt:[300,2.80]},
+ milk:{n:'Full cream milk',a:'D',u:'ml',pk:2000,p:3.10,pr:3.4,alt:[1000,1.80]},
  butter:{n:'Butter',a:'D',u:'g',pk:250,p:4.50,pr:.8,tbsp:14},
- cheese:{n:'Grated tasty cheese',a:'D',u:'g',pk:700,p:9.00,pr:25,cup:100},
- mozz:{n:'Grated mozzarella',a:'D',u:'g',pk:500,p:7.00,pr:22,cup:100},
+ cheese:{n:'Grated tasty cheese',a:'D',u:'g',pk:700,p:9.00,pr:25,cup:100,alt:[250,4.50]},
+ mozz:{n:'Grated mozzarella',a:'D',u:'g',pk:500,p:7.00,pr:22,cup:100,alt:[250,4.20]},
  parm:{n:'Parmesan',a:'D',u:'g',pk:250,p:6.50,pr:35},
  fetta:{n:'Fetta',a:'D',u:'g',pk:200,p:4.50,pr:17},
  slices:{n:'Burger cheese slices (12)',a:'D',u:'ea',pk:12,p:4.50,pr:3.5,pl:'12 pack',ea:[1,'slice']},
  sourcream:{n:'Sour cream',a:'D',u:'ml',pk:300,p:2.60,pr:3},
- yoghurt:{n:'Greek yoghurt',a:'D',u:'g',pk:1000,p:6.00,pr:9,cup:250},
+ yoghurt:{n:'Greek yoghurt',a:'D',u:'g',pk:1000,p:6.00,pr:9,cup:250,alt:[500,4.00]},
  kimchi:{n:'Kimchi',a:'D',u:'g',pk:400,p:7.50,pr:1.5,ck:1},
 
  // Fruit & veg
- potato:{n:'Washed potatoes',a:'F',u:'g',pk:2000,p:5.00,pr:2,ea:[200,'potato']},
- swpotato:{n:'Sweet potato',a:'F',u:'g',pk:1000,p:4.90,pr:1.6},
- onion:{n:'Brown onions',a:'F',u:'g',pk:1000,p:3.50,pr:1.1,ea:[150,'onion']},
+ potato:{n:'Washed potatoes',a:'F',u:'g',pk:2000,p:5.00,pr:2,ea:[200,'potato'],alt:[1000,3.50]},
+ swpotato:{n:'Sweet potato',a:'F',u:'g',pk:1000,p:4.90,pr:1.6,wt:1},
+ onion:{n:'Brown onions',a:'F',u:'g',pk:1000,p:3.50,pr:1.1,ea:[150,'onion'],wt:1},
  red_onion:{n:'Red onion',a:'F',u:'ea',pk:1,p:0.80,pr:1.5,ea:[1,'red onion']},
  garlic:{n:'Garlic',a:'F',u:'ea',pk:1,p:1.20,pr:.3,pl:'bulb',cl:10},
- ginger:{n:'Fresh ginger',a:'F',u:'g',pk:100,p:2.50,pr:2},
- carrot:{n:'Carrots',a:'F',u:'g',pk:1000,p:2.50,pr:.9,ea:[120,'carrot']},
- broccoli:{n:'Broccoli',a:'F',u:'g',pk:500,p:3.45,pr:2.8},
+ ginger:{n:'Fresh ginger',a:'F',u:'g',pk:100,p:2.50,pr:2,wt:1},
+ carrot:{n:'Carrots',a:'F',u:'g',pk:1000,p:2.50,pr:.9,ea:[120,'carrot'],wt:1},
+ broccoli:{n:'Broccoli',a:'F',u:'g',pk:500,p:3.45,pr:2.8,wt:1},
  capsicum:{n:'Red capsicum',a:'F',u:'ea',pk:1,p:1.80,pr:1.2,ea:[1,'capsicum']},
- zucchini:{n:'Zucchini',a:'F',u:'g',pk:1000,p:5.50,pr:1.2,ea:[200,'zucchini']},
+ zucchini:{n:'Zucchini',a:'F',u:'g',pk:1000,p:5.50,pr:1.2,ea:[200,'zucchini'],wt:1},
  cherrytom:{n:'Cherry tomatoes',a:'F',u:'g',pk:250,p:3.50,pr:.9},
  spinach:{n:'Baby spinach',a:'F',u:'g',pk:120,p:3.00,pr:2.9},
  cos:{n:'Cos lettuce',a:'F',u:'ea',pk:1,p:3.00,pr:1.5,ea:[1,'cos lettuce']},
@@ -70,13 +71,13 @@ const ING={
  mint:{n:'Mint',a:'F',u:'ea',pk:1,p:3.00,pr:0,pl:'bunch',ea:[1,'bunch']},
  thaibasil:{n:'Thai basil',a:'F',u:'ea',pk:1,p:3.50,pr:0,pl:'bunch',ea:[1,'bunch']},
  chilli:{n:'Long red chillies',a:'F',u:'ea',pk:1,p:0.40,pr:0,ea:[1,'chilli']},
- mushroom:{n:'Cup mushrooms',a:'F',u:'g',pk:500,p:6.00,pr:3},
+ mushroom:{n:'Cup mushrooms',a:'F',u:'g',pk:500,p:6.00,pr:3,wt:1},
  eggplant:{n:'Eggplant',a:'F',u:'ea',pk:1,p:3.50,pr:1,ea:[1,'eggplant']},
- greenbeans:{n:'Green beans',a:'F',u:'g',pk:500,p:4.50,pr:2},
+ greenbeans:{n:'Green beans',a:'F',u:'g',pk:500,p:4.50,pr:2,wt:1},
 
  lamb_mince:{n:'Lamb mince',a:'M',u:'g',pk:500,p:9.00,pr:18,t:'red'},
- pork_belly:{n:'Pork belly',a:'M',u:'g',pk:1000,p:17.00,pr:14,t:'pork'},
- whitefish:{n:'White fish fillets (basa)',a:'M',u:'g',pk:1000,p:14.00,pr:17,t:'seafood'},
+ pork_belly:{n:'Pork belly',a:'M',u:'g',pk:1000,p:17.00,pr:14,t:'pork',wt:1},
+ whitefish:{n:'White fish fillets (basa)',a:'M',u:'g',pk:1000,p:14.00,pr:17,t:'seafood',wt:1},
  hummus:{n:'Hummus',a:'D',u:'g',pk:200,p:3.50,pr:7},
  beansprouts:{n:'Bean sprouts',a:'F',u:'g',pk:250,p:2.50,pr:3},
  massaman:{n:'Massaman curry paste',a:'P',u:'g',pk:195,p:3.80,pr:2,ck:1,pl:'jar',tbsp:16},
@@ -85,14 +86,14 @@ const ING={
  turkish:{n:'Turkish rolls (4)',a:'B',u:'ea',pk:4,p:4.50,pr:9,pl:'4 pack',ea:[1,'roll']},
  currypowder:{n:'Curry powder',a:'K',u:'g',pk:40,p:2.50,pr:0,ck:1,tsp:2.5,pan:1},
  worcestershire:{n:'Worcestershire sauce',a:'K',u:'ml',pk:250,p:3.00,pr:0,ck:1,pan:1},
- scotch:{n:'Scotch fillet steak',a:'M',u:'g',pk:1000,p:45.00,pr:21,t:'red'},
- lambcutlets:{n:'Lamb cutlets (frenched)',a:'M',u:'g',pk:1000,p:42.00,pr:16,t:'red'},
- barra:{n:'Barramundi fillets, skin on',a:'M',u:'g',pk:1000,p:32.00,pr:20,t:'seafood'},
- shortribs:{n:'Korean-cut beef short ribs',a:'M',u:'g',pk:1000,p:26.00,pr:15,t:'red'},
+ scotch:{n:'Scotch fillet steak',a:'M',u:'g',pk:1000,p:45.00,pr:21,t:'red',wt:1},
+ lambcutlets:{n:'Lamb cutlets (frenched)',a:'M',u:'g',pk:1000,p:42.00,pr:16,t:'red',wt:1},
+ barra:{n:'Barramundi fillets, skin on',a:'M',u:'g',pk:1000,p:32.00,pr:20,t:'seafood',wt:1},
+ shortribs:{n:'Korean-cut beef short ribs',a:'M',u:'g',pk:1000,p:26.00,pr:15,t:'red',wt:1},
  wagyu:{n:'Wagyu beef mince',a:'M',u:'g',pk:500,p:11.00,pr:18,t:'red'},
  prosciutto:{n:'Prosciutto',a:'M',u:'g',pk:100,p:5.50,pr:25,t:'pork'},
  chk_mince:{n:'Chicken mince',a:'M',u:'g',pk:500,p:7.00,pr:20},
- pumpkin:{n:'Butternut pumpkin',a:'F',u:'g',pk:1000,p:3.50,pr:1},
+ pumpkin:{n:'Butternut pumpkin',a:'F',u:'g',pk:1000,p:3.50,pr:1,wt:1},
  iceberg:{n:'Iceberg lettuce',a:'F',u:'ea',pk:1,p:3.50,pr:1,ea:[1,'iceberg lettuce']},
  corncob:{n:'Corn cobs',a:'F',u:'ea',pk:1,p:1.20,pr:3,ea:[1,'corn cob']},
  rosemary:{n:'Rosemary',a:'F',u:'ea',pk:1,p:3.00,pr:0,pl:'bunch',ea:[1,'bunch']},
@@ -103,17 +104,17 @@ const ING={
  brownrice:{n:'Brown rice',a:'K',u:'g',pk:1000,p:3.50,pr:8,cup:190,pan:1},
  miso:{n:'White miso paste',a:'K',u:'g',pk:300,p:5.50,pr:12,ck:1,tbsp:17,pan:1},
  pork_cutlets:{n:'Pork cutlets',a:'M',u:'g',pk:1000,p:22.00,pr:18,t:'pork'},
- beef_cheek:{n:'Beef cheeks',a:'M',u:'g',pk:1000,p:24.00,pr:20,t:'red'},
- lamb_shanks:{n:'Lamb shanks',a:'M',u:'g',pk:1000,p:16.00,pr:13,t:'red'},
- duck:{n:'Duck breast fillets',a:'M',u:'g',pk:1000,p:38.00,pr:19},
+ beef_cheek:{n:'Beef cheeks',a:'M',u:'g',pk:1000,p:24.00,pr:20,t:'red',wt:1},
+ lamb_shanks:{n:'Lamb shanks',a:'M',u:'g',pk:1000,p:16.00,pr:13,t:'red',wt:1},
+ duck:{n:'Duck breast fillets',a:'M',u:'g',pk:1000,p:38.00,pr:19,wt:1},
  rocket:{n:'Rocket',a:'F',u:'g',pk:120,p:3.50,pr:2.6},
  bokchoy:{n:'Baby bok choy',a:'F',u:'ea',pk:1,p:2.50,pr:1.5,pl:'bunch',ea:[1,'bunch']},
  ricepaper:{n:'Rice paper sheets',a:'P',u:'g',pk:200,p:3.00,pr:1},
  fivespice:{n:'Chinese five spice',a:'K',u:'g',pk:30,p:2.80,pr:0,tsp:2.2,pan:1},
  // Freezer
- peas:{n:'Frozen peas',a:'Z',u:'g',pk:1000,p:3.50,pr:5,cup:140},
+ peas:{n:'Frozen peas',a:'Z',u:'g',pk:1000,p:3.50,pr:5,cup:140,alt:[500,2.50]},
  edamame:{n:'Frozen shelled edamame',a:'Z',u:'g',pk:500,p:4.50,pr:11,cup:150},
- prawns:{n:'Raw peeled prawns',a:'Z',u:'g',pk:1000,p:32.00,pr:20,t:'seafood'},
+ prawns:{n:'Raw peeled prawns',a:'Z',u:'g',pk:1000,p:32.00,pr:20,t:'seafood',alt:[500,17.00]},
 
  // Pantry & tins (bought each week)
  tintom:{n:'Crushed tomatoes (400g tin)',a:'P',u:'g',pk:400,p:1.30,pr:1.2,pl:'tin'},
@@ -187,7 +188,7 @@ const ING={
 const GFSWAP={panko:'gf_crumbs',flour:'gf_flour',pasta:'gf_pasta',lasagne:'gf_lasagne',buns:'gf_buns',wraps:'gf_wraps',pita:'gf_wraps',naan:'gf_wraps',tortillas:'corn_tortillas',soy:'tamari',gochujang:'sriracha',turkish:'gf_buns'};
 
 // ---------- Recipes (quantities per serve) ----------
-// c category · tier 'premium' or 'lighter' (blank = everyday) · t total minutes · h hands-on minutes (slow cooks) · d one-line description
+// big: needs a whole roast, best for 4+ serves · c category · tier 'premium' or 'lighter' (blank = everyday) · t total minutes · h hands-on minutes (slow cooks) · d one-line description
 // i ingredients · m method · l lunch note · g gluten free note
 const R=[
  {id:'bulgogi',n:'Korean Beef Bulgogi Bowls',c:'Bowls',t:40,d:'Sticky soy-garlic beef, quick-pickled cucumber, kimchi and gochujang mayo over rice.',
@@ -268,7 +269,7 @@ const R=[
   l:'Built for lunch. Reheat until piping hot.',
   g:'Make the whole batch with tamari, and use a GF oyster sauce or skip it. Rice dishes are where hidden gluten sneaks in.'},
 
- {id:'roastpork',n:'Roast Pork with Crackling',c:'Roasts',t:180,h:30,d:'Crunchy crackling, roast veg, gravy and a sharp apple slaw.',
+ {id:'roastpork',big:1,n:'Roast Pork with Crackling',c:'Roasts',t:180,h:30,d:'Crunchy crackling, roast veg, gravy and a sharp apple slaw.',
   i:[['pork_roast',300],['potato',200],['swpotato',120],['carrot',60],['cabbage',.1],['apple',.3],['mayo',10],['stockpowder',3],['cornflour',3]],
   m:['Pat the rind bone dry (leave it uncovered in the fridge overnight if you can). Score it, rub with oil and plenty of salt.','Roast at 240°C for 30 minutes until the rind blisters, then drop to 170°C for 2 hours.','Cut the veg into chunks, toss in oil and salt, and roast below the pork for the last hour.','If the crackling isn\'t crunchy, put the pork under the grill for 5 minutes and watch it closely.','Rest the pork 15 minutes. Gravy: pan juices plus stock powder dissolved in water, thickened with cornflour mixed into a little cold water.','Slaw: shredded cabbage and apple matchsticks tossed with mayo, a squeeze of lemon if you have one, and salt.'],
   l:'Pork and veg together, gravy in a little container. Pork and slaw rolls work well too.',
@@ -292,13 +293,13 @@ const R=[
   l:'Pasta water or a splash of milk brings the sauce back when reheating.',
   g:'GF pasta in a separate pot. Check the stock powder.'},
 
- {id:'chook',n:'Roast Chook, Crispy Potatoes & Gravy',c:'Roasts',t:100,d:'Lemon and garlic roast chicken, crunchy potatoes, greens and proper gravy.',
+ {id:'chook',big:1,n:'Roast Chook, Crispy Potatoes & Gravy',c:'Roasts',t:100,d:'Lemon and garlic roast chicken, crunchy potatoes, greens and proper gravy.',
   i:[['chk_whole',450],['lemon',.15],['garlic',.1],['butter',10],['potato',300],['carrot',80],['greenbeans',80],['stockpowder',3],['cornflour',3]],
   m:['Oven to 200°C. Rub the birds with butter, crushed garlic and salt. Lemon halves inside.','Roast about 1 hour 20 minutes for a 1.8kg bird, until the juices run clear.','Parboil chunked potatoes 8 minutes, drain, shake to rough them up, and roast in oil alongside for 50 minutes with the carrots.','Rest the chooks 10 minutes. Steam the beans.','Gravy: pan juices plus stock powder dissolved in water, thickened with cornflour mixed into a little cold water.','Carve and serve.'],
   l:'Strip the leftover meat and pack it with potatoes and greens. Spare gravy in a little container.',
   g:'Use 100% maize cornflour and check the stock powder. Naturally GF otherwise.'},
 
- {id:'lamb',n:'Slow-Roast Lamb, Smashed Potatoes',c:'Roasts',t:210,h:25,d:'Garlic and oregano lamb shoulder roasted until it pulls apart, with crispy smashed potatoes.',
+ {id:'lamb',big:1,n:'Slow-Roast Lamb, Smashed Potatoes',c:'Roasts',t:210,h:25,d:'Garlic and oregano lamb shoulder roasted until it pulls apart, with crispy smashed potatoes.',
   i:[['lamb_sh',320],['garlic',.12],['oregano',1],['lemon',.2],['potato',250],['yoghurt',40],['mint',.08],['cos',.12],['cucumber',.2]],
   m:['Oven to 160°C. Stab the lamb all over and rub with crushed garlic, oregano, lemon zest, oil and salt.','Roast covered with a cup of water for 3 hours until it pulls apart.','Meanwhile boil the potatoes whole for 15 minutes until tender. Drain and cool.','Rest the lamb covered. Turn the oven to 220°C. Smash the potatoes flat on an oiled tray, oil and salt the tops, roast 30 minutes until crispy.','Mint yoghurt: yoghurt, chopped mint, lemon juice and salt. Salad: lettuce and cucumber with lemon and oil.','Shred the lamb and serve with everything.'],
   l:'Lamb, potatoes and salad in one container, yoghurt on the side.',
