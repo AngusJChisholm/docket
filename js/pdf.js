@@ -33,7 +33,8 @@ const DocketPDF = (function () {
     const n = d.getNumberOfPages();
     for (let i = 1; i <= n; i++) {
       d.setPage(i); text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(8);
-      d.text('Docket  ·  Meal kit dinners. Supermarket prices.', M, H - 9);
+      const who = window.DocketRecipes && window.DocketRecipes.member();
+      d.text(clean(who ? `Docket  ·  Prepared for ${who}. Please don't share.` : 'Docket  ·  Meal kit dinners. Supermarket prices.'), M, H - 9);
       d.text(`${i} / ${n}`, W - M, H - 9, { align: 'right' });
     }
   }
@@ -101,6 +102,7 @@ const DocketPDF = (function () {
   }
 
   function recipe(r, n, gfCount) {
+    const c = window.DocketRecipes ? window.DocketRecipes.peek(r.id) : r; // null when the method is locked
     const { jsPDF } = window.jspdf; const d = new jsPDF({ unit: 'mm', format: 'a4' });
     let y = header(d, r.n, `${r.c} · ${timeLabel(r)} · ${n} serves`);
     text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(20);
@@ -118,13 +120,23 @@ const DocketPDF = (function () {
     yl += 7; yr += 7;
     splitLines(r, n).forEach(([i, a]) => {
       d.setFont('helvetica', 'bold'); d.setFontSize(9.5); text(d, C.ink);
-      const amt = clean(kAmt(i, a)); d.text(amt, colL, yl);
-      d.setFont('helvetica', 'normal'); text(d, C.muted);
-      const nl = d.splitTextToSize(clean(iname(i)), wL); d.text(nl, colL, yl + 4.3);
-      yl += 4.3 * nl.length + 5.2;
+      if (c) {
+        const amt = clean(kAmt(i, a)); d.text(amt, colL, yl);
+        d.setFont('helvetica', 'normal'); text(d, C.muted);
+        const nl = d.splitTextToSize(clean(iname(i)), wL); d.text(nl, colL, yl + 4.3);
+        yl += 4.3 * nl.length + 5.2;
+      } else {
+        d.setFont('helvetica', 'normal'); text(d, C.ink);
+        const nl = d.splitTextToSize(clean(iname(i)), wL); d.text(nl, colL, yl); yl += 4.6 * nl.length + 1.8;
+      }
     });
     d.setFont('helvetica', 'normal'); d.setFontSize(8.5); text(d, C.muted); d.text('Plus oil, salt and pepper.', colL, yl); yl += 6;
-    r.m.forEach((s, k) => {
+    if (!c) {
+      d.setFont('helvetica', 'normal'); d.setFontSize(10); text(d, C.ink);
+      const ll = d.splitTextToSize(clean(`The full method, amounts, lunch tip and gluten free notes for this dinner are for Docket members. Unlock every recipe free while we're in beta at ${SITE}plan.html`), wR);
+      fill(d, C.mint); d.roundedRect(colR - 2, yr - 5, wR + 2, ll.length * 4.9 + 8, 3, 3, 'F'); d.text(ll, colR + 2, yr + 0.5); yr += ll.length * 4.9 + 8;
+    }
+    (c ? c.m : []).forEach((s, k) => {
       d.setFont('helvetica', 'normal'); d.setFontSize(10);
       const sl = d.splitTextToSize(clean(s), wR - 9);
       if (yr + sl.length * 4.9 > H - 20) { d.addPage(); yr = M + 6; }
@@ -135,8 +147,8 @@ const DocketPDF = (function () {
     });
     y = Math.max(yl, d.getNumberOfPages() > 1 ? yr : Math.max(yl, yr)) + 2;
     if (d.getNumberOfPages() > 1) y = yr + 2;
-    if (r.l) y = noteBox(d, y, 'Lunch:', r.l, C.mint);
-    if (r.g && gfCount > 0) y = noteBox(d, y, `Gluten free (${gfCount}):`, r.g, C.butter);
+    if (c && c.l) y = noteBox(d, y, 'Lunch:', c.l, C.mint);
+    if (c && c.g && gfCount > 0) y = noteBox(d, y, `Gluten free (${gfCount}):`, c.g, C.butter);
     const checks = [...new Set(r.i.filter(([i]) => ING[i].ck).map(([i]) => iname(i)))];
     if (checks.length) y = noteBox(d, y, 'Check labels:', checks.join(', '), C.peach);
     footer(d);

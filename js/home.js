@@ -47,9 +47,9 @@
   const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hf = KITS[0];
   // Meal kits sell 2- or 4-person boxes, so small households still pay for at least 2 serves a meal
-  let HH = 4;
-  function weekOf(pick, people = HH) {
-    const perMeal = people * 2, serves = perMeal * pick.length;
+  let HH = 4, LUNCH = true;
+  function weekOf(pick, people = HH, lunch = LUNCH) {
+    const perMeal = people * (lunch ? 2 : 1), serves = perMeal * pick.length;
     const total = pick.reduce((s, r) => s + serveCost(r) * perMeal, 0) + STAPLES;
     const kit = kitCost(hf, perMeal, pick.length);
     return { total, kit, serves };
@@ -59,12 +59,25 @@
     const w = weekOf(pick);
     current = pick;
     const isPicks = pick === PICKS;
-    $('#menu-card').innerHTML = `<p class="mc-eyebrow">${isPicks ? `This week's picks` : `Your shuffled week`}</p>
-      <div class="hh" role="group" aria-label="How many people are you cooking for"><span class="hh-l">Cooking for</span>${[1, 2, 3, 4, 5, 6, 7, 8].map(n => `<button type="button" data-n="${n}" aria-pressed="${n === HH}" aria-label="${n} ${n === 1 ? 'person' : 'people'}">${n}</button>`).join('')}</div>
-      <p class="mc-sub">Dinners + next-day lunches</p>
-      <ol class="mc-list${animate ? ' deal' : ''}">${pick.map((r, i) => `<li style="--i:${i}"><span class="mc-day">${days[i]}</span><span class="mc-dish">${esc(r.n)}${tierOf(r) !== 'everyday' ? ` <span class="tier ${tierOf(r) === 'premium' ? 'prem' : 'light'}">${tierOf(r) === 'premium' ? 'Premium' : 'Lighter'}</span>` : ''}</span><span class="mc-lead" aria-hidden="true"></span><span class="mc-pr num">${money(serveCost(r))}</span></li>`).join('')}</ol>
-      <div class="mc-foot"><span>Food for the week</span><b class="num">${money(w.total, 0)}</b></div>
-      <div class="mc-dodge"><span>Kit Tax dodged</span><b class="num">${money(w.kit - w.total, 0)}</b></div>
+    if (!$('#mc-body')) {
+      $('#menu-card').innerHTML = `<p class="mc-eyebrow" id="mc-title"></p>
+        <div class="mc-ctl">
+          <label class="mc-slide" for="mc-people"><span>Cooking for <b id="mc-people-v"></b></span>
+            <input type="range" id="mc-people" min="1" max="8" step="1" value="${HH}" aria-label="How many people you're cooking for"></label>
+          <label class="mc-tick"><input type="checkbox" id="mc-lunch" ${LUNCH ? 'checked' : ''}><span>Cook double for next-day lunches</span></label>
+        </div>
+        <div id="mc-body"></div>`;
+      const sl = $('#mc-people');
+      sl.addEventListener('input', () => { HH = +sl.value; renderMenu(current, false); });
+      $('#mc-lunch').addEventListener('change', e => { LUNCH = e.target.checked; renderMenu(current, false); });
+    }
+    $('#mc-title').textContent = isPicks ? "This week's picks" : 'Your shuffled week';
+    $('#mc-people-v').textContent = `${HH} ${HH === 1 ? 'person' : 'people'}`;
+    $('#mc-people').style.setProperty('--fill', ((HH - 1) / 7 * 100) + '%');
+    const dodged = w.kit - w.total;
+    $('#mc-body').innerHTML = `<ol class="mc-list${animate ? ' deal' : ''}">${pick.map((r, i) => `<li style="--i:${i}"><span class="mc-day">${days[i]}</span><span class="mc-dish">${esc(r.n)}${tierOf(r) !== 'everyday' ? ` <span class="tier ${tierOf(r) === 'premium' ? 'prem' : 'light'}">${tierOf(r) === 'premium' ? 'Premium' : 'Lighter'}</span>` : ''}</span><span class="mc-lead" aria-hidden="true"></span><span class="mc-pr num">${money(serveCost(r))}</span></li>`).join('')}</ol>
+      <div class="mc-foot"><span>Food for the week · ${w.serves} serves</span><b class="num">${money(w.total, 0)}</b></div>
+      ${dodged > 0 ? `<div class="mc-dodge"><span>Kit Tax dodged</span><b class="num">${money(dodged, 0)}</b></div>` : ''}
       ${isPicks && SEA ? `<p class="mc-season">Week of ${SEA.weekLabel()}. Quick, good value and built around what's in season: <b>${esc(SEA.inSeasonNames().slice(0, 5).join(', '))}</b>.</p>` : ''}`;
     $('#hero-serve').textContent = money(w.total / w.serves);
     const tk = document.querySelector('.hang .ticket'); if (animate && tk && !reduce) { tk.classList.remove('bump'); void tk.offsetWidth; tk.classList.add('bump'); }
@@ -84,7 +97,6 @@
   const start = PICKS;
   renderMenu(start, false);
   $('#shuffle').onclick = () => renderMenu(randomWeek(), true);
-  $('#menu-card').addEventListener('click', e => { const b = e.target.closest('.hh button'); if (!b) return; HH = +b.dataset.n; renderMenu(current, false); });
 
   // Ribbon of dinners
   const pill = r => `<span class="rb-pill rb-${tierOf(r)}">${esc(r.n)}</span>`;

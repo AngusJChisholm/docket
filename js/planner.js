@@ -4,7 +4,7 @@ const STAPLES=(window.DOCKET_CONFIG||{}).staplesPerWeek??15;
 let fresh=true;try{const s=JSON.parse(localStorage.getItem('docket-state')||'null');if(s)fresh=false;if(s&&typeof s==='object'){Object.assign(S,s,{skip:{...S.skip,...(s.skip||{})}});if(s.budgetAuto===undefined)S.budgetAuto=false}}catch(e){}
 delete S.kits;S.sel=S.sel.filter(id=>R.some(r=>r.id===id));
 S.people=Math.min(8,Math.max(1,S.people));S.gf=Math.min(S.gf,S.people);
-if(['picks','quick','everyday','premium','lighter'].includes(location.hash.slice(1)))S.col=location.hash.slice(1);
+if(['all','picks','quick','everyday','premium','lighter'].includes(location.hash.slice(1)))S.col=location.hash.slice(1);
 function save(){try{localStorage.setItem('docket-state',JSON.stringify(S))}catch(e){}}
 
 // ---------- Pricing ----------
@@ -139,7 +139,7 @@ function renderCards(){
       <div class="card-top"><div><div class="card-eyebrow">${tierOf(r)==='premium'?'<span class="tier prem">Premium</span>':tierOf(r)==='lighter'?'<span class="tier light">Lighter</span>':''}${esc(r.c)}</div><h3>${esc(r.n)}</h3><div class="meta">${timeLabel(r)}</div></div>
       <div class="ticket num"><b>${money(serveCost(r))}</b><small>per serve</small></div></div>
       ${r.d?`<p class="blurb">${esc(r.d)}</p>`:''}
-      <div class="badges"><span class="badge p num">${Math.round(p)}g protein</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span>${SEA.isNew(r)?'<span class="badge new">New</span>':''}${PICKS.includes(r.id)&&S.col!=='picks'?'<span class="badge pick">This week</span>':''}${SEA.recipe(r).isIn?'<span class="badge season">In season</span>':''}${r.t<=30?'<span class="badge quick">Quick</span>':''}${r.big&&spm()<4?'<span class="badge big">Best for 4+ serves</span>':''}</div>
+      <div class="badges"><span class="badge p num">${Math.round(p)}g protein</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span>${SEA.isNew(r)?'<span class="badge new">New</span>':''}${PICKS.includes(r.id)&&S.col!=='picks'?'<span class="badge pick">This week</span>':''}${!RS.canSee(r.id,PICKS)?'<span class="badge lock">Members</span>':''}${SEA.recipe(r).isIn?'<span class="badge season">In season</span>':''}${r.t<=30?'<span class="badge quick">Quick</span>':''}${r.big&&spm()<4?'<span class="badge big">Best for 4+ serves</span>':''}</div>
       <div class="card-actions"><button class="btn ghost view" data-id="${r.id}">Recipe</button>
       <button class="btn ghost pick" data-id="${r.id}" ${!sel&&full?'disabled':''} aria-pressed="${sel}">${sel?'✓ Picked':'Add'}</button></div></article>`}).join('');
   const blocked=R.length-R.filter(allowed).length;
@@ -211,7 +211,7 @@ function renderUse(w){
   el.hidden=false;el.innerHTML=`<span class="eyebrow">Use it up</span><p><b>${esc(b.r.n)}</b> uses up your leftover ${esc(b.used.slice(0,3).join(', '))}, about ${money(b.save,0)} of food you've already bought.</p>${room?`<button class="btn" data-id="${b.r.id}" id="use-add">Add it</button>`:`<p class="hint">Your week's full. Swap a dinner out to fit it in.</p>`}`;
   const btn=$('#use-add');if(btn)btn.onclick=()=>{if(S.sel.length<S.dinners){S.sel.push(btn.dataset.id);render()}};
 }
-function render(){renderControls();renderCards();const w=week();renderWeek(w);renderList(w);renderUse(w);save()}
+function render(){renderControls();renderCards();const w=week();renderWeek(w);renderList(w);renderUse(w);save();RS.load(S.sel.filter(canSee))}
 
 // ---------- Recipe dialog ----------
 function openRecipe(id){
@@ -220,13 +220,22 @@ function openRecipe(id){
   $('#dlg-in').innerHTML=`${imgOf(r,1200)?`<div class="dlg-img"><img src="${imgOf(r,1200)}" alt="${esc(r.n)}"></div>`:''}<div class="dlg-head"><div><span class="eyebrow">${esc(r.c)} · ${timeLabel(r)}</span><h2>${esc(r.n)}</h2></div><button class="x" id="dlg-x" aria-label="Close">×</button></div>
    ${r.d?`<p class="lead-sm">${esc(r.d)}</p>`:''}
    <div class="badges" style="margin-top:10px"><span class="badge p num">${Math.round(serveProt(r))}g protein/serve</span><span class="badge num">${money(serveCost(r))}/serve at ${STORE_NAME[S.store]}</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span></div>
-   <div class="dlg-cols"><div><h3>For ${n} serves</h3><ul class="ing">${lines.map(([i,a])=>`<li><span>${esc(iname(i))}</span><b class="num">${kAmt(i,a)}</b></li>`).join('')}</ul><p class="hint" style="margin-top:8px">Plus oil, salt and pepper.</p></div>
-   <div><h3>Method</h3><ol class="steps">${r.m.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div></div>
-   ${r.l?`<div class="gfnote"><b>Lunch:</b> ${esc(r.l)}</div>`:''}
-   ${r.g&&S.gf>0?`<div class="gfnote"><b>Gluten free (${Math.min(S.gf,S.people)}):</b> ${esc(r.g)}</div>`:''}
+   <div class="dlg-cols"><div>${canSee(id)?`<h3>For ${n} serves</h3><ul class="ing">${lines.map(([i,a])=>`<li><span>${esc(iname(i))}</span><b class="num">${kAmt(i,a)}</b></li>`).join('')}</ul><p class="hint" style="margin-top:8px">Plus oil, salt and pepper.</p>`:`<h3>What's in it</h3><ul class="ing names">${lines.map(([i])=>`<li><span>${esc(iname(i))}</span></li>`).join('')}</ul><p class="hint" style="margin-top:8px">Amounts for your ${n} serves unlock with the method.</p>`}</div>
+   <div id="dlg-method">${canSee(id)?'<h3>Method</h3><p class="hint">Loading the method...</p>':lockedHTML()}</div></div>
+   <div id="dlg-notes"></div>
    ${checks.length?`<div class="gfnote" style="background:var(--peach)">Check the label on: ${esc(checks.join(', '))}.</div>`:''}`;
-  const d=$('#dlg');d.showModal();$('#dlg-x').onclick=()=>d.close();
+  const d=$('#dlg');if(!d.open)d.showModal();$('#dlg-x').onclick=()=>d.close();
+  if(canSee(id))RS.get(id).then(c=>{if(!$('#dlg').open||!$('#dlg-method'))return;$('#dlg-method').innerHTML=methodHTML(c);$('#dlg-notes').innerHTML=notesHTML(c)}).catch(()=>{$('#dlg-method').innerHTML='<h3>Method</h3><p class="hint">Couldn\'t load the method. Check your connection and try again.</p>'});
+  else{const f=$('#unlock-form');f.onsubmit=async e=>{e.preventDefault();const v=$('#unlock-email').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){$('#unlock-msg').textContent='Enter an email address like you@example.com.';return}await RS.unlock(v,'recipe');try{localStorage.setItem('docket-email',v)}catch(err){}if(!$('#email').value)$('#email').value=v;render();openRecipe(id)}}
 }
+const RS=window.DocketRecipes;
+const SITE=location.href.split(/[?#]/)[0].replace(/plan\.html$/,'');
+function canSee(id){return RS.canSee(id,weekPicks())}
+const methodHTML=c=>`<h3>Method</h3><ol class="steps">${c.m.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`;
+const notesHTML=c=>`${c.l?`<div class="gfnote"><b>Lunch:</b> ${esc(c.l)}</div>`:''}${c.g&&S.gf>0?`<div class="gfnote"><b>Gluten free (${Math.min(S.gf,S.people)}):</b> ${esc(c.g)}</div>`:''}`;
+function lockedHTML(){return`<div class="locked"><h3>Method</h3><div class="ghost" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="unlock"><span class="eyebrow">Members' recipe</span><p><b>Get the full method, lunch tip and gluten free notes for every Docket dinner.</b> Free while we're in beta. This week's picks are open to everyone.</p>
+  <form id="unlock-form" class="unlock-form"><input type="email" id="unlock-email" placeholder="you@example.com" autocomplete="email" required aria-label="Your email"><button class="btn" type="submit">Unlock recipes</button></form><p class="hint" id="unlock-msg"></p></div></div>`}
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')e.target.close()});
 
 // ---------- Plain text plan ----------
@@ -236,7 +245,7 @@ function planText(){
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
   ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=x.pan?`[ ] ${ING[x.id].n} (check pantry, using ${kAmt(x.id,x.amt)})\n`:`[ ] ${ING[x.id].n}: ${x.label} (${money(x.cost)})\n`})});
   t+=`\nRECIPES\n`;
-  S.sel.forEach(id=>{const r=R.find(x=>x.id===id);t+=`\n${r.n.toUpperCase()} (${timeLabel(r)})\n`;splitLines(r,n).forEach(([i,a])=>{t+=`- ${kAmt(i,a)} ${iname(i)}\n`});r.m.forEach((s,k)=>{t+=`${k+1}. ${s}\n`});if(r.l)t+=`Lunch: ${r.l}\n`;if(r.g&&S.gf>0)t+=`Gluten free: ${r.g}\n`});
+  S.sel.forEach(id=>{const r=R.find(x=>x.id===id);const ok=!!RS.peek(id);t+=`\n${r.n.toUpperCase()} (${timeLabel(r)})\n`;splitLines(r,n).forEach(([i,a])=>{t+=ok?`- ${kAmt(i,a)} ${iname(i)}\n`:`- ${iname(i)}\n`});const c=RS.peek(id);if(c){c.m.forEach((s,k)=>{t+=`${k+1}. ${s}\n`});if(c.l)t+=`Lunch: ${c.l}\n`;if(c.g&&S.gf>0)t+=`Gluten free: ${c.g}\n`}else t+=`Full method: unlock it free at ${SITE}plan.html\n`});
   return t;
 }
 
@@ -272,10 +281,11 @@ function copyText(t,okMsg){
   try{navigator.clipboard.writeText(t).then(done,()=>fallback(t))}catch(e){fallback(t)}
   function fallback(t){const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();$('#msg').textContent=ok?okMsg:'Copy was blocked here. Select the list above and copy it manually.'}
 }
-$('#copy').onclick=()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}copyText(planText(),'Plan copied: shopping list plus every recipe. Paste it into an email or the group chat.')};
+$('#copy').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}if(S.sel.some(id=>canSee(id)&&!RS.peek(id)))await RS.load(S.sel.filter(canSee));copyText(planText(),'Plan copied: shopping list plus every recipe. Paste it into an email or the group chat.')};
 async function makePdfs(){
   if(!window.jspdf||!window.DocketPDF){$('#msg').textContent='The PDF maker is still loading. Give it a second and try again.';return null}
   $('#msg').textContent='Building your PDFs...';
+  await RS.load(S.sel.filter(canSee));
   return DocketPDF.build(S);
 }
 $('#send').onclick=async()=>{
@@ -283,6 +293,7 @@ $('#send').onclick=async()=>{
   if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){$('#msg').textContent='Enter an email address like you@example.com.';return}
   try{localStorage.setItem('docket-email',v)}catch(e){}
+  if(!RS.unlocked()&&RS.mode()==='email'){await RS.unlock(v,'send-plan');render()}
   const btn=$('#send');btn.disabled=true;
   try{
     const out=await makePdfs();if(!out)return;
@@ -311,11 +322,11 @@ function listText(){
 if(navigator.share){$('#share').hidden=false;$('#share').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}try{await navigator.share({title:'Our Docket for the week',text:planText()})}catch(e){}}}
 function fillPrint(){
   const n=spm();
-  $('#print-recipes').innerHTML='<h2>Recipes</h2>'+S.sel.map(id=>{const r=R.find(x=>x.id===id);return`<article><h3>${esc(r.n)} · ${timeLabel(r)} · ${n} serves</h3><ul>${splitLines(r,n).map(([i,a])=>`<li>${kAmt(i,a)} ${esc(iname(i))}</li>`).join('')}</ul><ol>${r.m.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></article>`}).join('');
+  $('#print-recipes').innerHTML='<h2>Recipes</h2>'+S.sel.map(id=>{const r=R.find(x=>x.id===id);const c=RS.peek(id);return`<article><h3>${esc(r.n)} · ${timeLabel(r)} · ${n} serves</h3><ul>${splitLines(r,n).map(([i,a])=>`<li>${c?kAmt(i,a)+' ':''}${esc(iname(i))}</li>`).join('')}</ul>${c?`<ol>${c.m.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`:`<p>Full method: unlock it free at ${esc(SITE)}plan.html</p>`}</article>`}).join('');
 }
 window.addEventListener('beforeprint',fillPrint);
 $('#print').onclick=()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}fillPrint();window.print()};
 try{const e=localStorage.getItem('docket-email');if(e)$('#email').value=e}catch(e){}
 // First visit: start on this week's picks
-if(fresh&&window.DOCKET_SEASON){if(S.col==='all')S.col='picks';S.sel=weekPicks().slice(0,S.dinners)}
+if(fresh&&window.DOCKET_SEASON){if(S.col==='all'&&!location.hash)S.col='picks';S.sel=weekPicks().slice(0,S.dinners)}
 renderKitCfg();render();

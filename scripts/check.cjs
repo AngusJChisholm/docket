@@ -4,16 +4,21 @@ const fs = require('fs'); const path = require('path');
 const ROOT = path.resolve(__dirname, '..'); const rd = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const mk = () => new Proxy(function () {}, { get: (t, k) => k === 'addEventListener' ? () => {} : k === Symbol.toPrimitive ? () => '' : mk(), set: () => true, apply: () => mk() });
 global.document = { querySelector: () => mk(), querySelectorAll: () => [], createElement: () => mk(), body: mk() };
-global.location = { hash: '', pathname: '/', search: '' }; global.localStorage = { getItem: () => null, setItem() {} };
+global.location = { hash: '', pathname: '/', search: '', href: 'https://angusjchisholm.github.io/docket/plan.html' }; global.localStorage = { getItem: () => null, setItem() {} };
 class J { constructor() { this.n = 0; this.internal = { pageSize: { getWidth: () => 210, getHeight: () => 297 } }; } text(t) { if (/NaN|undefined/.test(String(t))) throw new Error('PDF text: ' + t); } splitTextToSize(t) { return [String(t)]; } getTextWidth(t) { return String(t).length * 2; } addPage() { this.n++; } getNumberOfPages() { return this.n + 1; } output() { return ''; } }
 ['setFont', 'setFontSize', 'setTextColor', 'setFillColor', 'setDrawColor', 'setLineWidth', 'rect', 'roundedRect', 'line', 'circle', 'save', 'setLineDashPattern', 'setPage'].forEach(m => J.prototype[m] = function () {});
 global.window = { addEventListener() {}, DOCKET_CONFIG: { staplesPerWeek: 10 }, jspdf: { jsPDF: J } };
 const fails = []; const warns = []; const fail = m => fails.push(m); const warn = m => warns.push(m);
-eval(rd('js/data.js') + rd('js/prices.js') + rd('js/season.js') + rd('js/planner.js') + rd('js/pdf.js') + `
+global.fetch = async u => { const m = String(u).match(/content\/recipes\/([^.?]+)\.json/); const f = m && path.join(ROOT, 'content/recipes', decodeURIComponent(m[1]) + '.json'); return f && fs.existsSync(f) ? { ok: true, json: async () => JSON.parse(fs.readFileSync(f, 'utf8')) } : { ok: false, status: 404 }; };
+eval(rd('js/data.js') + rd('js/prices.js') + rd('js/season.js') + rd('js/recipes.js') + rd('js/planner.js') + rd('js/pdf.js') + `
 (async () => {
-  // 1. Recipe shape
+  // 1. Recipe shape (public menu in js/data.js, method in content/recipes/<id>.json)
   const ids = new Set();
-  for (const r of R) {
+  for (const pub of R) {
+    if (pub.m || pub.l || pub.g) fail(pub.id + ' has method/lunch/GF text in js/data.js: it belongs in content/recipes/' + pub.id + '.json');
+    const cf = path.join(ROOT, 'content/recipes', pub.id + '.json');
+    if (!fs.existsSync(cf)) { fail(pub.id + ' missing content/recipes/' + pub.id + '.json'); continue; }
+    const r = { ...pub, ...JSON.parse(fs.readFileSync(cf, 'utf8')) };
     if (ids.has(r.id)) fail('duplicate id ' + r.id); ids.add(r.id);
     for (const k of ['id', 'n', 'c', 't', 'd', 'i', 'm', 'l', 'g']) if (r[k] == null || r[k] === '') fail(r.id + ' missing ' + k);
     if (r.tier && !['premium', 'lighter'].includes(r.tier)) fail(r.id + ' bad tier ' + r.tier);
@@ -57,9 +62,15 @@ eval(rd('js/data.js') + rd('js/prices.js') + rd('js/season.js') + rd('js/planner
   const pk = weekPicks(); if (pk.length < 5) fail('weekly picks only found ' + pk.length);
   const lastWk = window.DOCKET_SEASON.picks(serveCostColes, { date: new Date(Date.now() - 7 * 864e5), allowed: r => serveProt(r) >= 40 });
   if (pk.some(id => lastWk.includes(id))) warn('a pick repeats from last week');
-  // 6. PDFs for the newest five dinners
+  // 6. PDFs for the newest five dinners, locked and unlocked
   Object.assign(S, { people: 3, gf: 1, sel: R.slice(-5).map(r => r.id), dinners: 5 });
-  const out = await DocketPDF.build(S); if (out.files.length !== 6) fail('PDF build made ' + out.files.length + ' files');
+  let out = await DocketPDF.build(S); if (out.files.length !== 6) fail('PDF build (locked) made ' + out.files.length + ' files');
+  await window.DocketRecipes.load(S.sel);
+  out = await DocketPDF.build(S); if (out.files.length !== 6) fail('PDF build made ' + out.files.length + ' files');
+  // 7. Locked recipes stay locked: no method content in the public files
+  if (rd('js/data.js').includes("m:['")) fail('method text found in js/data.js');
+  const orphans = fs.readdirSync(path.join(ROOT, 'content/recipes')).filter(f => !R.some(r => r.id + '.json' === f));
+  if (orphans.length) warn('content files with no recipe: ' + orphans.join(', '));
   console.log('Recipes: ' + R.length + ' (' + R.filter(r => r.tier === 'premium').length + ' premium, ' + R.filter(r => r.tier === 'lighter').length + ' lighter, ' + R.filter(r => r.t <= 30).length + ' quick)');
   console.log('Random weeks over budget: ' + Math.round(over / N * 100) + '%. Beat HelloFresh: ' + Math.round(beats / N * 100) + '%. Flat week: $' + flat.total.toFixed(0));
   console.log("This week's picks: " + pk.map(id => R.find(r => r.id === id).n).join(', '));

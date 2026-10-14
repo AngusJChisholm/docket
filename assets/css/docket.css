@@ -439,3 +439,27 @@ body{margin:0}
 .collections button[data-c="quick"]::before{background:var(--peach);border-color:var(--peach)}
 .mc-season{margin:14px 0 0;font-size:12.5px;color:var(--muted);line-height:1.45}
 .mc-season b{color:var(--green);font-weight:700}
+
+/* Members' recipes */
+.badge.lock{background:var(--sunk);color:var(--muted)}
+.badge.lock::before{content:"";display:inline-block;width:7px;height:8px;margin-right:5px;vertical-align:-1px;border-radius:2px;background:currentColor;box-shadow:0 -3px 0 -1px var(--sunk),0 -4px 0 0 currentColor}
+.card.tier-premium .badge.lock{background:color-mix(in srgb,var(--bg) 14%,transparent);color:var(--bg)}
+.ing.names li{justify-content:flex-start}
+.locked .ghost{display:flex;flex-direction:column;gap:9px;margin:4px 0 14px;filter:blur(1.5px);opacity:.55}
+.locked .ghost i{display:block;height:11px;border-radius:6px;background:var(--line)}
+.locked .ghost i:nth-child(2n){width:86%}.locked .ghost i:nth-child(3n){width:70%}
+.unlock{background:var(--mint);border-radius:var(--r-md);padding:16px}
+.unlock p{margin:6px 0 12px;font-size:14px;line-height:1.45}
+.unlock-form{display:flex;gap:8px;flex-wrap:wrap}
+.unlock-form input{flex:1 1 180px;min-width:0;border:1px solid var(--line);border-radius:999px;padding:10px 14px;font:inherit;background:var(--surface);color:var(--ink)}
+
+/* Menu card controls */
+.mc-ctl{display:flex;flex-direction:column;gap:10px;margin:12px 0 18px;padding:12px 14px;background:var(--bg);border-radius:var(--r-md)}
+.mc-slide{display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--muted);font-weight:600}
+.mc-slide b{color:var(--ink);font-weight:800}
+.mc-slide input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;background:linear-gradient(to right,var(--green) var(--fill,43%),var(--line) var(--fill,43%));outline:none;margin:4px 0}
+.mc-slide input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--surface);border:3px solid var(--green);box-shadow:0 1px 4px rgba(0,0,0,.15);cursor:pointer}
+.mc-slide input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--surface);border:3px solid var(--green);cursor:pointer}
+.mc-slide input[type=range]:focus-visible::-webkit-slider-thumb{outline:3px solid var(--mint);outline-offset:2px}
+.mc-tick{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;cursor:pointer}
+.mc-tick input{width:18px;height:18px;accent-color:var(--green);margin:0}
