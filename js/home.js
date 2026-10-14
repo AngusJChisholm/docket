@@ -9,7 +9,8 @@
 
   // Cost and protein per serve at Coles, no GF swaps (same maths as the planner).
   const COLES = (window.DOCKET_PRICES || {}).coles || {};
-  const cp = id => COLES[id] ? { p: COLES[id].p, pk: COLES[id].pk || ING[id].pk } : { p: ING[id].p, pk: ING[id].pk };
+  const SEA = window.DOCKET_SEASON;
+  const cp = id => COLES[id] ? { p: COLES[id].p, pk: COLES[id].pk || ING[id].pk } : { p: ING[id].p * (SEA ? SEA.factor(id) : 1), pk: ING[id].pk };
   const serveCost = r => r.i.reduce((s, [id, q]) => { const c = cp(id); return s + q / c.pk * c.p; }, 0);
   const serveProt = r => r.i.reduce((s, [id, q]) => { const it = ING[id]; return s + (it.u === 'ea' ? q * it.pr : q * it.pr / 100); }, 0);
   const AVG = R.reduce((s, r) => s + serveCost(r), 0) / R.length;
@@ -57,12 +58,14 @@
   function renderMenu(pick, animate) {
     const w = weekOf(pick);
     current = pick;
-    $('#menu-card').innerHTML = `<p class="mc-eyebrow">This week's menu</p>
+    const isPicks = pick === PICKS;
+    $('#menu-card').innerHTML = `<p class="mc-eyebrow">${isPicks ? `This week's picks` : `Your shuffled week`}</p>
       <div class="hh" role="group" aria-label="How many people are you cooking for"><span class="hh-l">Cooking for</span>${[1, 2, 3, 4, 5, 6, 7, 8].map(n => `<button type="button" data-n="${n}" aria-pressed="${n === HH}" aria-label="${n} ${n === 1 ? 'person' : 'people'}">${n}</button>`).join('')}</div>
       <p class="mc-sub">Dinners + next-day lunches</p>
       <ol class="mc-list${animate ? ' deal' : ''}">${pick.map((r, i) => `<li style="--i:${i}"><span class="mc-day">${days[i]}</span><span class="mc-dish">${esc(r.n)}${tierOf(r) !== 'everyday' ? ` <span class="tier ${tierOf(r) === 'premium' ? 'prem' : 'light'}">${tierOf(r) === 'premium' ? 'Premium' : 'Lighter'}</span>` : ''}</span><span class="mc-lead" aria-hidden="true"></span><span class="mc-pr num">${money(serveCost(r))}</span></li>`).join('')}</ol>
       <div class="mc-foot"><span>Food for the week</span><b class="num">${money(w.total, 0)}</b></div>
-      <div class="mc-dodge"><span>Kit Tax dodged</span><b class="num">${money(w.kit - w.total, 0)}</b></div>`;
+      <div class="mc-dodge"><span>Kit Tax dodged</span><b class="num">${money(w.kit - w.total, 0)}</b></div>
+      ${isPicks && SEA ? `<p class="mc-season">Week of ${SEA.weekLabel()}. Quick, good value and built around what's in season: <b>${esc(SEA.inSeasonNames().slice(0, 5).join(', '))}</b>.</p>` : ''}`;
     $('#hero-serve').textContent = money(w.total / w.serves);
     const tk = document.querySelector('.hang .ticket'); if (animate && tk && !reduce) { tk.classList.remove('bump'); void tk.offsetWidth; tk.classList.add('bump'); }
   }
@@ -76,7 +79,9 @@
     }
     return sample(by('everyday'), 5);
   }
-  const start = ['chook', 'misosalmon', 'butter', 'poke', 'carnitas'].map(id => R.find(r => r.id === id)).filter(Boolean);
+  const fixed = ['chook', 'misosalmon', 'butter', 'poke', 'carnitas'].map(id => R.find(r => r.id === id)).filter(Boolean);
+  const PICKS = SEA ? SEA.picks(serveCost, { allowed: r => serveProt(r) >= 40 }).map(id => R.find(r => r.id === id)) : fixed;
+  const start = PICKS;
   renderMenu(start, false);
   $('#shuffle').onclick = () => renderMenu(randomWeek(), true);
   $('#menu-card').addEventListener('click', e => { const b = e.target.closest('.hh button'); if (!b) return; HH = +b.dataset.n; renderMenu(current, false); });
@@ -89,7 +94,7 @@
   $('#ribbon-b').innerHTML = `<div class="rb-track">${rowB.map(pill).join('')}${rowB.map(pill).join('')}</div>`;
 
   // Numbers band
-  const flat = weekOf(start, 5);
+  const flat = weekOf(fixed, 5);
   const N = { 'n-dinners': R.length, 'n-cheap': Math.min(...R.map(serveCost)), 'n-prot': Math.round(R.reduce((s, r) => s + serveProt(r), 0) / R.length), 'n-year': Math.round((flat.kit - flat.total) * 52) };
   const fmtN = (el, v) => { const dp = el.dataset.dp != null ? +el.dataset.dp : (el.dataset.money ? 2 : 0); el.textContent = el.dataset.money ? money(v, dp) : Math.round(v).toLocaleString('en-AU') + (el.dataset.suffix || ''); };
   Object.entries(N).forEach(([id, v]) => { const el = document.getElementById(id); el.dataset.to = v; fmtN(el, v); });

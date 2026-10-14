@@ -1,20 +1,21 @@
 // ---------- State ----------
 const S={people:2,gf:0,dinners:4,lunch:true,budget:120,budgetAuto:true,minProt:40,store:'coles',skip:{pork:false,seafood:false,red:false},sel:['butter','tuscan','carnitas','friedrice'],sort:'cost',col:'all',kits:KITS_DEFAULT.map(k=>({...k})),done:{}};
 const STAPLES=(window.DOCKET_CONFIG||{}).staplesPerWeek??15;
-try{const s=JSON.parse(localStorage.getItem('docket-state')||'null');if(s&&typeof s==='object'){Object.assign(S,s,{skip:{...S.skip,...(s.skip||{})}});if(s.budgetAuto===undefined)S.budgetAuto=false}}catch(e){}
+let fresh=true;try{const s=JSON.parse(localStorage.getItem('docket-state')||'null');if(s)fresh=false;if(s&&typeof s==='object'){Object.assign(S,s,{skip:{...S.skip,...(s.skip||{})}});if(s.budgetAuto===undefined)S.budgetAuto=false}}catch(e){}
 S.sel=S.sel.filter(id=>R.some(r=>r.id===id));
 S.people=Math.min(8,Math.max(1,S.people));S.gf=Math.min(S.gf,S.people);
-if(['everyday','premium','lighter'].includes(location.hash.slice(1)))S.col=location.hash.slice(1);
+if(['picks','quick','everyday','premium','lighter'].includes(location.hash.slice(1)))S.col=location.hash.slice(1);
 function save(){try{localStorage.setItem('docket-state',JSON.stringify(S))}catch(e){}}
 
 // ---------- Pricing ----------
+const SEA=window.DOCKET_SEASON||{factor:()=>1,recipe:()=>({isIn:false,inn:[]}),isNew:()=>false,picks:()=>[]};
 function hash(s){let h=7;for(const ch of s)h=(h*31+ch.charCodeAt(0))%1000;return h/1000}
 // Real prices you've checked (js/prices.js) win; otherwise Woolies and Aldi are estimated from Coles.
 const PRICES=window.DOCKET_PRICES||{coles:{},woolies:{},aldi:{}};
 function price(id,store=S.store){
   const it=ING[id];const real=(PRICES[store]||{})[id];
   if(real)return{p:real.p,pk:real.pk||it.pk,fb:false,real:true,at:real.at,wt:!!real.wt,sp:!!real.sp,was:real.was,alt:real.alt};
-  const c=(PRICES.coles||{})[id];const base=c?{p:c.p,pk:c.pk||it.pk}:{p:it.p,pk:it.pk};
+  const c=(PRICES.coles||{})[id];const base=c?{p:c.p,pk:c.pk||it.pk}:{p:+(it.p*SEA.factor(id)).toFixed(2),pk:it.pk};
   if(store==='coles')return{...base,fb:false};
   if(store==='woolies')return{p:+(base.p*(0.95+hash(id)*0.11)).toFixed(2),pk:base.pk,fb:false};
   if(it.noAldi)return{...base,fb:true};
@@ -46,6 +47,9 @@ function serveCost(r){return splitLines(r,1).reduce((s,[id,a])=>{const pr=price(
 function serveProt(r){return r.i.reduce((s,[id,q])=>{const it=ING[id];return s+(it.u==='ea'?q*it.pr:q*it.pr/100)},0)}
 function tags(r){const t=new Set();r.i.forEach(([id])=>{if(ING[id].t)t.add(ING[id].t)});return t}
 function gfType(r){return r.i.some(([id])=>GFSWAP[id])?'swap':'yes'}
+function inCol(r,picks){return S.col==='all'||(S.col==='picks'?(picks||weekPicks()).includes(r.id):S.col==='quick'?r.t<=30:tierOf(r)===S.col)}
+function weekPicks(){return SEA.picks(serveCostColes,{allowed:r=>allowed(r)&&serveProt(r)>=S.minProt})}
+function serveCostColes(r){return r.i.reduce((s,[id,a])=>{const pr=price(id,'coles');return s+a/pr.pk*pr.p},0)}
 function allowed(r){const t=tags(r);return!Object.keys(S.skip).some(k=>S.skip[k]&&t.has(k))}
 
 function week(){
@@ -117,12 +121,14 @@ function renderControls(){
 const tierOf=r=>r.tier||'everyday';
 const IMG=(window.DOCKET_IMG||{}).recipes||{};
 const imgOf=(r,w)=>IMG[r.id]?`assets/img/food/${IMG[r.id]}-${w}.jpg`:'';
-const COL_NOTE={all:'',everyday:'Our staples: big flavour, big serves, best value.',premium:'Restaurant-style nights at home. Better cuts, a few more steps, still well under meal-kit prices.',lighter:'Lean protein, loads of veg, nothing fried or creamy. Still properly filling.'};
+const COL_NOTE={picks:'',quick:'On the table in 30 minutes or less. Weeknight gold.',all:'',everyday:'Our staples: big flavour, big serves, best value.',premium:'Restaurant-style nights at home. Better cuts, a few more steps, still well under meal-kit prices.',lighter:'Lean protein, loads of veg, nothing fried or creamy. Still properly filling.'};
 function renderCards(){
   const full=S.sel.length>=S.dinners;
   document.querySelectorAll('#cols button').forEach(b=>b.setAttribute('aria-selected',b.dataset.c===S.col));
   $('#col-note').textContent=COL_NOTE[S.col]||'';
-  let list=R.filter(allowed).filter(r=>S.col==='all'||tierOf(r)===S.col||S.sel.includes(r.id));
+  const PICKS=weekPicks();
+  if(S.col==='picks')$('#col-note').textContent=`Quick, good value and in season for the week of ${SEA.weekLabel()}. Refreshed every Wednesday.`;
+  let list=R.filter(allowed).filter(r=>inCol(r,PICKS)||S.sel.includes(r.id));
   const low=list.filter(r=>serveProt(r)<S.minProt&&!S.sel.includes(r.id));
   list=list.filter(r=>serveProt(r)>=S.minProt||S.sel.includes(r.id));
   const key={cost:r=>serveCost(r),prot:r=>-serveProt(r),time:r=>r.t}[S.sort];
@@ -134,7 +140,7 @@ function renderCards(){
       <div class="card-top"><div><div class="card-eyebrow">${tierOf(r)==='premium'?'<span class="tier prem">Premium</span>':tierOf(r)==='lighter'?'<span class="tier light">Lighter</span>':''}${esc(r.c)}</div><h3>${esc(r.n)}</h3><div class="meta">${timeLabel(r)}</div></div>
       <div class="ticket num"><b>${money(serveCost(r))}</b><small>per serve</small></div></div>
       ${r.d?`<p class="blurb">${esc(r.d)}</p>`:''}
-      <div class="badges"><span class="badge p num">${Math.round(p)}g protein</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span>${r.big&&spm()<4?'<span class="badge big">Best for 4+ serves</span>':''}</div>
+      <div class="badges"><span class="badge p num">${Math.round(p)}g protein</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span>${SEA.isNew(r)?'<span class="badge new">New</span>':''}${PICKS.includes(r.id)&&S.col!=='picks'?'<span class="badge pick">This week</span>':''}${SEA.recipe(r).isIn?'<span class="badge season">In season</span>':''}${r.t<=30?'<span class="badge quick">Quick</span>':''}${r.big&&spm()<4?'<span class="badge big">Best for 4+ serves</span>':''}</div>
       <div class="card-actions"><button class="btn ghost view" data-id="${r.id}">Recipe</button>
       <button class="btn ghost pick" data-id="${r.id}" ${!sel&&full?'disabled':''} aria-pressed="${sel}">${sel?'✓ Picked':'Add'}</button></div></article>`}).join('');
   const blocked=R.length-R.filter(allowed).length;
@@ -252,7 +258,7 @@ $('#cards').addEventListener('click',e=>{
   if(S.sel.includes(id))S.sel=S.sel.filter(x=>x!==id);else if(S.sel.length<S.dinners)S.sel.push(id);render();
 });
 $('#fill').onclick=()=>{
-  const pool=R.filter(r=>allowed(r)&&serveProt(r)>=S.minProt&&!S.sel.includes(r.id)&&(S.col==='all'||tierOf(r)===S.col)&&!(r.big&&spm()<4)).sort((a,b)=>serveCost(a)-serveCost(b));
+  const pool=R.filter(r=>allowed(r)&&serveProt(r)>=S.minProt&&!S.sel.includes(r.id)&&inCol(r)&&!(r.big&&spm()<4)).sort((a,b)=>serveCost(a)-serveCost(b));
   const cats=new Set(S.sel.map(id=>R.find(r=>r.id===id).c));
   for(const r of pool){if(S.sel.length>=S.dinners)break;if(!cats.has(r.c)){S.sel.push(r.id);cats.add(r.c)}}
   for(const r of pool){if(S.sel.length>=S.dinners)break;if(!S.sel.includes(r.id))S.sel.push(r.id)}
@@ -310,4 +316,6 @@ function fillPrint(){
 window.addEventListener('beforeprint',fillPrint);
 $('#print').onclick=()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}fillPrint();window.print()};
 try{const e=localStorage.getItem('docket-email');if(e)$('#email').value=e}catch(e){}
+// First visit: start on this week's picks
+if(fresh&&window.DOCKET_SEASON){if(S.col==='all')S.col='picks';S.sel=weekPicks().slice(0,S.dinners)}
 renderKitCfg();render();

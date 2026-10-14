@@ -422,3 +422,17 @@ body{margin:0}
 .hh-l{font-size:12px;font-weight:700;color:var(--muted);margin-right:4px}
 .hh button{width:30px;height:30px;padding:0;display:grid;place-items:center;font-size:13px}
 .price-note{margin:-6px 0 14px}
+
+/* Seasons, picks, quick */
+.badge.season{background:var(--mint);color:var(--green)}
+.badge.quick{background:var(--peach);color:var(--markup)}
+.badge.new{background:var(--ticket);color:var(--on-ticket)}
+.badge.pick{background:var(--green);color:var(--on-green)}
+.card.tier-lighter .badge.season{background:var(--surface)}
+.card.tier-premium .badge.new{background:var(--ticket);color:var(--on-ticket)}
+.card.tier-premium .badge.quick{background:var(--peach);color:var(--markup)}
+.card.tier-premium .badge.pick{background:var(--green);color:var(--on-green)}
+.collections button[data-c="picks"]::before{background:var(--green);border-color:var(--green)}
+.collections button[data-c="quick"]::before{background:var(--peach);border-color:var(--peach)}
+.mc-season{margin:14px 0 0;font-size:12.5px;color:var(--muted);line-height:1.45}
+.mc-season b{color:var(--green);font-weight:700}
