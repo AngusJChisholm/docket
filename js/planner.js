@@ -86,6 +86,8 @@ function renderControls(){
   $('#sort').value=S.sort;
 }
 const tierOf=r=>r.tier||'everyday';
+const IMG=(window.DOCKET_IMG||{}).recipes||{};
+const imgOf=(r,w)=>IMG[r.id]?`assets/img/food/${IMG[r.id]}-${w}.jpg`:'';
 const COL_NOTE={all:'',everyday:'Our staples: big flavour, big serves, best value.',premium:'Restaurant-style nights at home. Better cuts, a few more steps, still well under meal-kit prices.',lighter:'Lean protein, loads of veg, nothing fried or creamy. Still properly filling.'};
 function renderCards(){
   const full=S.sel.length>=S.dinners;
@@ -99,6 +101,7 @@ function renderCards(){
   $('#cards').innerHTML=list.map(r=>{
     const sel=S.sel.includes(r.id);const p=serveProt(r);const g=gfType(r);
     return`<article class="card tier-${tierOf(r)}${sel?' sel':''}${!sel&&full?' off':''}">
+      ${imgOf(r,640)?`<div class="card-img"><img src="${imgOf(r,640)}" alt="${esc(r.n)}" loading="lazy" width="640" height="480"></div>`:''}
       <div class="card-top"><div><div class="card-eyebrow">${tierOf(r)==='premium'?'<span class="tier prem">Premium</span>':tierOf(r)==='lighter'?'<span class="tier light">Lighter</span>':''}${esc(r.c)}</div><h3>${esc(r.n)}</h3><div class="meta">${timeLabel(r)}</div></div>
       <div class="ticket num"><b>${money(serveCost(r))}</b><small>per serve</small></div></div>
       ${r.d?`<p class="blurb">${esc(r.d)}</p>`:''}
@@ -157,7 +160,7 @@ function render(){renderControls();renderCards();const w=week();renderWeek(w);re
 function openRecipe(id){
   const r=R.find(x=>x.id===id);const n=spm();const lines=splitLines(r,n);const g=gfType(r);
   const checks=[...new Set(r.i.filter(([i])=>ING[i].ck).map(([i])=>ING[i].n))];
-  $('#dlg-in').innerHTML=`<div class="dlg-head"><div><span class="eyebrow">${esc(r.c)} · ${timeLabel(r)}</span><h2>${esc(r.n)}</h2></div><button class="x" id="dlg-x" aria-label="Close">×</button></div>
+  $('#dlg-in').innerHTML=`${imgOf(r,1200)?`<div class="dlg-img"><img src="${imgOf(r,1200)}" alt="${esc(r.n)}"></div>`:''}<div class="dlg-head"><div><span class="eyebrow">${esc(r.c)} · ${timeLabel(r)}</span><h2>${esc(r.n)}</h2></div><button class="x" id="dlg-x" aria-label="Close">×</button></div>
    ${r.d?`<p class="lead-sm">${esc(r.d)}</p>`:''}
    <div class="badges" style="margin-top:10px"><span class="badge p num">${Math.round(serveProt(r))}g protein/serve</span><span class="badge num">${money(serveCost(r))}/serve at ${STORE_NAME[S.store]}</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span></div>
    <div class="dlg-cols"><div><h3>For ${n} serves</h3><ul class="ing">${lines.map(([i,a])=>`<li><span>${esc(iname(i))}</span><b class="num">${kAmt(i,a)}</b></li>`).join('')}</ul><p class="hint" style="margin-top:8px">Plus oil, salt and pepper.</p></div>

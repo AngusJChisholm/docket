@@ -341,3 +341,15 @@ body{font-size:15.5px;-webkit-font-smoothing:antialiased}
 .picked li::before{content:"";position:absolute;left:0;top:.45em;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface)}
 .picked li.pk-premium::before{background:var(--ink);border-color:var(--ink)}
 .picked li.pk-lighter::before{background:var(--mint);border-color:var(--green)}
+
+/* ---------- Food photos ---------- */
+.card{--pad:18px}.card.sel{--pad:17px}
+.card-img{margin:calc(var(--pad)*-1) calc(var(--pad)*-1) 4px;aspect-ratio:4/3;overflow:hidden;border-radius:21px 21px 0 0;background:var(--sunk)}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block;max-width:100%;transition:transform .4s ease}
+.card:hover .card-img img{transform:scale(1.03)}
+.dlg-img{margin:-24px -24px 18px;aspect-ratio:16/9;overflow:hidden;border-radius:var(--r-lg) var(--r-lg) 0 0}
+.dlg-img img{width:100%;height:100%;object-fit:cover;display:block}
+.col-card.has-img{padding-top:0;overflow:hidden}
+.col-img{display:block;margin:0 -28px 8px;aspect-ratio:16/10;overflow:hidden}
+.col-img img{width:100%;height:100%;object-fit:cover;display:block}
+@media (prefers-reduced-motion:reduce){.card:hover .card-img img{transform:none}}

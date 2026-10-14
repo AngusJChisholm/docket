@@ -60,7 +60,8 @@
   $('#col-grid').innerHTML = COLS.map(c => {
     const rs = R.filter(r => tierOf(r) === c.k); const costs = rs.map(serveCost);
     const eg = rs.slice().sort((a, b) => serveCost(b) - serveCost(a)).slice(0, 3).map(r => esc(r.n));
-    return `<a class="col-card col-${c.k}" href="plan.html#${c.k}"><span class="col-count">${rs.length} dinners</span><h3>${c.t}</h3><p>${c.d}</p>
+    const ci = ((window.DOCKET_IMG || {}).collections || {})[c.k];
+    return `<a class="col-card col-${c.k}${ci ? ' has-img' : ''}" href="plan.html#${c.k}">${ci ? `<span class="col-img"><img src="assets/img/food/${ci}-640.jpg" alt="" loading="lazy"></span>` : ''}<span class="col-count">${rs.length} dinners</span><h3>${c.t}</h3><p>${c.d}</p>
       <ul>${eg.map(n => `<li>${n}</li>`).join('')}</ul><span class="col-from">From <b class="num">${money(Math.min(...costs))}</b> a serve</span></a>`;
   }).join('');
 
