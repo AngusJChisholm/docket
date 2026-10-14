@@ -74,6 +74,17 @@ const ING={
  eggplant:{n:'Eggplant',a:'F',u:'ea',pk:1,p:3.50,pr:1,ea:[1,'eggplant']},
  greenbeans:{n:'Green beans',a:'F',u:'g',pk:500,p:4.50,pr:2},
 
+ lamb_mince:{n:'Lamb mince',a:'M',u:'g',pk:500,p:9.00,pr:18,t:'red'},
+ pork_belly:{n:'Pork belly',a:'M',u:'g',pk:1000,p:17.00,pr:14,t:'pork'},
+ whitefish:{n:'White fish fillets (basa)',a:'M',u:'g',pk:1000,p:14.00,pr:17,t:'seafood'},
+ hummus:{n:'Hummus',a:'D',u:'g',pk:200,p:3.50,pr:7},
+ beansprouts:{n:'Bean sprouts',a:'F',u:'g',pk:250,p:2.50,pr:3},
+ massaman:{n:'Massaman curry paste',a:'P',u:'g',pk:195,p:3.80,pr:2,ck:1,pl:'jar',tbsp:16},
+ ricenoodles:{n:'Flat rice noodles',a:'P',u:'g',pk:375,p:2.80,pr:6},
+ cornchips:{n:'Plain corn chips',a:'P',u:'g',pk:230,p:3.50,pr:7,ck:1},
+ turkish:{n:'Turkish rolls (4)',a:'B',u:'ea',pk:4,p:4.50,pr:9,pl:'4 pack',ea:[1,'roll']},
+ currypowder:{n:'Curry powder',a:'K',u:'g',pk:40,p:2.50,pr:0,ck:1,tsp:2.5,pan:1},
+ worcestershire:{n:'Worcestershire sauce',a:'K',u:'ml',pk:250,p:3.00,pr:0,ck:1,pan:1},
  // Freezer
  peas:{n:'Frozen peas',a:'Z',u:'g',pk:1000,p:3.50,pr:5,cup:140},
  edamame:{n:'Frozen shelled edamame',a:'Z',u:'g',pk:500,p:4.50,pr:11,cup:150},
@@ -148,7 +159,7 @@ const ING={
 };
 
 // Regular ingredient -> what gluten free eaters get instead (scaled to the number of GF eaters)
-const GFSWAP={panko:'gf_crumbs',flour:'gf_flour',pasta:'gf_pasta',lasagne:'gf_lasagne',buns:'gf_buns',wraps:'gf_wraps',pita:'gf_wraps',naan:'gf_wraps',tortillas:'corn_tortillas',soy:'tamari',gochujang:'sriracha'};
+const GFSWAP={panko:'gf_crumbs',flour:'gf_flour',pasta:'gf_pasta',lasagne:'gf_lasagne',buns:'gf_buns',wraps:'gf_wraps',pita:'gf_wraps',naan:'gf_wraps',tortillas:'corn_tortillas',soy:'tamari',gochujang:'sriracha',turkish:'gf_buns'};
 
 // ---------- Recipes (quantities per serve) ----------
 // c category · t total minutes · h hands-on minutes (slow cooks) · d one-line description
@@ -290,7 +301,102 @@ const R=[
   i:[['chickpeas',300],['currypaste',30],['onion',50],['garlic',.08],['ginger',5],['coconut',100],['tintom',100],['spinach',40],['rice',90],['yoghurt',40],['naan',.5],['coriander',.1]],
   m:['Cook the rice.','Soften the onion 8 minutes, add the garlic and ginger for 1 minute, then the curry paste for 2 minutes.','Add the tomatoes, coconut milk and drained chickpeas. Simmer 15 minutes, crushing some chickpeas to thicken it.','Stir through the spinach until wilted. Season with salt and a squeeze of lemon if you have one.','Serve with rice, yoghurt, naan and coriander.'],
   l:'Freezes and reheats well. Great for a meat-free day.',
-  g:'GF wraps or extra rice instead of naan, and check the curry paste.'}
+  g:'GF wraps or extra rice instead of naan, and check the curry paste.'},
+ {id:'honeygarlic',n:'Honey Garlic Chicken & Greens',c:'Bowls',t:30,d:'Crispy-edged chicken in a sticky honey, garlic and soy glaze with charred broccoli and rice.',
+  i:[['chk_thigh',250],['honey',15],['soy',20],['garlic',.15],['ginger',5],['ricevinegar',5],['cornflour',4],['broccoli',120],['rice',95],['springonion',.1],['sesameseeds',2]],
+  m:['Cook the rice.','Cut the chicken into bite-size pieces, season with salt and pepper and toss in the cornflour so it\'s lightly coated.','Glaze: honey, soy, rice vinegar, grated garlic and ginger, plus 2 tbsp water per serve.','Fry the chicken in a hot pan with a good splash of oil, in batches, 6 to 7 minutes until golden and crisp on the edges.','Meanwhile cut the broccoli into small florets and char in a separate hot pan with a little oil for 4 minutes, then add a splash of water and cover for 2 minutes.','Pour the glaze over the chicken and bubble 2 minutes, tossing, until thick and sticky.','Serve over rice with the broccoli, spring onion and sesame seeds.'],
+  l:'Chicken, broccoli and rice in one container. The glaze keeps it juicy when reheated.',
+  g:'Tamari instead of soy, and make sure the cornflour is 100% maize. Cook the GF batch first in a clean pan.'},
+
+ {id:'massaman',n:'Slow-Cooked Beef Massaman',c:'Curry',t:180,h:25,d:'Chuck braised in a rich, peanutty massaman with potatoes until it falls apart.',
+  i:[['beef_chuck',250],['massaman',35],['coconut',160],['potato',150],['onion',50],['fishsauce',8],['brownsugar',6],['peanuts',15],['lime',.15],['rice',95],['coriander',.1]],
+  m:['Cut the chuck into large 4cm chunks, season with salt and brown hard in a heavy pot in batches. Set aside.','Lower the heat, add a splash of oil and fry the curry paste for 2 minutes until fragrant.','Add the coconut milk, half a cup of water per 2 serves, the fish sauce and brown sugar. Return the beef and bring to a gentle simmer.','Lid on, low heat (or 160°C oven) for 2 hours, stirring occasionally.','Add the potato in chunks and the onion in wedges. Simmer uncovered 30 to 40 minutes until the potato is tender and the beef falls apart.','Taste: adjust with more fish sauce for salt, sugar for sweet, lime for sour. Cook the rice.','Serve over rice, topped with crushed peanuts and coriander.'],
+  l:'Even better the next day. Pack the peanuts separately so they stay crunchy.',
+  g:'Naturally gluten free. Check the curry paste and fish sauce labels.'},
+
+ {id:'katsu',n:'Chicken Katsu Curry',c:'Fakeaway',t:50,d:'Crunchy panko chicken with a from-scratch Japanese curry sauce, rice and a sharp cabbage salad.',
+  i:[['chk_thigh',240],['flour',18],['eggs',.4],['panko',35],['onion',50],['carrot',60],['garlic',.08],['ginger',4],['currypowder',4],['stockpowder',3],['honey',6],['soy',8],['rice',95],['cabbage',.1],['ricevinegar',6]],
+  m:['Curry sauce: soften the diced onion and carrot in a little oil for 8 minutes. Add the garlic, ginger and curry powder for 1 minute.','Stir in half the flour for 1 minute, then whisk in the stock powder dissolved in ¾ cup hot water per serve. Simmer 15 minutes, add the honey and soy, then blitz smooth.','Cook the rice. Slaw: shred the cabbage thin and toss with the rice vinegar and a pinch of salt and sugar.','Flatten the thighs a little. Dust in the remaining flour, dip in beaten egg, press into the panko.','Shallow-fry in 1cm of oil, 4 minutes a side, until deep golden and cooked through. Drain and rest 2 minutes, then slice.','Plate the rice, chicken and slaw, and pour the curry sauce alongside.'],
+  l:'Keep the sauce separate and reheat the chicken in the oven or air fryer so it stays crunchy.',
+  g:'GF flour in the sauce (make a small separate pot) and for crumbing, with GF crumbs. Tamari instead of soy. Fry the GF chicken first in fresh oil.'},
+
+ {id:'greektray',n:'Greek Lemon Chicken Tray Bake',c:'Roasts',t:60,d:'One-tray lemon, garlic and oregano chicken with crispy potatoes, tomatoes, fetta and tzatziki.',
+  i:[['chk_thigh',250],['potato',250],['lemon',.4],['garlic',.15],['oregano',1.2],['red_onion',.25],['cherrytom',70],['fetta',25],['yoghurt',40],['cucumber',.2],['parsley',.05]],
+  m:['Oven to 220°C. Cut the potatoes into wedges, toss with oil, salt and half the oregano and roast 20 minutes.','Meanwhile toss the chicken with the juice and zest of most of the lemons, half the garlic (crushed), the rest of the oregano, oil and salt.','Add the chicken and the red onion wedges to the tray, turn the potatoes, and roast another 20 minutes.','Add the tomatoes and roast 10 minutes more until the chicken is golden and the tomatoes burst.','Tzatziki: grated cucumber (water squeezed out), yoghurt, the rest of the garlic, a squeeze of lemon and salt.','Crumble the fetta over the tray, scatter parsley, and serve with the tzatziki.'],
+  l:'Everything in one container with the tzatziki on the side.',
+  g:'Naturally gluten free.'},
+
+ {id:'mongolian',n:'Mongolian Beef',c:'Fakeaway',t:30,d:'Thin, crispy beef tossed in a sweet, garlicky soy sauce with broccoli and spring onions.',
+  i:[['beef_rump',230],['cornflour',8],['soy',25],['brownsugar',12],['garlic',.15],['ginger',6],['springonion',.25],['broccoli',100],['rice',95],['sesameoil',3]],
+  m:['Cook the rice.','Slice the beef as thin as you can across the grain (freeze it for 20 minutes first to make this easy). Toss in the cornflour.','Sauce: soy, brown sugar and 3 tbsp water per serve.','Fry the beef in a very hot wok with plenty of oil, in small batches, 1 to 2 minutes until crisp. Drain.','Pour out most of the oil. Fry the garlic and ginger 30 seconds, add the broccoli and a splash of water, and cook 3 minutes.','Pour in the sauce and bubble until it thickens, then toss the beef and spring onions through. Finish with sesame oil and serve over rice.'],
+  l:'Beef, broccoli and rice together. Reheat until hot.',
+  g:'Tamari instead of soy, 100% maize cornflour, and a separate clean wok for the GF batch.'},
+
+ {id:'tandoori',n:'Tandoori Chicken, Raita & Rice',c:'Curry',t:45,d:'Charred yoghurt-marinated chicken with cooling mint raita, pickled onions, rice and naan.',
+  i:[['chk_thigh',260],['yoghurt',90],['currypaste',20],['garammasala',1.5],['lemon',.3],['garlic',.1],['cucumber',.25],['mint',.1],['red_onion',.2],['whitevinegar',8],['rice',95],['naan',.5]],
+  m:['Marinade: half the yoghurt with the curry paste, garam masala, half the garlic, the juice of half the lemons and 1 tsp salt. Coat the chicken and leave at least 30 minutes (overnight is best).','Pickled onion: thinly sliced red onion with the vinegar, a pinch of sugar and salt.','Raita: the rest of the yoghurt with grated cucumber, chopped mint, the rest of the garlic and salt.','Cook the rice.','Grill or pan-fry the chicken on high, 5 to 6 minutes a side, until charred at the edges and cooked through. Rest 5 minutes.','Serve with rice, warm naan, raita, pickled onion and lemon wedges.'],
+  l:'Chicken over rice with the raita in a separate container.',
+  g:'GF wraps or extra rice instead of naan. Check the curry paste label.'},
+
+ {id:'nachos',n:'Loaded Beef Nachos',c:'Fakeaway',t:35,d:'Spiced beef and beans under melted cheese, with guacamole, salsa, sour cream and jalapeños.',
+  i:[['beef_mince',200],['onion',40],['garlic',.08],['cumin',1.2],['smokedpaprika',1],['chillipowder',.5],['oregano',.4],['tompaste',12],['tintom',100],['blackbeans',80],['cornchips',70],['cheese',50],['avocado',.4],['lime',.25],['cherrytom',50],['red_onion',.1],['coriander',.1],['sourcream',30],['jalapenos',10]],
+  m:['Brown the mince hard in a big pan. Add the diced onion and cook 5 minutes, then the garlic and all the spices for 1 minute.','Stir in the tomato paste, crushed tomatoes and drained beans. Simmer 10 minutes until thick and season well.','Guacamole: mash the avocado with lime juice, salt and some chopped coriander. Salsa: chopped tomatoes, red onion, coriander and lime.','Oven to 200°C. Spread the corn chips on trays, spoon over the beef and cover with cheese.','Bake 8 to 10 minutes until the cheese is melted and bubbling.','Top with guac, salsa, sour cream and jalapeños and get it on the table fast.'],
+  l:'Pack the beef with rice instead of chips (burrito bowl style), toppings on the side.',
+  g:'Plain corn chips are usually gluten free, but check the bag. Check the spices too.'},
+
+ {id:'padthai',n:'Chicken Pad Thai',c:'Bowls',t:35,d:'Flat rice noodles wok-tossed with chicken, egg, bean sprouts and peanuts in a sweet-sour sauce.',
+  i:[['chk_thigh',200],['ricenoodles',90],['eggs',1],['beansprouts',50],['springonion',.2],['garlic',.1],['fishsauce',15],['brownsugar',12],['ketchup',10],['lime',.35],['peanuts',20],['chilliflakes',.3]],
+  m:['Soak the noodles in hot (not boiling) water for 15 minutes until bendy but still firm. Drain.','Sauce: fish sauce, brown sugar, tomato sauce, the juice of half the limes and 1 tbsp water per serve. Stir until the sugar dissolves.','Slice the chicken thin and stir-fry in a very hot wok until cooked. Push to one side.','Add the garlic, then crack in the eggs and scramble them into the chicken.','Add the noodles and sauce and toss constantly for 2 to 3 minutes until the sauce is absorbed. Cook in two batches if your wok is small.','Toss through the bean sprouts and spring onion. Serve with crushed peanuts, chilli flakes and lime wedges.'],
+  l:'Reheat with a splash of water so the noodles loosen up. Fresh lime over the top brings it back.',
+  g:'Naturally gluten free with rice noodles. Check the fish sauce and tomato sauce labels.'},
+
+ {id:'cottage',n:'Cottage Pie',c:'Comfort',t:75,d:'Rich beef and veg in gravy under a thick, golden layer of cheesy mash.',
+  i:[['beef_mince',220],['onion',50],['carrot',60],['garlic',.08],['tompaste',15],['worcestershire',8],['stockpowder',3],['peas',40],['cornflour',3],['potato',300],['butter',15],['milk',40],['cheese',30]],
+  m:['Mash: boil the peeled potatoes 15 to 18 minutes until soft. Drain and mash with the butter, milk and salt.','Brown the mince hard in a big pan. Add the diced onion and carrot and cook 8 minutes.','Stir in the garlic and tomato paste for 2 minutes, then the Worcestershire and stock powder dissolved in ½ cup water per serve.','Simmer 15 minutes. Add the peas, and thicken with the cornflour mixed into a little cold water. Season well.','Oven to 200°C. Spoon the beef into a baking dish, spread the mash on top, rough it up with a fork and cover with cheese.','Bake 25 minutes until golden and bubbling at the edges. Rest 5 minutes.'],
+  l:'Cut into portions once cool. Reheats perfectly.',
+  g:'Check the Worcestershire sauce (some aren\'t GF), the stock powder and the cornflour (100% maize).'},
+
+ {id:'chilli',n:'Chilli Con Carne',c:'Comfort',t:60,d:'Smoky beef and bean chilli with rice, sour cream, cheese and fresh coriander.',
+  i:[['beef_mince',220],['onion',50],['capsicum',.3],['garlic',.1],['cumin',1.5],['smokedpaprika',1.5],['chillipowder',.8],['oregano',.4],['cinnamon',.2],['tompaste',15],['tintom',150],['blackbeans',100],['rice',90],['sourcream',30],['cheese',25],['coriander',.1],['lime',.15]],
+  m:['Brown the mince hard in a heavy pot. Add the diced onion and capsicum and cook 8 minutes.','Add the garlic and all the spices and cook 1 minute until fragrant.','Stir in the tomato paste for 2 minutes, then the crushed tomatoes, drained beans and ½ cup water per 2 serves.','Simmer low for 30 to 40 minutes, stirring now and then, until rich and thick. Season with salt and a squeeze of lime.','Cook the rice.','Serve the chilli over rice with sour cream, cheese and coriander.'],
+  l:'One of the best lunches there is. It freezes well too.',
+  g:'Naturally gluten free. Check the spice labels.'},
+
+ {id:'periperi',n:'Peri Peri Chicken, Chips & Slaw',c:'Fakeaway',t:55,d:'Fiery, lemony charred chicken with crunchy chips and a creamy slaw.',
+  i:[['chk_thigh',260],['chilli',.6],['garlic',.12],['smokedpaprika',1.5],['oregano',.5],['lemon',.35],['whitevinegar',8],['brownsugar',3],['potato',250],['cabbage',.12],['carrot',50],['mayo',20]],
+  m:['Peri peri sauce: blitz the chillies, garlic, paprika, oregano, lemon juice, vinegar, sugar, a glug of oil and 1 tsp salt. Keep a few spoonfuls aside for serving.','Coat the chicken in the rest and marinate at least 20 minutes.','Chips: oven to 220°C. Cut potatoes into chips, toss with oil and salt, roast 35 to 40 minutes, turning once.','Slaw: shredded cabbage and grated carrot with mayo, a squeeze of lemon and salt.','Grill pan, BBQ or hot oven tray: cook the chicken 5 to 6 minutes a side until charred and cooked through.','Serve with chips and slaw, and the extra sauce for the brave.'],
+  l:'Chicken and slaw in a wrap, or over rice. Skip the chips.',
+  g:'Naturally gluten free. Check the mayo label.'},
+
+ {id:'kofta',n:'Lamb Kofta, Hummus & Flatbread',c:'Bowls',t:40,d:'Spiced lamb kofta with hummus, Israeli salad, yoghurt and warm flatbreads.',
+  i:[['lamb_mince',220],['onion',30],['garlic',.08],['cumin',1.2],['cinnamon',.3],['parsley',.15],['hummus',50],['pita',1.2],['cucumber',.3],['cherrytom',70],['red_onion',.12],['lemon',.25],['yoghurt',40]],
+  m:['Kofta: mix the lamb with finely grated onion, garlic, cumin, cinnamon, half the chopped parsley and 1 tsp salt. Shape into small sausages, about 3 per serve.','Chill 15 minutes so they hold together.','Salad: finely diced cucumber, tomato and red onion with the rest of the parsley, lemon juice, oil and salt.','Cook the kofta on a hot grill pan or BBQ, 8 to 10 minutes, turning, until charred and cooked through.','Warm the flatbreads.','Spread hummus on each plate, add the kofta, salad, a spoon of yoghurt and flatbread on the side.'],
+  l:'Kofta, salad and hummus in one container, bread on the side.',
+  g:'GF wraps instead of flatbread. Check the hummus label.'},
+
+ {id:'porkbelly',n:'Sticky Pork Belly Bowls',c:'Bowls',t:60,d:'Crispy pork belly bites in a sticky soy-honey glaze with rice, greens and pickled cucumber.',
+  i:[['pork_belly',220],['soy',20],['honey',15],['garlic',.1],['ginger',5],['broccoli',100],['cucumber',.25],['ricevinegar',8],['rice',95],['springonion',.1],['sesameseeds',2]],
+  m:['Oven to 220°C. Cut the belly into 2cm cubes, toss with salt and spread on a lined tray.','Roast 35 to 40 minutes, turning once, until crisp and rendered. Drain off the fat.','Cook the rice. Quick pickle: thin cucumber slices with rice vinegar and a pinch of salt and sugar.','Glaze: soy, honey, grated garlic and ginger.','Toss the pork in a hot pan with the glaze for 2 to 3 minutes until sticky and glossy.','Steam the broccoli. Build bowls with rice, pork, broccoli and pickles, and finish with spring onion and sesame seeds.'],
+  l:'Pork and rice together, pickles in a separate container.',
+  g:'Tamari instead of soy, glazed in a separate pan.'},
+
+ {id:'steaksanga',n:'Steak Sangas & Chips',c:'Pub classics',t:45,d:'Seared rump on toasted Turkish with sticky caramelised onions, cheese and chips.',
+  i:[['beef_rump',200],['onion',80],['brownsugar',5],['whitevinegar',5],['turkish',1],['slices',1],['cos',.1],['cherrytom',40],['mayo',15],['potato',230]],
+  m:['Chips: oven to 220°C. Cut potatoes into chips, toss with oil and salt, roast 35 to 40 minutes.','Caramelised onions: slice the onions thin and cook low in oil with a pinch of salt for 20 minutes, stirring often, until deep golden. Add the sugar and vinegar for the last 2 minutes.','Bash the steaks to about 1cm thick and season well.','Sear in a smoking hot pan, 1 to 2 minutes a side. Rest 3 minutes, then slice.','Split and toast the Turkish rolls. Melt a cheese slice on the steak in the pan.','Build: mayo, lettuce, sliced tomato, steak and cheese, plenty of onions. Serve with chips.'],
+  l:'Steak and onions over salad, or in a wrap. Keep the bread separate so it doesn\'t go soggy.',
+  g:'GF buns instead of Turkish rolls, toasted separately.'},
+
+ {id:'meatballs',n:'Spaghetti & Meatballs',c:'Pasta',t:60,d:'Big, juicy beef and pork meatballs simmered in tomato sauce, over pasta with parmesan.',
+  i:[['beef_mince',130],['pork_mince',100],['panko',20],['eggs',.25],['parm',20],['garlic',.12],['onion',40],['passata',180],['tintom',100],['oregano',.5],['pasta',120],['parsley',.05]],
+  m:['Meatballs: mix both minces with the panko, egg, half the parmesan, half the garlic (crushed), chopped parsley and 1 tsp salt. Roll into golf-ball sizes, about 5 per serve.','Brown the meatballs all over in a big pan with a little oil. Set aside.','Same pan: soften the diced onion 5 minutes, then the rest of the garlic and the oregano for 1 minute.','Add the passata and crushed tomatoes, return the meatballs and simmer, half covered, 20 minutes.','Cook the pasta, keep a mug of the water, and toss with some sauce.','Serve the meatballs and sauce over pasta with the rest of the parmesan.'],
+  l:'Meatballs and sauce reheat beautifully. Use the pasta water to loosen it.',
+  g:'GF crumbs in a separate small batch of meatballs, cooked first, and GF pasta in its own pot.'},
+
+ {id:'fishtacos',n:'Crispy Fish Tacos',c:'Fakeaway',t:35,d:'Spiced crispy fish in warm tortillas with lime slaw, sriracha mayo and avocado.',
+  i:[['whitefish',220],['flour',15],['smokedpaprika',1],['cumin',.6],['tortillas',2.5],['cabbage',.1],['lime',.4],['mayo',20],['sriracha',6],['avocado',.3],['coriander',.12],['sourcream',20]],
+  m:['Slaw: shred the cabbage thin and toss with the juice of half the limes, coriander and salt.','Sauce: mayo, sriracha, sour cream and a squeeze of lime.','Cut the fish into fingers. Mix the flour with the paprika, cumin and 1 tsp salt, and toss the fish in it.','Shallow-fry in hot oil 2 to 3 minutes a side until golden and flaky. Drain on paper towel.','Warm the tortillas in a dry pan.','Load each taco with slaw, fish, avocado and sauce. Lime wedges on the side.'],
+  l:'Turn it into a bowl: fish over rice and slaw, sauce on the side.',
+  g:'GF flour for the GF fish (fried first in fresh oil), and corn tortillas.'}
 ];
 
 // ---------- Meal-kit prices for the Kit Tax ----------
