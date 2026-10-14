@@ -8,7 +8,9 @@
   const LOGO = document.querySelector('.logo').innerHTML;
 
   // Cost and protein per serve at Coles, no GF swaps (same maths as the planner).
-  const serveCost = r => r.i.reduce((s, [id, q]) => s + q / ING[id].pk * ING[id].p, 0);
+  const COLES = (window.DOCKET_PRICES || {}).coles || {};
+  const cp = id => COLES[id] ? { p: COLES[id].p, pk: COLES[id].pk || ING[id].pk } : { p: ING[id].p, pk: ING[id].pk };
+  const serveCost = r => r.i.reduce((s, [id, q]) => { const c = cp(id); return s + q / c.pk * c.p; }, 0);
   const serveProt = r => r.i.reduce((s, [id, q]) => { const it = ING[id]; return s + (it.u === 'ea' ? q * it.pr : q * it.pr / 100); }, 0);
   const AVG = R.reduce((s, r) => s + serveCost(r), 0) / R.length;
 

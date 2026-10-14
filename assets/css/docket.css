@@ -247,3 +247,4 @@ a{color:var(--green)}
 .print-recipes article{break-inside:avoid;margin-top:18px}
 .blurb{margin:0;font-size:13.5px;color:var(--muted);line-height:1.45;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .lead-sm{margin:8px 0 0;font-size:15.5px;color:var(--muted)}
+.item .ok{color:var(--green);font-weight:700}

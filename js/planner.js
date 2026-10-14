@@ -7,12 +7,16 @@ function save(){try{localStorage.setItem('docket-state',JSON.stringify(S))}catch
 
 // ---------- Pricing ----------
 function hash(s){let h=7;for(const ch of s)h=(h*31+ch.charCodeAt(0))%1000;return h/1000}
+// Real prices you've checked (js/prices.js) win; otherwise Woolies and Aldi are estimated from Coles.
+const PRICES=window.DOCKET_PRICES||{coles:{},woolies:{},aldi:{}};
 function price(id,store=S.store){
-  const it=ING[id];
-  if(store==='coles')return{p:it.p,fb:false};
-  if(store==='woolies')return{p:+(it.p*(0.95+hash(id)*0.11)).toFixed(2),fb:false};
-  if(it.noAldi)return{p:it.p,fb:true};
-  return{p:+(it.p*(0.79+hash(id+'a')*0.09)).toFixed(2),fb:false};
+  const it=ING[id];const real=(PRICES[store]||{})[id];
+  if(real)return{p:real.p,pk:real.pk||it.pk,fb:false,real:true,at:real.at};
+  const c=(PRICES.coles||{})[id];const base=c?{p:c.p,pk:c.pk||it.pk}:{p:it.p,pk:it.pk};
+  if(store==='coles')return{...base,fb:false};
+  if(store==='woolies')return{p:+(base.p*(0.95+hash(id)*0.11)).toFixed(2),pk:base.pk,fb:false};
+  if(it.noAldi)return{...base,fb:true};
+  return{p:+(base.p*(0.79+hash(id+'a')*0.09)).toFixed(2),pk:base.pk,fb:false};
 }
 const STORE_NAME={coles:'Coles',woolies:'Woolies',aldi:'Aldi'};
 const spm=()=>S.people*(S.lunch?2:1);
@@ -27,7 +31,7 @@ function splitLines(r,serves){ // returns [[id,amount]] with GF swaps split
   }
   return out.filter(x=>x[1]>1e-9);
 }
-function serveCost(r){return splitLines(r,1).reduce((s,[id,a])=>s+a/ING[id].pk*price(id).p,0)}
+function serveCost(r){return splitLines(r,1).reduce((s,[id,a])=>{const pr=price(id);return s+a/pr.pk*pr.p},0)}
 function serveProt(r){return r.i.reduce((s,[id,q])=>{const it=ING[id];return s+(it.u==='ea'?q*it.pr:q*it.pr/100)},0)}
 function tags(r){const t=new Set();r.i.forEach(([id])=>{if(ING[id].t)t.add(ING[id].t)});return t}
 function gfType(r){return r.i.some(([id])=>GFSWAP[id])?'swap':'yes'}
@@ -36,7 +40,7 @@ function allowed(r){const t=tags(r);return!Object.keys(S.skip).some(k=>S.skip[k]
 function week(){
   const agg={};const n=spm();
   S.sel.forEach(sid=>{const r=R.find(x=>x.id===sid);if(!r)return;splitLines(r,n).forEach(([id,a])=>{agg[id]=(agg[id]||0)+a})});
-  const items=Object.entries(agg).map(([id,amt])=>{const it=ING[id];const packs=Math.max(1,Math.ceil(amt/it.pk-1e-6));const pr=price(id);return{id,amt,packs,pan:!!it.pan,pack:pr.p,cost:it.pan?amt/it.pk*pr.p:packs*pr.p,fb:pr.fb}});
+  const items=Object.entries(agg).map(([id,amt])=>{const it=ING[id];const pr=price(id);const packs=Math.max(1,Math.ceil(amt/pr.pk-1e-6));return{id,amt,packs,pk:pr.pk,real:!!pr.real,at:pr.at,pan:!!it.pan,pack:pr.p,cost:it.pan?amt/pr.pk*pr.p:packs*pr.p,fb:pr.fb}});
   const shop=items.reduce((s,x)=>s+x.cost,0);
   const serves=S.sel.length*n;
   const prot=S.sel.length?S.sel.reduce((s,id)=>s+serveProt(R.find(r=>r.id===id)),0)/S.sel.length:0;
@@ -65,7 +69,7 @@ function kAmt(id,a){const it=ING[id];
   if(it.cup&&a/it.cup>=.25){const c=a/it.cup;return`${frac(c)} cup${c>1.1?'s':''} (${fmtAmt(id,a)})`}
   return fmtAmt(id,a)}
 const iname=id=>ING[id].n.replace(/\s*\([^)]*\)$/,'');
-function packLabel(id){const it=ING[id];if(it.pl)return it.pl;if(it.u==='g')return it.pk>=1000?(it.pk/1000)+'kg':it.pk+'g';if(it.u==='ml')return it.pk>=1000?(it.pk/1000)+'L':it.pk+'ml';return'each'}
+function packLabel(id,pk){const it=ING[id];pk=pk||it.pk;if(it.pl&&pk===it.pk)return it.pl;if(it.u==='g')return pk>=1000?(+(pk/1000).toFixed(2))+'kg':pk+'g';if(it.u==='ml')return pk>=1000?(+(pk/1000).toFixed(2))+'L':pk+'ml';return pk>1?pk+' pack':'each'}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const timeLabel=r=>r.t>=120?`${+(r.t/60).toFixed(1)} hr · ${r.h} min hands-on`:`${r.t} min`;
 
@@ -138,8 +142,8 @@ function renderList(w){
   if(!w.items.length){$('#aisles').innerHTML='<p class="hint">Pick a dinner and your list builds itself here, merged and sorted by aisle.</p>';$('#list-meta').textContent='';return}
   $('#aisles').innerHTML=order.filter(a=>by[a]).map(a=>`<div class="aisle"><h3>${AISLE[a]}</h3>${by[a].sort((x,y)=>ING[x.id].n.localeCompare(ING[y.id].n)).map(x=>{
     const it=ING[x.id];const k='i-'+x.id;const done=!!S.done[x.id];
-    const detail=x.pan?`you'll use ${kAmt(x.id,x.amt)} · if you're out: ${packLabel(x.id)} ${money(x.pack)}`:`${fmtAmt(x.id,x.amt)} needed · ${x.packs} × ${packLabel(x.id)}`;
-    return`<label class="item${done?' done':''}" for="${k}"><input type="checkbox" id="${k}" data-id="${x.id}" ${done?'checked':''}><span class="what">${esc(it.n)}<small>${detail}${x.fb?' · <span class="flag">Not at Aldi, priced at Coles</span>':''}${it.ck?' · check label for GF':''}</small></span><span class="c num">${x.pan?'≈':''}${money(x.cost)}</span></label>`}).join('')}</div>`).join('');
+    const detail=x.pan?`you'll use ${kAmt(x.id,x.amt)} · if you're out: ${packLabel(x.id,x.pk)} ${money(x.pack)}`:`${fmtAmt(x.id,x.amt)} needed · ${x.packs} × ${packLabel(x.id,x.pk)}`;
+    return`<label class="item${done?' done':''}" for="${k}"><input type="checkbox" id="${k}" data-id="${x.id}" ${done?'checked':''}><span class="what">${esc(it.n)}<small>${detail}${x.fb?' · <span class="flag">Not at Aldi, priced at Coles</span>':''}${it.ck?' · check label for GF':''}${x.real?' · <span class="ok">price checked</span>':''}</small></span><span class="c num">${x.pan?'≈':''}${money(x.cost)}</span></label>`}).join('')}</div>`).join('');
   $('#list-meta').textContent=`${w.items.length} items · ${money(w.shop)} + ${money(STAPLES,0)} staples`;
 }
 function render(){renderControls();renderCards();const w=week();renderWeek(w);renderList(w);save()}
@@ -165,7 +169,7 @@ function planText(){
   const w=week();const n=spm();
   let t=`DOCKET · Your week at ${STORE_NAME[S.store]}\n${S.people} people${S.lunch?' + lunches':''} · ${S.sel.length} dinners · ${w.serves} serves\nEstimated shop: ${money(w.total)} (${money(w.total/Math.max(1,w.serves))} per serve)\n\nSHOPPING LIST\n`;
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
-  ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=x.pan?`[ ] ${ING[x.id].n} (check pantry, using ${kAmt(x.id,x.amt)})\n`:`[ ] ${ING[x.id].n}: ${x.packs} x ${packLabel(x.id)} (${money(x.cost)})\n`})});
+  ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=x.pan?`[ ] ${ING[x.id].n} (check pantry, using ${kAmt(x.id,x.amt)})\n`:`[ ] ${ING[x.id].n}: ${x.packs} x ${packLabel(x.id,x.pk)} (${money(x.cost)})\n`})});
   t+=`\nRECIPES\n`;
   S.sel.forEach(id=>{const r=R.find(x=>x.id===id);t+=`\n${r.n.toUpperCase()} (${timeLabel(r)})\n`;splitLines(r,n).forEach(([i,a])=>{t+=`- ${kAmt(i,a)} ${iname(i)}\n`});r.m.forEach((s,k)=>{t+=`${k+1}. ${s}\n`});if(r.l)t+=`Lunch: ${r.l}\n`;if(r.g&&S.gf>0)t+=`Gluten free: ${r.g}\n`});
   return t;
@@ -234,7 +238,7 @@ function listText(){
   const w=week();
   let t=`DOCKET · ${STORE_NAME[S.store]} · est. ${money(w.total)}\n`;
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
-  ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=`[ ] ${ING[x.id].n}: ${x.packs} x ${packLabel(x.id)}\n`})});
+  ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=`[ ] ${ING[x.id].n}: ${x.packs} x ${packLabel(x.id,x.pk)}\n`})});
   t+=`\nDINNERS: ${S.sel.map(id=>R.find(r=>r.id===id).n).join(', ')}`;
   return t;
 }

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Price Importer · Docket</title>
+<link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,700..900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="../assets/css/docket.css">
+<style>
+  .admin{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 60px;display:flex;flex-direction:column;gap:20px}
+  .admin h1{font-family:var(--display);font-weight:900;font-size:34px;letter-spacing:-.02em;margin:0}
+  .admin textarea{width:100%;min-height:180px;border:1px solid var(--line);border-radius:var(--r-md);padding:12px;font-family:var(--mono);font-size:12.5px;background:var(--bg);color:var(--ink)}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tbl th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:8px 6px;border-bottom:2px solid var(--line)}
+  .tbl td{padding:8px 6px;border-bottom:1px dashed var(--line);vertical-align:middle}
+  .tbl select{max-width:240px;border:1px solid var(--line);border-radius:8px;padding:5px 8px;background:var(--surface)}
+  .tbl .num{font-family:var(--mono)}
+  .wrapx{overflow-x:auto}
+  .diff.up{color:var(--markup);font-weight:700}.diff.down{color:var(--green);font-weight:700}
+  .warn{background:var(--peach);color:var(--markup);border-radius:999px;padding:2px 8px;font-size:11.5px;font-weight:700}
+  .tok{border:1px solid var(--line);border-radius:999px;padding:9px 14px;min-width:0;width:320px;max-width:100%;background:var(--bg)}
+  .small{font-size:12.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main class="admin">
+  <div><h1>Price importer</h1><p class="small">Private tool. Search a supermarket site, select all the results text (Ctrl/Cmd + A, then C), paste it here, and Docket picks out the prices.</p></div>
+
+  <section class="panel">
+    <div class="row" style="margin-bottom:12px">
+      <span class="eyebrow">Store</span>
+      <div class="seg" id="store"><button data-s="coles" aria-pressed="false">Coles</button><button data-s="woolies" aria-pressed="true">Woolies</button><button data-s="aldi" aria-pressed="false">Aldi</button></div>
+    </div>
+    <label for="paste" class="eyebrow">Paste the search results</label>
+    <textarea id="paste" placeholder="Paste a Coles, Woolies or Aldi search results page here"></textarea>
+    <div class="row" style="margin-top:10px"><button class="btn" id="find">Find prices</button><span class="small" id="found"></span></div>
+  </section>
+
+  <section class="panel" id="results-panel" hidden>
+    <div class="sec-head"><h2>Matches</h2><span class="small">Tick the ones to use. Change the ingredient if the match is wrong.</span></div>
+    <div class="wrapx"><table class="tbl"><thead><tr><th></th><th>Product</th><th>Shelf price</th><th>Docket ingredient</th><th>Per unit vs current</th></tr></thead><tbody id="results"></tbody></table></div>
+    <div class="row" style="margin-top:12px"><button class="btn" id="add">Add ticked prices</button><span class="small" id="added"></span></div>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head"><h2>Checked prices</h2><span class="small" id="count"></span></div>
+    <div class="wrapx"><table class="tbl"><thead><tr><th>Store</th><th>Ingredient</th><th>Product</th><th>Price</th><th>Checked</th><th></th></tr></thead><tbody id="saved"></tbody></table></div>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head"><h2>Publish to the site</h2></div>
+    <p class="small">Needs a GitHub token that can edit the docket repo (fine-grained token, Contents: read and write). It's kept in this browser only.</p>
+    <div class="row"><input class="tok" id="token" type="password" placeholder="github_pat_..." autocomplete="off"><button class="btn" id="publish">Publish prices</button><button class="btn ghost" id="copyjs">Copy prices.js</button></div>
+    <p class="msg" id="pubmsg" role="status"></p>
+  </section>
+</main>
+
+<script src="../js/data.js"></script>
+<script src="../js/prices.js"></script>
+<script>
+(function(){
+  const $=s=>document.querySelector(s);
+  const REPO='AngusJChisholm/docket', PATH='js/prices.js';
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const money=v=>'$'+(+v).toFixed(2);
+  const today=new Date().toISOString().slice(0,10);
+  let store='woolies';
+  let P=JSON.parse(JSON.stringify(window.DOCKET_PRICES||{coles:{},woolies:{},aldi:{}}));
+  try{const d=localStorage.getItem('docket-prices-draft');if(d)P=JSON.parse(d)}catch(e){}
+  try{$('#token').value=localStorage.getItem('docket-gh-token')||''}catch(e){}
+  const saveDraft=()=>{try{localStorage.setItem('docket-prices-draft',JSON.stringify(P))}catch(e){}};
+  let found=[];
+
+  document.querySelectorAll('#store button').forEach(b=>b.onclick=()=>{store=b.dataset.s;document.querySelectorAll('#store button').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+
+  // ---------- Parse pasted results ----------
+  const NOISE=/^(was|min|max|range|save|special|seasonal|lower shelf|buy more|add to|save to|\d+(\.\d+)?$|\/|\d+ for |shop now|page \d|sort by|in stock|specials|hide|all filters|everyday market|new|price drop|down down)/i;
+  const isName=l=>!/^\$/.test(l)&&!NOISE.test(l)&&/[a-z]/i.test(l)&&(/\d/.test(l)||l.length>20)&&l.length<160;
+  function parse(text){
+    const L=text.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);const out=[];const seen=new Set();
+    for(let i=0;i<L.length;i++){
+      const m=L[i].match(/^\$(\d+(?:\.\d{1,2})?)$/);if(!m)continue;
+      const unitLine=[L[i+1]||'',L[i+2]||''].find(l=>/\$\s*[\d.]+\s*(\/|per)\s*\d*\s*(kg|g|l|ml|ea|each)\b/i.test(l))||'';
+      const um=unitLine.match(/\$\s*([\d.]+)\s*(?:\/|per)\s*(\d*)\s*(kg|g|l|ml|ea|each)\b/i);
+      const ahead=[],behind=[];
+      for(let k=1;k<=6&&i+k<L.length;k++){if(/^\$\d/.test(L[i+k])&&k>2)break;if(isName(L[i+k]))ahead.push(L[i+k])}
+      for(let k=1;k<=5&&i-k>=0;k++){if(/^\$\d/.test(L[i-k]))break;if(isName(L[i-k]))behind.push(L[i-k])}
+      const name=ahead.find(a=>behind.includes(a))||behind[0]||ahead[0];
+      if(!name||seen.has(name+m[1]))continue;seen.add(name+m[1]);
+      out.push({name:name.replace(/\s*\|\s*/g,' '),price:+m[1],unit:um?{p:+um[1],amt:+(um[2]||1),u:um[3].toLowerCase()}:null});
+    }
+    return out;
+  }
+
+  // ---------- Match to Docket ingredients ----------
+  const STOP=new Set(['and','the','with','fresh','pack','tin','jar','each','bunch','free','range','approx','australian','coles','woolworths','aldi','rspca','approved']);
+  const WRONG=/marinated|sausage|burger|meatball|slow cooked|\bcook\b|bbq|schnitzel|stir fry|knuckle|rib|kangaroo|kebab|crumbed|kiev|nugget|smoked|seasoned|portion/i;
+  const words=s=>s.toLowerCase().replace(/\([^)]*\)/g,' ').split(/[^a-z]+/).filter(w=>w.length>2&&!STOP.has(w));
+  function bestMatch(name){
+    const pw=new Set(words(name));let best=null,score=0;
+    for(const[id,it]of Object.entries(ING)){
+      const iw=words(it.n);if(!iw.length)continue;
+      const hit=iw.filter(w=>pw.has(w)||pw.has(w.replace(/s$/,''))||pw.has(w+'s')).length;
+      let sc=hit/iw.length;if(WRONG.test(name)&&!WRONG.test(it.n))sc*=.4;if(/\b(beef|pork|lamb|chicken|steaks?|salmon|prawns?|veal)\b/i.test(name)&&it.a!=='M'&&it.a!=='Z')sc*=.3;
+      if(sc>score){score=sc;best=id}
+    }
+    return score>=.66?best:'';
+  }
+  function sizeOf(name,u){
+    const range=/\d+(\.\d+)?\s*(g|kg)\s*-\s*\d/i.test(name);
+    const ms=[...name.matchAll(/(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/gi)];const last=ms[ms.length-1];
+    const pack=name.match(/(\d+)\s*(pack|pk)\b/i);
+    return{range,amt:last?+last[1]*(/kg|^l$/i.test(last[2])?1000:1):null,su:last?last[2].toLowerCase().replace('kg','g').replace(/^l$/,'ml'):null,count:pack?+pack[1]:null};
+  }
+  // Convert a found product to {p, pk} in the ingredient's own unit
+  function toIng(f,id){
+    const it=ING[id];if(!it)return null;const sz=sizeOf(f.name);
+    if(it.u==='ea')return{p:f.price,pk:it.pk>1?(sz.count||it.pk):1};
+    if(!sz.range&&sz.amt&&sz.su===it.u)return{p:f.price,pk:sz.amt};
+    if(f.unit){const base=f.unit.u==='kg'||f.unit.u==='l'?1000:1;const amt=f.unit.amt*base;return{p:+(f.unit.p*(1000/amt)).toFixed(2),pk:1000}}
+    return{p:f.price,pk:it.pk};
+  }
+  const current=id=>{const r=(P[store]||{})[id]||(P.coles||{})[id];return r?{p:r.p,pk:r.pk||ING[id].pk}:{p:ING[id].p,pk:ING[id].pk}};
+  const ingOptions=sel=>'<option value="">(skip)</option>'+Object.entries(ING).sort((a,b)=>a[1].n.localeCompare(b[1].n)).map(([id,it])=>`<option value="${id}" ${id===sel?'selected':''}>${esc(it.n)}</option>`).join('');
+
+  function renderResults(){
+    // tick only the best value per ingredient
+    const bestBy={};
+    found.forEach((f,i)=>{if(!f.id)return;const c=toIng(f,f.id);if(!c)return;const per=c.p/c.pk;if(!(f.id in bestBy)||per<bestBy[f.id].per)bestBy[f.id]={i,per}});
+    found.forEach((f,i)=>{if(f.tick===undefined)f.tick=!!(f.id&&bestBy[f.id]&&bestBy[f.id].i===i)});
+    $('#results').innerHTML=found.map((f,i)=>{
+      let cmp='';if(f.id){const c=toIng(f,f.id),cur=current(f.id);const ratio=(c.p/c.pk)/(cur.p/cur.pk);const pct=Math.round((ratio-1)*100);
+        cmp=`<span class="diff ${pct>0?'up':pct<0?'down':''}">${pct>0?'+':''}${pct}%</span> <span class="small">(${money(c.p)} per ${c.pk}${ING[f.id].u==='ea'?'':ING[f.id].u})</span>${Math.abs(pct)>60?' <span class="warn">check</span>':''}`}
+      return`<tr><td><input type="checkbox" data-i="${i}" class="tick" ${f.tick?'checked':''} aria-label="Use this price"></td><td>${esc(f.name)}</td><td class="num">${money(f.price)}${f.unit?`<br><span class="small">${money(f.unit.p)} / ${f.unit.amt}${f.unit.u}</span>`:''}</td><td><select data-i="${i}" class="ing" aria-label="Ingredient">${ingOptions(f.id)}</select></td><td>${cmp}</td></tr>`}).join('');
+    $('#results-panel').hidden=!found.length;
+  }
+  $('#find').onclick=()=>{
+    found=parse($('#paste').value).map(f=>({...f,id:bestMatch(f.name)}));
+    $('#found').textContent=found.length?`Found ${found.length} products, ${found.filter(f=>f.id).length} matched to Docket ingredients.`:'No prices found. Make sure you copied the whole results page.';
+    renderResults();
+  };
+  $('#results').addEventListener('change',e=>{const i=+e.target.dataset.i;if(e.target.classList.contains('ing')){found[i].id=e.target.value;found[i].tick=!!e.target.value;renderResults()}else found[i].tick=e.target.checked});
+  $('#add').onclick=()=>{
+    let n=0;P[store]=P[store]||{};
+    found.forEach(f=>{if(!f.tick||!f.id)return;const c=toIng(f,f.id);if(!c)return;P[store][f.id]={p:c.p,pk:c.pk,name:f.name,at:today};n++});
+    saveDraft();renderSaved();$('#added').textContent=`Added ${n} price${n===1?'':'s'}. Publish when you're done.`;
+  };
+
+  function renderSaved(){
+    const rows=[];['coles','woolies','aldi'].forEach(s=>Object.entries(P[s]||{}).forEach(([id,r])=>rows.push({s,id,r})));
+    rows.sort((a,b)=>a.s.localeCompare(b.s)||ING[a.id]?.n.localeCompare(ING[b.id]?.n));
+    $('#saved').innerHTML=rows.map(x=>`<tr><td>${x.s[0].toUpperCase()+x.s.slice(1)}</td><td>${esc(ING[x.id]?.n||x.id)}</td><td class="small">${esc(x.r.name||'')}</td><td class="num">${money(x.r.p)} / ${x.r.pk}${ING[x.id]?.u==='ea'?'':ING[x.id]?.u||''}</td><td class="small">${esc(x.r.at||'')}</td><td><button class="btn ghost rm" data-s="${x.s}" data-id="${x.id}" style="padding:4px 10px">Remove</button></td></tr>`).join('');
+    $('#count').textContent=`${rows.length} checked prices across ${Object.keys(ING).length} ingredients × 3 stores`;
+  }
+  $('#saved').addEventListener('click',e=>{const b=e.target.closest('.rm');if(!b)return;delete P[b.dataset.s][b.dataset.id];saveDraft();renderSaved()});
+
+  const fileText=()=>`// Real shelf prices, checked by hand. Managed from admin/prices.html.
+// Each entry: p = shelf price, pk = pack size (in the ingredient's unit), name = product checked, at = date checked.
+window.DOCKET_PRICES = ${JSON.stringify(P,null,2)};
+`;
+  $('#copyjs').onclick=async()=>{try{await navigator.clipboard.writeText(fileText());$('#pubmsg').textContent='Copied.'}catch(e){$('#pubmsg').textContent='Copy was blocked.'}};
+  $('#publish').onclick=async()=>{
+    const tok=$('#token').value.trim();if(!tok){$('#pubmsg').textContent='Paste your GitHub token first.';return}
+    try{localStorage.setItem('docket-gh-token',tok)}catch(e){}
+    const api=`https://api.github.com/repos/${REPO}/contents/${PATH}`;const h={'Authorization':`Bearer ${tok}`,'Accept':'application/vnd.github+json'};
+    $('#pubmsg').textContent='Publishing...';
+    try{
+      const cur=await fetch(api+'?ref=main',{headers:h});if(!cur.ok)throw new Error('Could not read the repo ('+cur.status+'). Check the token.');
+      const sha=(await cur.json()).sha;
+      const content=btoa(unescape(encodeURIComponent(fileText())));
+      const res=await fetch(api,{method:'PUT',headers:{...h,'Content-Type':'application/json'},body:JSON.stringify({message:`Update prices (${today})`,content,sha,branch:'main'})});
+      if(!res.ok)throw new Error('GitHub said no ('+res.status+').');
+      try{localStorage.removeItem('docket-prices-draft')}catch(e){}
+      $('#pubmsg').textContent='Published. The live site updates in about a minute.';
+    }catch(e){$('#pubmsg').textContent=e.message}
+  };
+  renderSaved();
+})();
+</script>
+</body>
+</html>
