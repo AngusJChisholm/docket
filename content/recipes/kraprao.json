@@ -1,13 +1,31 @@
 {
  "id": "kraprao",
  "m": [
-  "Cook the rice.",
-  "Pound or finely chop the garlic and chilli together.",
-  "Fry the garlic and chilli in a hot wok for 30 seconds. Add the mince and stir-fry hard, breaking it up, until browned and a little crispy.",
-  "Add the sliced beans, then the oyster sauce, soy, fish sauce and sugar. Toss 2 minutes.",
-  "Off the heat, stir through a big handful of Thai basil until it wilts.",
-  "Fry the eggs in plenty of hot oil until the edges are crispy and the yolk's still runny. Serve over rice."
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Pound the aromatics",
+   "s": "Pound {garlic} and {chilli} together in a mortar and pestle, or chop them together very finely. Slice {greenbeans} into 1cm pieces and pick the leaves from {thaibasil}."
+  },
+  {
+   "h": "Fry the pork",
+   "s": "Heat a drizzle of oil in a wok or large frying pan over high heat. Fry the garlic and chilli for 30 seconds until fragrant. Add {pork_mince} and stir-fry hard, breaking it up, for 5 to 6 minutes until browned, cooked through and a little crispy."
+  },
+  {
+   "h": "Sauce it",
+   "s": "Add the beans and stir-fry for 1 minute. Add {oyster}, {soy}, {fishsauce} and {brownsugar} and toss for 2 minutes until glossy."
+  },
+  {
+   "h": "Wilt the basil",
+   "s": "Take the wok off the heat and stir through the Thai basil until it just wilts."
+  },
+  {
+   "h": "Fry the eggs",
+   "s": "Heat 1cm of oil in a frying pan over medium-high heat. Crack in {eggs} and fry for 2 minutes, spooning the hot oil over the whites, until the edges are crispy and the yolks are still runny. Serve the pork over the rice with an egg on top."
+  }
  ],
- "l": "Pork over rice. Skip the egg for lunch or pack a boiled one.",
+ "l": "Pork over rice. Skip the egg for lunch or pack a boiled one. Keeps 3 days in the fridge.",
  "g": "Tamari instead of soy and a GF oyster sauce, cooked in a separate wok. Check the fish sauce."
 }

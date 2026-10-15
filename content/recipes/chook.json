@@ -1,13 +1,31 @@
 {
  "id": "chook",
  "m": [
-  "Oven to 200°C. Rub the birds with butter, crushed garlic and salt. Lemon halves inside.",
-  "Roast about 1 hour 20 minutes for a 1.8kg bird, until the juices run clear.",
-  "Parboil chunked potatoes 8 minutes, drain, shake to rough them up, and roast in oil alongside for 50 minutes with the carrots.",
-  "Rest the chooks 10 minutes. Steam the beans.",
-  "Gravy: pan juices plus stock powder dissolved in water, thickened with cornflour mixed into a little cold water.",
-  "Carve and serve."
+  {
+   "h": "Prep the chook",
+   "s": "Heat the oven to 200°C. You'll need {chk_whole}, which is one bird for every 4 serves. Pat dry, then rub all over with softened {butter}, crushed {garlic} and plenty of salt. Tuck {lemon}, cut into wedges, inside the bird."
+  },
+  {
+   "h": "Roast",
+   "s": "Roast for about 1 hour 20 minutes for a 1.8kg bird, until the skin is golden and the juices run clear when you pierce the thigh (75°C in the thickest part)."
+  },
+  {
+   "h": "Crispy potatoes",
+   "s": "Cut {potato} into chunks and boil in salted water for 8 minutes. Drain, then shake in the pot to rough up the edges. Tip onto an oiled tray with {carrot} in chunks, season and roast alongside the chook for 50 minutes, turning once."
+  },
+  {
+   "h": "Rest and greens",
+   "s": "Rest the chook on a board for 10 minutes, loosely covered. Steam or boil {greenbeans} for 3 minutes until bright green."
+  },
+  {
+   "h": "Make the gravy",
+   "s": "Pour the pan juices into a small saucepan and skim off most of the fat. Add {stockpowder} dissolved in 1 cup hot water and bring to a simmer. Mix {cornflour} with a splash of cold water, whisk it in and simmer for 2 minutes until thick and glossy. Season to taste."
+  },
+  {
+   "h": "Carve and serve",
+   "s": "Carve the chook and serve with the potatoes, carrots, beans and gravy."
+  }
  ],
- "l": "Strip the leftover meat and pack it with potatoes and greens. Spare gravy in a little container.",
+ "l": "Strip the leftover meat and pack it with potatoes and greens, with spare gravy in a little container. Keeps 3 days in the fridge.",
  "g": "Use 100% maize cornflour and check the stock powder. Naturally GF otherwise."
 }

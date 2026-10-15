@@ -1,13 +1,31 @@
 {
  "id": "roastpork",
  "m": [
-  "Pat the rind bone dry (leave it uncovered in the fridge overnight if you can). Score it, rub with oil and plenty of salt.",
-  "Roast at 240°C for 30 minutes until the rind blisters, then drop to 170°C for 2 hours.",
-  "Cut the veg into chunks, toss in oil and salt, and roast below the pork for the last hour.",
-  "If the crackling isn't crunchy, put the pork under the grill for 5 minutes and watch it closely.",
-  "Rest the pork 15 minutes. Gravy: pan juices plus stock powder dissolved in water, thickened with cornflour mixed into a little cold water.",
-  "Slaw: shredded cabbage and apple matchsticks tossed with mayo, a squeeze of lemon if you have one, and salt."
+  {
+   "h": "Prep the crackling",
+   "s": "Pat the rind of {pork_roast} bone dry with paper towel. If you can, leave it uncovered in the fridge overnight so it dries out. Score the rind in lines 1cm apart with a sharp knife, cutting into the fat but not the meat. Rub with oil and plenty of salt, getting it into the cuts."
+  },
+  {
+   "h": "Blast, then roast",
+   "s": "Heat the oven to 240°C. Roast the pork on a rack in a roasting tin for 30 minutes until the rind bubbles and blisters. Turn the oven down to 170°C and roast for 2 hours more."
+  },
+  {
+   "h": "Roast the veg",
+   "s": "Cut {potato}, {swpotato} and {carrot} into chunks, toss with oil and salt on a tray and roast below the pork for the last hour, turning halfway, until golden."
+  },
+  {
+   "h": "Check the crackling",
+   "s": "If the crackling isn't crunchy all over, put the pork under a hot grill for 3 to 5 minutes and watch it closely, as it goes from perfect to burnt fast. Rest the pork for 15 minutes, uncovered so the crackling stays crisp."
+  },
+  {
+   "h": "Make the gravy",
+   "s": "Pour the pan juices into a small saucepan and skim off most of the fat. Add {stockpowder} dissolved in 1 cup hot water and bring to a simmer. Mix {cornflour} with a splash of cold water, whisk it in and simmer for 2 minutes until thick and glossy."
+  },
+  {
+   "h": "Slaw and serve",
+   "s": "Finely shred the cabbage and cut {apple} into matchsticks. Toss with {mayo}, a squeeze of lemon if you have one and a pinch of salt. Carve the pork and serve with the veg, gravy and slaw."
+  }
  ],
- "l": "Pork and veg together, gravy in a little container. Pork and slaw rolls work well too.",
+ "l": "Pork and veg together, gravy in a little container. Pork and slaw rolls work well too. Keeps 3 days in the fridge.",
  "g": "Use 100% maize cornflour (not \"wheaten\") and check the stock powder. Everything else is naturally GF."
 }

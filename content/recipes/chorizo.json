@@ -1,13 +1,31 @@
 {
  "id": "chorizo",
  "m": [
-  "Fry the sliced chorizo in a dry pan until crispy and the oil runs red. Remove and keep the oil.",
-  "Season and brown the bite-size chicken in the chorizo oil. Set aside.",
-  "Cook the onion and capsicum 8 minutes. Add the garlic, paprika, chilli and tomato paste for 2 minutes.",
-  "Add the crushed tomatoes and chicken and simmer 20 minutes.",
-  "Stir in the cream and spinach, add the chorizo back and season.",
-  "Cook the regular and GF pasta separately, toss each with the sauce, top with parmesan and parsley."
+  {
+   "h": "Crisp the chorizo",
+   "s": "Slice {chorizo} into thin rounds. Fry in a large dry frying pan over medium heat for 4 to 5 minutes until crispy and the oil runs red. Lift out with a slotted spoon and leave the oil in the pan."
+  },
+  {
+   "h": "Brown the chicken",
+   "s": "Cut {chk_thigh} into bite-size pieces and season with salt and pepper. Turn the heat up to medium-high and brown the chicken in the chorizo oil for 4 to 5 minutes until golden. Set aside with the chorizo."
+  },
+  {
+   "h": "Build the sauce",
+   "s": "Turn the heat down to medium. Add sliced {onion} and {capsicum} and cook for 8 minutes until soft. Add crushed {garlic}, {smokedpaprika}, {chilliflakes} and {tompaste} and stir for 2 minutes until it darkens."
+  },
+  {
+   "h": "Simmer",
+   "s": "Add {tintom} and the chicken, then simmer for 20 minutes, stirring now and then, until the sauce is thick and the chicken is cooked through. While it simmers, put a big pot of well-salted water on to boil."
+  },
+  {
+   "h": "Finish the sauce",
+   "s": "Stir in {cream} and {spinach} until the spinach wilts, then add the chorizo back. Taste and season."
+  },
+  {
+   "h": "Pasta time",
+   "s": "Cook {pasta} until al dente. Scoop out a mug of pasta water, then drain. Toss the pasta through the sauce with a splash of the water so it coats every piece. Serve with grated {parm} and chopped {parsley}."
+  }
  ],
- "l": "Keep a mug of pasta water to loosen the sauce when reheating.",
+ "l": "Keep a mug of pasta water to loosen the sauce when reheating. Keeps 3 days in the fridge.",
  "g": "GF pasta in its own pot. Check the chorizo label; most are GF but not all."
 }

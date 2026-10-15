@@ -1,12 +1,31 @@
 {
  "id": "lasagne",
  "m": [
-  "Soften the diced onion, carrot, garlic and bacon. Add the mince and brown well.",
-  "Stir in the tomato paste for 2 minutes, then the crushed tomatoes and oregano. Simmer 25 minutes until thick.",
-  "White sauce: melt the butter, stir in the flour for 1 minute, then whisk in the milk bit by bit until thick. Season and stir in half the cheese.",
-  "Layer ragu, sheets and white sauce three times. Top with the rest of the cheese and the parmesan.",
-  "Bake at 180°C fan for 35 to 40 minutes. Rest 10 minutes before cutting."
+  {
+   "h": "Start the ragu",
+   "s": "Finely dice {onion}, {carrot} and {bacon}, and crush {garlic}. Heat a drizzle of oil in a large pot over medium heat and cook them for 8 minutes until soft. Turn the heat up, add {beef_mince} and cook for 6 to 8 minutes, breaking it up, until well browned."
+  },
+  {
+   "h": "Simmer",
+   "s": "Stir in {tompaste} for 2 minutes, then add {tintom}, {oregano} and half a tin of water. Simmer for 25 minutes until thick, then season. Heat the oven to 180°C fan."
+  },
+  {
+   "h": "White sauce",
+   "s": "Melt {butter} in a saucepan over medium heat. Stir in {flour} for 1 minute, then whisk in {milk} a splash at a time, letting it thicken before adding more, so it stays smooth. Simmer for 2 minutes, season and stir in half of {cheese}."
+  },
+  {
+   "h": "Layer it up",
+   "s": "In a large baking dish, layer ragu, {lasagne} and white sauce. Repeat twice more, finishing with white sauce. Top with the rest of the cheese and grated {parm}."
+  },
+  {
+   "h": "Bake",
+   "s": "Bake for 35 to 40 minutes until golden and bubbling, and a knife slides through the pasta easily."
+  },
+  {
+   "h": "Rest and serve",
+   "s": "Rest for 10 minutes before cutting, so the layers hold together."
+  }
  ],
- "l": "Cut into portions once cool. One of the best reheat lunches there is.",
+ "l": "Cut into portions once cool. One of the best reheat lunches there is. Keeps 4 days in the fridge, and it freezes well.",
  "g": "A separate smaller GF lasagne with GF sheets and white sauce made with GF flour. Check the bacon."
 }

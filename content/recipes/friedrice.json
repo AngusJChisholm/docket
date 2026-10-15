@@ -1,13 +1,31 @@
 {
  "id": "friedrice",
  "m": [
-  "Best with rice cooked the day before and chilled. If not, cook it early, spread on a tray and fridge it for an hour.",
-  "Slice the chicken small, toss with a splash of soy, and stir-fry in a very hot wok until cooked. Set aside.",
-  "Scramble the eggs softly, then set aside.",
-  "Stir-fry the diced carrot 2 minutes, then the garlic, ginger and white parts of the spring onion for 30 seconds.",
-  "Add the rice, press it into the wok and leave it 1 minute to toast before tossing. Repeat a few times.",
-  "Add the peas, chicken, egg, soy and oyster sauce. Toss hot for 2 minutes, finish with sesame oil and green spring onion."
+  {
+   "h": "Sort the rice",
+   "s": "Fried rice works best with cold rice. If you didn't cook it yesterday, rinse {rice} and cook it with 1½ times its volume of water, covered on low for 12 minutes. Spread it on a tray and pop it in the fridge for at least an hour."
+  },
+  {
+   "h": "Get prepped",
+   "s": "Thinly slice {chk_thigh} into small pieces and toss with a splash of the soy. Finely dice {carrot}, crush {garlic} and grate {ginger}. Slice {springonion}, keeping the whites and greens separate. Beat {eggs} with a pinch of salt."
+  },
+  {
+   "h": "Cook the chicken and egg",
+   "s": "Heat a drizzle of oil in a wok or large frying pan over high heat until smoking. Stir-fry the chicken for 4 to 5 minutes until cooked through, then set aside. Add a little more oil, pour in the eggs and scramble softly for 1 minute. Set aside with the chicken."
+  },
+  {
+   "h": "Fry the aromatics",
+   "s": "Add another drizzle of oil and stir-fry the carrot for 2 minutes. Add the garlic, ginger and spring onion whites and cook for 30 seconds until fragrant."
+  },
+  {
+   "h": "Toast the rice",
+   "s": "Add the cold rice and break up any clumps. Press it flat into the wok and leave it for 1 minute to toast before tossing. Repeat three or four times. That's where the smoky fried rice flavour comes from."
+  },
+  {
+   "h": "Bring it together",
+   "s": "Add {peas}, the chicken and egg, {soy} and {oyster}. Toss over high heat for 2 minutes until everything is piping hot. Finish with {sesameoil} and the spring onion greens."
+  }
  ],
- "l": "Built for lunch. Reheat until piping hot.",
+ "l": "Built for lunch. Reheat until piping hot all the way through. Keeps 3 days in the fridge.",
  "g": "Make the whole batch with tamari, and use a GF oyster sauce or skip it. Rice dishes are where hidden gluten sneaks in."
 }

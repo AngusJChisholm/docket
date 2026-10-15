@@ -1,13 +1,31 @@
 {
  "id": "salmonbowl",
  "m": [
-  "Cook the rice, then stir through the rice vinegar and a pinch of sugar and salt while it's hot.",
-  "Glaze: soy, mirin, honey and grated ginger.",
-  "Cook the edamame in boiling water for 3 minutes and drain.",
-  "Pat the salmon dry. Skin side down in a hot oiled pan for 4 minutes until crispy, flip for 2 minutes.",
-  "Pour in the glaze and let it bubble 1 minute, spooning it over the fish.",
-  "Bowls: rice, salmon, edamame, sliced cucumber and avo. Drizzle sriracha mayo, finish with spring onion and sesame seeds."
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Rest off the heat for 10 minutes with the lid on, then stir through {ricevinegar} and a pinch of sugar."
+  },
+  {
+   "h": "Mix the glaze",
+   "s": "In a small bowl mix {soy}, {mirin}, {honey} and finely grated {ginger}."
+  },
+  {
+   "h": "Get prepped",
+   "s": "Cook {edamame} in boiling water for 3 minutes, then drain. Thinly slice {cucumber}, {avocado} and {springonion}. Stir {sriracha} into {mayo}."
+  },
+  {
+   "h": "Crisp the salmon",
+   "s": "Pat {salmon} really dry with paper towel and season the skin with salt. Heat a drizzle of oil in a large frying pan over medium-high heat. Cook the salmon skin side down for 4 minutes, pressing it flat for the first 30 seconds, until the skin is crispy. Flip and cook for 2 minutes more."
+  },
+  {
+   "h": "Glaze it",
+   "s": "Turn the heat down to low and pour in the glaze. Let it bubble for 1 minute, spooning it over the fish until sticky. The salmon should still be a little pink in the middle."
+  },
+  {
+   "h": "Build the bowls",
+   "s": "Divide the rice between bowls and top with the salmon, edamame, cucumber and avocado. Drizzle with the sriracha mayo and finish with the spring onion and {sesameseeds}."
+  }
  ],
- "l": "Flake the salmon over rice and pack the avo and mayo separately. Eat cold or barely warm.",
+ "l": "Flake the salmon over the rice and pack the avo and mayo separately. Eat cold or barely warm. Keeps 2 days in the fridge.",
  "g": "Tamari instead of soy in the glaze, cooked in a separate pan. Mirin is usually GF but check it."
 }

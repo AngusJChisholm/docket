@@ -1,12 +1,31 @@
 {
  "id": "tuscan",
  "m": [
-  "Season the thighs and sear 5 to 6 minutes a side until golden. Rest, then slice.",
-  "Same pan: garlic and sliced sun-dried tomatoes for 1 minute.",
-  "Add the cream, stock powder dissolved in ¼ cup water, and oregano. Simmer 3 minutes.",
-  "Stir in the parmesan and spinach until wilted. Add the chicken back.",
-  "Cook the pasta, keep some pasta water, and toss through the sauce."
+  {
+   "h": "Sear the chicken",
+   "s": "Season {chk_thigh} with salt and pepper. Heat a drizzle of oil in a large frying pan over medium-high heat. Cook the chicken for 5 to 6 minutes a side until golden and cooked through (75°C in the thickest part). Rest on a board, then slice."
+  },
+  {
+   "h": "Get the pasta water on",
+   "s": "While the chicken cooks, bring a big pot of well-salted water to the boil."
+  },
+  {
+   "h": "Start the sauce",
+   "s": "Turn the heat under the chicken pan down to medium. Add crushed {garlic} and sliced {sundried} and stir for 1 minute, scraping up the golden bits."
+  },
+  {
+   "h": "Simmer",
+   "s": "Add {cream}, {stockpowder} dissolved in ¼ cup hot water, and {oregano}. Simmer for 3 minutes until slightly thickened. Stir in grated {parm} and {spinach} until the spinach wilts, then add the chicken back."
+  },
+  {
+   "h": "Cook the pasta",
+   "s": "Cook {pasta} until al dente. Scoop out a mug of pasta water, then drain."
+  },
+  {
+   "h": "Toss and serve",
+   "s": "Toss the pasta through the sauce with a splash of the pasta water until it's glossy and coats every piece. Season to taste and serve."
+  }
  ],
- "l": "Pasta water or a splash of milk brings the sauce back when reheating.",
+ "l": "A splash of pasta water or milk brings the sauce back when reheating. Keeps 3 days in the fridge.",
  "g": "GF pasta in a separate pot. Check the stock powder."
 }

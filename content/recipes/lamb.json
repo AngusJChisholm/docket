@@ -1,13 +1,31 @@
 {
  "id": "lamb",
  "m": [
-  "Oven to 160°C. Stab the lamb all over and rub with crushed garlic, oregano, lemon zest, oil and salt.",
-  "Roast covered with a cup of water for 3 hours until it pulls apart.",
-  "Meanwhile boil the potatoes whole for 15 minutes until tender. Drain and cool.",
-  "Rest the lamb covered. Turn the oven to 220°C. Smash the potatoes flat on an oiled tray, oil and salt the tops, roast 30 minutes until crispy.",
-  "Mint yoghurt: yoghurt, chopped mint, lemon juice and salt. Salad: lettuce and cucumber with lemon and oil.",
-  "Shred the lamb and serve with everything."
+  {
+   "h": "Season the lamb",
+   "s": "Heat the oven to 160°C. Stab {lamb_sh} all over with a small knife. Rub with crushed {garlic}, {oregano}, the finely grated zest of {lemon}, a good glug of oil and plenty of salt, pushing it into the cuts."
+  },
+  {
+   "h": "Slow roast",
+   "s": "Put the lamb in a roasting tin with 1 cup water and cover tightly with foil. Roast for 3 hours until it pulls apart easily with a fork."
+  },
+  {
+   "h": "Boil the potatoes",
+   "s": "While the lamb roasts, boil {potato} whole in salted water for 15 minutes until a knife slides in. Drain and let them cool and steam dry."
+  },
+  {
+   "h": "Smash and crisp",
+   "s": "Take the lamb out, keep it covered to rest and turn the oven up to 220°C. Smash the potatoes flat on an oiled tray with the bottom of a glass. Drizzle with oil, season and roast for 30 minutes until crispy."
+  },
+  {
+   "h": "Mint yoghurt and salad",
+   "s": "Mix {yoghurt} with chopped {mint}, a squeeze of the lemon and a pinch of salt. Chop {cos} and {cucumber} and dress with the rest of the lemon juice, oil and salt."
+  },
+  {
+   "h": "Shred and serve",
+   "s": "Shred the lamb off the bone with two forks and spoon over some of the pan juices. Serve with the potatoes, salad and mint yoghurt."
+  }
  ],
- "l": "Lamb, potatoes and salad in one container, yoghurt on the side.",
+ "l": "Lamb, potatoes and salad in one container, yoghurt on the side. Keeps 3 days in the fridge.",
  "g": "Naturally gluten free."
 }

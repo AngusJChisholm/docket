@@ -106,11 +106,14 @@ const iname=id=>ING[id].n.replace(/\s*\([^)]*\)$/,'');
 // Method steps: a plain string, or {h: heading, s: text}. Text can hold {id} or {id*0.5} markers,
 // filled with that ingredient's amount for the household, e.g. "{lime}" -> "2 limes".
 const stepOf=s=>typeof s==='string'?{h:'',s}:s;
-function ingPhrase(id,a){const it=ING[id];const amt=kAmt(id,a);
-  if(it.ea&&it.u==='g')return amt;
-  if(it.u==='ea'&&it.ea&&it.ea[1]!=='bunch'&&!it.cl){const w=it.ea[1];const many=a/it.ea[0]>1.0001;return`${amt} ${many?plural(w):w}`}
-  return`${amt} ${iname(id).replace(/,.*$/,'').replace(/^\w+/,w=>/^(Greek|Thai|American|Chinese|Korean|Lebanese|Turkish|Japanese|Italian|Dijon)$/.test(w)?w:w.toLowerCase())}`}
-function fillStep(r,txt,n,wrap=x=>x){return String(txt).replace(/\{(\w+)(?:\*([\d.]+))?\}/g,(m,id,f)=>{const q=(r.i.find(x=>x[0]===id)||[])[1];if(q==null||!ING[id])return m;return wrap(ingPhrase(id,q*n*(f?+f:1)))})}
+function ingPhrase(id,a,adj){const it=ING[id];const amt=kAmt(id,a);const pre=adj?adj+' ':'';
+  if(it.cl){const v=Math.max(1,Math.round(a*it.cl));return`${v} ${pre}garlic clove${v>1?'s':''}`}
+  if(it.ea&&it.u==='g')return adj?amt.replace(/^(\S+) /,`$1 ${adj} `):amt;
+  if(it.u==='ea'&&it.ea&&it.ea[1]!=='bunch'){const w=it.ea[1];const many=a/it.ea[0]>1.0001;return`${amt} ${pre}${many?plural(w):w}`}
+  return`${amt} ${pre}${iname(id).replace(/,.*$/,'').replace(/^\w+/,w=>/^(Greek|Thai|American|Chinese|Korean|Lebanese|Turkish|Japanese|Italian|Dijon)$/.test(w)?w:w.toLowerCase())}`}
+// A describing word right before a marker ("crushed {garlic}") moves inside the amount: "4 crushed garlic cloves".
+const ADJ='(?:finely |roughly |thinly )?(?:crushed|grated|sliced|diced|chopped|torn|softened|shredded)';
+function fillStep(r,txt,n,wrap=x=>x){return String(txt).replace(new RegExp(`(?:\\b(${ADJ}) )?\\{(\\w+)(?:\\*([\\d.]+))?\\}`,'g'),(m,adj,id,f)=>{const q=(r.i.find(x=>x[0]===id)||[])[1];if(q==null||!ING[id])return m;return wrap(ingPhrase(id,q*n*(f?+f:1),adj))})}
 // [{h, s}] with amounts filled in for n serves (s as plain text)
 function methodSteps(r,c,n){return(c&&c.m||[]).map(x=>{const st=stepOf(x);return{h:st.h||'',s:fillStep(r,st.s,n)}})}
 function packLabel(id,pk){const it=ING[id];pk=pk||it.pk;if(it.pl&&pk===it.pk)return it.pl;if(it.u==='g')return pk>=1000?(+(pk/1000).toFixed(2))+'kg':pk+'g';if(it.u==='ml')return pk>=1000?(+(pk/1000).toFixed(2))+'L':pk+'ml';return pk>1?pk+' pack':'each'}

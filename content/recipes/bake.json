@@ -1,13 +1,31 @@
 {
  "id": "bake",
  "m": [
-  "Brown the mince hard in a big pan. Add the diced onion, capsicum and zucchini and cook 8 minutes.",
-  "Add the garlic, oregano and tomato paste for 2 minutes, then the crushed tomatoes. Simmer 15 minutes and season.",
-  "Meanwhile cook the pasta 2 minutes short of the packet time. Drain.",
-  "Heat oven to 200°C. Mix the pasta through the sauce and tip into a baking dish.",
-  "Cover with the cheese and mozzarella. Bake 20 minutes until golden and bubbling.",
-  "Rest 5 minutes before serving."
+  {
+   "h": "Brown the mince",
+   "s": "Heat a drizzle of oil in a large deep frying pan over high heat. Add {beef_mince} and cook for 6 to 8 minutes, breaking it up, until well browned. Don't stir too often, as the brown bits are the flavour."
+  },
+  {
+   "h": "Add the veg",
+   "s": "Turn the heat down to medium. Add diced {onion}, {capsicum} and {zucchini} and cook for 8 minutes until soft. Add crushed {garlic}, {oregano} and {tompaste} and stir for 2 minutes."
+  },
+  {
+   "h": "Simmer the sauce",
+   "s": "Add {tintom} and half a tin of water. Simmer for 15 minutes until thick, then season well with salt and pepper. Heat the oven to 200°C."
+  },
+  {
+   "h": "Cook the pasta",
+   "s": "Meanwhile cook {pasta} in a big pot of salted boiling water for 2 minutes less than the packet says, as it finishes in the oven. Drain."
+  },
+  {
+   "h": "Bake",
+   "s": "Mix the pasta through the sauce and tip into a large baking dish. Scatter over {cheese} and {mozz}. Bake for 20 minutes until golden and bubbling."
+  },
+  {
+   "h": "Rest and serve",
+   "s": "Rest for 5 minutes before serving so it holds together when you scoop it out."
+  }
  ],
- "l": "Cut into squares once it cools. Reheats like a dream.",
+ "l": "Cut into squares once it cools. Reheats like a dream. Keeps 3 days in the fridge, and it freezes well.",
  "g": "Make the GF portion in its own smaller dish with GF pasta."
 }
