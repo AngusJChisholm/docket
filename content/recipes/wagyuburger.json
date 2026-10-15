@@ -1,13 +1,31 @@
 {
  "id": "wagyuburger",
  "m": [
-  "Fries: oven to 220°C. Cut potatoes into thin fries, toss with oil, salt and chopped rosemary, roast 35 to 40 minutes, turning once.",
-  "Caramelised onion: slice thin and cook low in oil for 20 minutes until jammy, adding the sugar at the end.",
-  "Burger sauce: mayo, tomato sauce, mustard and chopped pickles.",
-  "Roll the wagyu into 100g balls. Smash flat on a smoking hot plate, season hard, cook 2 minutes until a deep crust forms.",
-  "Flip, add cheese, cook 1 minute. Stack two per burger.",
-  "Toast the brioche. Sauce, lettuce, patties, onion, pickles. Fries on the side."
+  {
+   "h": "Get the fries in",
+   "s": "Heat the oven to 220°C. Cut {potato} into thin fries and toss with oil, salt and chopped {rosemary} on a lined tray. Roast for 35 to 40 minutes, turning halfway, until golden and crisp."
+  },
+  {
+   "h": "Caramelise the onions",
+   "s": "Thinly slice {onion}. Cook in a drizzle of oil with a pinch of salt over low heat for 20 minutes, stirring often, until soft and jammy. Stir in {brownsugar} for the last 2 minutes."
+  },
+  {
+   "h": "Burger sauce",
+   "s": "Slice {pickles} into rounds and finely chop a spoonful of them. Mix the chopped pickles with {mayo}, {ketchup} and {mustard}."
+  },
+  {
+   "h": "Smash the patties",
+   "s": "Roll {wagyu} into 100g balls and keep them cold until you cook. Heat a heavy frying pan or BBQ plate over high heat until smoking. Add a ball, smash it flat with a sturdy spatula and season well. Cook for 2 minutes without touching it until a deep crust forms."
+  },
+  {
+   "h": "Flip and cheese",
+   "s": "Scrape under the patty to keep the crust, flip, and lay a cheese slice on top (you'll use {slices} in all). Cook for 1 more minute. Stack two patties together and repeat."
+  },
+  {
+   "h": "Build the burgers",
+   "s": "Toast {buns} cut side down. Spread with the sauce, then add {cos}, the double patty, onion and pickles. Serve with the fries."
+  }
  ],
- "l": "Patties and onion over shredded lettuce with sauce on the side. Skip the bun.",
+ "l": "Patties and onion over shredded lettuce with the sauce on the side. Skip the bun. Keeps 3 days in the fridge.",
  "g": "GF buns, and cook the GF patties first on a clean surface. Check the mustard and pickles."
 }

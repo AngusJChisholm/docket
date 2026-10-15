@@ -1,13 +1,31 @@
 {
  "id": "harissaquinoa",
  "m": [
-  "Oven to 210°C. Cube the pumpkin, toss with oil, cumin and salt, roast 30 minutes until caramelised.",
-  "Mix the harissa with a squeeze of lemon and a little oil, and coat the chicken. Leave 15 minutes.",
-  "Rinse the quinoa and simmer in 2 parts water for 12 minutes. Drain and fluff.",
-  "Pan-fry or grill the chicken 5 to 6 minutes a side. Rest and slice.",
-  "Toss the quinoa with the spinach, pumpkin, thinly sliced red onion, lemon juice and a little oil.",
-  "Top with chicken, crumbled fetta and yoghurt mixed with chopped mint."
+  {
+   "h": "Roast the pumpkin",
+   "s": "Heat the oven to 210°C. Cut {pumpkin} into 2cm cubes, toss with oil, {cumin} and salt on a lined tray, and roast for 30 minutes until caramelised at the edges."
+  },
+  {
+   "h": "Marinate the chicken",
+   "s": "Mix {harissa} with a squeeze of {lemon} and a little oil. Coat {chk_breast} and leave for 15 minutes."
+  },
+  {
+   "h": "Cook the quinoa",
+   "s": "Rinse {quinoa} well in a sieve. Simmer in a saucepan with twice its volume of water for 12 minutes until the little tails pop out. Drain any leftover water and fluff with a fork."
+  },
+  {
+   "h": "Cook the chicken",
+   "s": "Heat a grill pan or frying pan over medium heat with a drizzle of oil. Cook the chicken for 5 to 6 minutes a side until cooked through (75°C in the thickest part). Harissa catches, so turn the heat down if it's charring too fast. Rest, then slice."
+  },
+  {
+   "h": "Toss the salad",
+   "s": "Toss the warm quinoa with {spinach}, the pumpkin, thinly sliced {red_onion}, the rest of the lemon juice and a drizzle of oil. Season to taste."
+  },
+  {
+   "h": "Serve up",
+   "s": "Top with the chicken and crumbled {fetta}. Mix {yoghurt} with chopped {mint} and spoon it over."
+  }
  ],
- "l": "Built for lunch. Good warm or cold, yoghurt on the side.",
+ "l": "Built for lunch. Good warm or cold, yoghurt on the side. Keeps 3 days in the fridge.",
  "g": "Naturally gluten free. Check the harissa label."
 }

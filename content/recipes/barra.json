@@ -1,13 +1,31 @@
 {
  "id": "barra",
  "m": [
-  "Cook the rice. Herb butter: soften the butter and mash in lime zest, chopped coriander and a pinch of salt.",
-  "Char the corn cobs directly over a gas flame, on a BBQ or in a dry pan until blackened in spots. Slice the kernels off.",
-  "Salad: corn, diced avocado, tomatoes and red onion with lime juice, paprika, oil and salt.",
-  "Pat the fish skin bone dry and salt it. Heat a pan with oil until shimmering and lay the fish in skin side down, pressing with a spatula for 30 seconds so it stays flat.",
-  "Cook 4 to 5 minutes without moving until the skin is crisp and the flesh is mostly opaque, then flip for 1 minute.",
-  "Serve skin side up with a knob of herb butter melting on top, the corn salad and rice."
+  {
+   "h": "Rice and herb butter",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming. Mash softened {butter} with the zest of {lime}, chopped {coriander} and a pinch of salt."
+  },
+  {
+   "h": "Char the corn",
+   "s": "Char {corncob} directly over a gas flame, on a BBQ or in a dry frying pan over high heat for 6 to 8 minutes, turning, until blackened in spots. Stand each cob on its end and slice the kernels off."
+  },
+  {
+   "h": "Toss the salad",
+   "s": "Toss the corn with diced {avocado}, halved {cherrytom}, finely diced {red_onion}, the lime juice, {smokedpaprika}, a drizzle of oil and a pinch of salt."
+  },
+  {
+   "h": "Prep the fish",
+   "s": "Pat the skin of {barra} bone dry with paper towel and season it with salt. Dry skin is the key to crispy skin."
+  },
+  {
+   "h": "Crisp the skin",
+   "s": "Heat a drizzle of oil in a large frying pan over medium-high heat until shimmering. Lay the fish in skin side down and press with a spatula for 30 seconds so it stays flat. Cook for 4 to 5 minutes without moving until the skin is crisp and the flesh is mostly opaque, then flip for 1 minute."
+  },
+  {
+   "h": "Serve up",
+   "s": "Serve the fish skin side up with a knob of herb butter melting on top, with the corn salad and rice."
+  }
  ],
- "l": "Pack the fish over rice with the salad on the side. Eat within a day.",
+ "l": "Pack the fish over rice with the salad on the side. Best eaten within a day. Keeps 2 days in the fridge.",
  "g": "Naturally gluten free."
 }

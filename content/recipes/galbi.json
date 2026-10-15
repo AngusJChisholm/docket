@@ -1,13 +1,31 @@
 {
  "id": "galbi",
  "m": [
-  "Marinade: grate the apple, garlic and ginger and mix with the soy, brown sugar, sesame oil and sliced spring onion. Coat the ribs and marinate at least 1 hour, ideally overnight.",
-  "Cook the rice.",
-  "Get a BBQ, grill pan or heavy pan very hot. Cook the ribs in a single layer, 2 minutes a side, until caramelised and charred at the edges.",
-  "Rest 2 minutes, then cut between the bones into bite-size pieces with scissors.",
-  "Ssamjang-style sauce: gochujang loosened with a little sesame oil and water.",
-  "Serve with rice, kimchi, lettuce leaves for wrapping, sauce and sesame seeds."
+  {
+   "h": "Make the marinade",
+   "s": "Coarsely grate {apple}, {garlic} and {ginger} into a bowl. Mix with {soy}, {brownsugar}, {sesameoil} and sliced {springonion}."
+  },
+  {
+   "h": "Marinate the ribs",
+   "s": "Coat {shortribs} in the marinade and leave for at least 1 hour, ideally overnight in the fridge. The apple tenderises the meat."
+  },
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Make the sauce",
+   "s": "Loosen {gochujang} with a little sesame oil and water until it's spoonable. Separate {cos} into leaves for wrapping."
+  },
+  {
+   "h": "Char the ribs",
+   "s": "Heat a BBQ, grill pan or heavy frying pan over high heat until very hot. Lift the ribs out of the marinade and cook in a single layer for 2 minutes a side until caramelised and charred at the edges. Rest for 2 minutes."
+  },
+  {
+   "h": "Cut and serve",
+   "s": "Cut between the bones into bite-size pieces with kitchen scissors. Serve with the rice, {kimchi}, lettuce leaves, the sauce and {sesameseeds}. Wrap a bit of everything in a lettuce leaf."
+  }
  ],
- "l": "Ribs over rice, kimchi on the side. Reheat in a hot pan to bring back the char.",
+ "l": "Ribs over rice, kimchi on the side. Reheat in a hot pan to bring back the char. Keeps 3 days in the fridge.",
  "g": "Tamari instead of soy, sriracha instead of gochujang, and marinate the GF ribs separately. Check the kimchi."
 }

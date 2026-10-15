@@ -1,13 +1,31 @@
 {
  "id": "prawnlinguine",
  "m": [
-  "Get a big pot of well-salted water boiling and cook the pasta. Keep a mug of the cooking water.",
-  "Meanwhile, sizzle the sliced garlic and fresh chilli in a generous glug of oil over medium heat for 1 minute. Don't let the garlic brown.",
-  "Add the halved tomatoes and cook 2 minutes until they start to burst.",
-  "Turn the heat up, add the prawns and cook 1 to 2 minutes a side until just pink.",
-  "Add the drained pasta, butter, lemon zest and juice and a splash of pasta water. Toss hard for a minute until glossy.",
-  "Finish with parsley and chilli flakes and serve straight away."
+  {
+   "h": "Get the pasta on",
+   "s": "Bring a big pot of well-salted water to the boil. Cook {pasta} until al dente, then scoop out a mug of the cooking water before draining."
+  },
+  {
+   "h": "Prep while it boils",
+   "s": "Thinly slice {garlic} and {chilli}. Halve {cherrytom}. Zest and juice {lemon}, and chop {parsley}."
+  },
+  {
+   "h": "Gently fry the garlic",
+   "s": "Heat a generous glug of oil in a large frying pan over medium heat. Sizzle the garlic and chilli for 1 minute until fragrant. Don't let the garlic brown or it goes bitter."
+  },
+  {
+   "h": "Burst the tomatoes",
+   "s": "Add the tomatoes and cook for 2 minutes until they start to burst. Turn the heat up, add {prawns} and cook for 1 to 2 minutes a side until just pink and curled."
+  },
+  {
+   "h": "Toss it together",
+   "s": "Add the drained pasta, {butter}, the lemon zest and juice and a splash of the pasta water. Toss hard for a minute until the sauce turns glossy and clings to the pasta."
+  },
+  {
+   "h": "Serve up",
+   "s": "Finish with the parsley and a pinch of {chilliflakes}, and serve straight away."
+  }
  ],
- "l": "Reheat gently with a splash of water. Prawns are best eaten within a day.",
+ "l": "Reheat gently with a splash of water. Prawns are best eaten within a day. Keeps 2 days in the fridge.",
  "g": "GF pasta in a separate pot, tossed in its own pan with a share of the prawns."
 }

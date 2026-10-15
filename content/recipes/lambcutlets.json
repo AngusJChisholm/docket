@@ -1,13 +1,31 @@
 {
  "id": "lambcutlets",
  "m": [
-  "Rub the cutlets with crushed garlic, chopped rosemary, lemon zest, oil and salt. Leave 20 minutes.",
-  "Potatoes: boil small potatoes whole for 15 minutes until tender. Drain, smash flat on an oiled tray, oil and salt the tops, roast at 230°C for 25 to 30 minutes until crisp.",
-  "Salsa verde: finely chop the parsley, mint and capers. Mix with the lemon juice, a little more garlic, salt and enough oil to make it spoonable.",
-  "Cook the cutlets in a very hot pan or on the BBQ, 2 to 3 minutes a side, holding them fat-side down for the first minute to render it. Rest 5 minutes.",
-  "Salad: lettuce and cucumber with lemon and oil.",
-  "Serve the cutlets with salsa verde spooned over, potatoes and salad."
+  {
+   "h": "Marinate the cutlets",
+   "s": "Rub {lambcutlets} with {garlic*0.5} (crushed), chopped {rosemary}, the finely grated zest of {lemon}, a drizzle of oil and salt. Leave for 20 minutes."
+  },
+  {
+   "h": "Boil the potatoes",
+   "s": "Heat the oven to 230°C. Boil {potato} whole in salted water for 15 minutes until a knife slides in. Drain and let them steam dry for a couple of minutes."
+  },
+  {
+   "h": "Smash and crisp",
+   "s": "Smash the potatoes flat on an oiled tray with the bottom of a glass. Drizzle the tops with oil, season and roast for 25 to 30 minutes until crisp and golden."
+  },
+  {
+   "h": "Make the salsa verde",
+   "s": "Finely chop {parsley}, {mint} and {capers}. Mix with the lemon juice, the rest of the garlic (crushed), a pinch of salt and enough oil to make it spoonable."
+  },
+  {
+   "h": "Cook the cutlets",
+   "s": "Heat a heavy frying pan or BBQ over high heat. Stand the cutlets fat side down for the first minute to render the fat, then cook for 2 to 3 minutes a side for pink in the middle. Rest for 5 minutes."
+  },
+  {
+   "h": "Serve up",
+   "s": "Chop {cos} and {cucumber} and dress with a squeeze of lemon and a drizzle of oil. Serve the cutlets with the salsa verde spooned over, the potatoes and the salad."
+  }
  ],
- "l": "Pack the cutlets with potatoes and salad, salsa verde on the side. Eat at room temp, not reheated.",
+ "l": "Pack the cutlets with potatoes and salad, salsa verde on the side. Eat at room temp, not reheated. Keeps 2 days in the fridge.",
  "g": "Naturally gluten free."
 }

@@ -1,12 +1,31 @@
 {
  "id": "poke",
  "m": [
-  "Cook the brown rice: rinse, then simmer in plenty of water for 25 to 30 minutes like pasta, drain and steam with the lid on for 5 minutes.",
-  "Teriyaki: soy, mirin, honey and grated ginger. Pour half over the chicken and leave 10 minutes.",
-  "Pan-fry the chicken 5 to 6 minutes a side until cooked. Pour in the rest of the teriyaki for the last minute and let it glaze. Rest and slice.",
-  "Cook the edamame 3 minutes in boiling water. Ribbon the carrot and cucumber with a peeler and toss with the rice vinegar and a pinch of salt.",
-  "Build bowls: rice, chicken, edamame, pickled veg, avocado. Finish with spring onion, sesame and lime."
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {brownrice} until the water runs clear. Put it in a saucepan with twice its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 25 minutes. Take it off the heat and leave the lid on for 5 minutes."
+  },
+  {
+   "h": "Marinate the chicken",
+   "s": "Mix {soy}, {mirin}, {honey} and finely grated {ginger} to make the teriyaki. Pour half over {chk_breast} and leave for 10 minutes."
+  },
+  {
+   "h": "Cook the chicken",
+   "s": "Heat a drizzle of oil in a frying pan over medium heat. Cook the chicken for 5 to 6 minutes a side until cooked through (75°C in the thickest part). Pour in the rest of the teriyaki for the last minute and let it bubble into a glaze. Rest, then slice."
+  },
+  {
+   "h": "Quick pickles",
+   "s": "Peel {carrot} and {cucumber} into ribbons with a veggie peeler. Toss with {ricevinegar} and a pinch of salt."
+  },
+  {
+   "h": "Cook the edamame",
+   "s": "Cook {edamame} in boiling water for 3 minutes, then drain. Slice {avocado} and {springonion}."
+  },
+  {
+   "h": "Build the bowls",
+   "s": "Divide the rice between bowls and top with the chicken, edamame, pickled veg and avocado. Finish with the spring onion, {sesameseeds} and a squeeze of {lime}."
+  }
  ],
- "l": "Made for lunch. Pack the avocado whole and slice on the day.",
+ "l": "Made for lunch. Pack the avocado whole and slice it on the day. Keeps 3 days in the fridge.",
  "g": "Tamari instead of soy in the teriyaki, cooked in a separate pan. Check the mirin."
 }
