@@ -90,9 +90,10 @@ const FR={0:'',0.25:'¼',0.5:'½',0.75:'¾'};
 function frac(v){const q=Math.round(v*4)/4||0.25;const w=Math.floor(q),f=+(q-w).toFixed(2);return (w?w:'')+(FR[f]??'')||'¼'}
 function half(v){const q=Math.max(.5,Math.ceil(v*2)/2);const w=Math.floor(q);return (w?w:'')+(q-w?'½':'')}
 function spoons(ml){if(ml>=60)return`${frac(ml/250)} cup${ml>=375?'s':''}`;if(ml>=12)return`${half(ml/15)} tbsp`;return`${half(ml/5)} tsp`}
+const plural=w=>/(tato|mato|lli|ch|sh)$/.test(w)?w+'es':w+'s';
 function kAmt(id,a){const it=ING[id];
   if(it.cl){const v=Math.max(1,Math.round(a*it.cl));return`${v} clove${v>1?'s':''}`}
-  if(it.ea&&it.u==='g'){const n=a/it.ea[0];return`${half(n)} ${it.ea[1]}${n>1?'s':''} (${fmtAmt(id,a)})`}
+  if(it.ea&&it.u==='g'){const n=a/it.ea[0];return`${half(n)} ${n>1?plural(it.ea[1]):it.ea[1]} (${fmtAmt(id,a)})`}
   if(it.pl==='tin'||it.pl==='can')return`${half(a/it.pk)} tin${a/it.pk>1?'s':''}`;
   if(it.whole){const v=Math.max(1,Math.ceil(a-1e-6));return String(v)}
   if(it.ea&&it.u==='ea'){const v=a<1?Math.max(.25,Math.round(a*4)/4):Math.ceil(a*2)/2;const w=it.ea[1];return /bunch$/.test(w)?`${frac(v)} bunch${v>1?'es':''}`:frac(v)}
@@ -106,7 +107,7 @@ const iname=id=>ING[id].n.replace(/\s*\([^)]*\)$/,'');
 // filled with that ingredient's amount for the household, e.g. "{lime}" -> "2 limes".
 const stepOf=s=>typeof s==='string'?{h:'',s}:s;
 function ingPhrase(id,a){const it=ING[id];const amt=kAmt(id,a);
-  if(it.u==='ea'&&it.ea&&it.ea[1]!=='bunch'&&!it.cl){const w=it.ea[1];const many=a/it.ea[0]>1.0001;return`${amt} ${many?(/(i|ch|sh)$/.test(w)?w+'es':w+'s'):w}`}
+  if(it.u==='ea'&&it.ea&&it.ea[1]!=='bunch'&&!it.cl){const w=it.ea[1];const many=a/it.ea[0]>1.0001;return`${amt} ${many?plural(w):w}`}
   return`${amt} ${iname(id).toLowerCase()}`}
 function fillStep(r,txt,n,wrap=x=>x){return String(txt).replace(/\{(\w+)(?:\*([\d.]+))?\}/g,(m,id,f)=>{const q=(r.i.find(x=>x[0]===id)||[])[1];if(q==null||!ING[id])return m;return wrap(ingPhrase(id,q*n*(f?+f:1)))})}
 // [{h, s}] with amounts filled in for n serves (s as plain text)

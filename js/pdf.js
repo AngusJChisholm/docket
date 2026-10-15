@@ -125,60 +125,92 @@ const DocketPDF = window.DocketPDF = (function () {
     return d;
   }
 
+  // One recipe on one A4 page. Lays out at full size, and if it runs long, steps the type down until it fits.
   function recipe(r, n, gfCount) {
     const c = window.DocketRecipes ? window.DocketRecipes.peek(r.id) : r; // null when the method is locked
-    const { jsPDF } = window.jspdf; const d = new jsPDF({ unit: 'mm', format: 'a4' });
-    let y = header(d, r.n, `${r.c} · ${timeLabel(r)} · ${n} serves`);
-    text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(20);
-    const tl = d.splitTextToSize(clean(r.n), 135); d.text(tl, M, y + 6);
-    ticket(d, W - M, y, money(serveCost(r)), 'per serve');
-    y += 6 + tl.length * 8;
-    if (r.d) { text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(10.5); const dl = d.splitTextToSize(clean(r.d), 135); d.text(dl, M, y); y += dl.length * 5 + 2; }
-    text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(9);
-    d.text(clean(`${Math.round(serveProt(r))}g PROTEIN PER SERVE   ·   ${gfType(r) === 'yes' ? 'GLUTEN FREE' : 'GF SWAPS INCLUDED'}`), M, y + 3);
-    y += 10;
-    // Two columns: ingredients | method
-    const colL = M, wL = 62, colR = M + wL + 8, wR = W - M - colR;
-    let yl = y, yr = y;
-    text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(12); d.text('Ingredients', colL, yl); d.text('Method', colR, yr);
-    yl += 7; yr += 7;
-    splitLines(r, n).forEach(([i, a]) => {
-      d.setFont('helvetica', 'bold'); d.setFontSize(9.5); text(d, C.ink);
-      if (c) {
-        const amt = clean(kAmt(i, a)); d.text(amt, colL, yl);
-        d.setFont('helvetica', 'normal'); text(d, C.muted);
-        const nl = d.splitTextToSize(clean(iname(i)), wL); d.text(nl, colL, yl + 4.3);
-        yl += 4.3 * nl.length + 5.2;
-      } else {
-        d.setFont('helvetica', 'normal'); text(d, C.ink);
-        const nl = d.splitTextToSize(clean(iname(i)), wL); d.text(nl, colL, yl); yl += 4.6 * nl.length + 1.8;
-      }
-    });
-    d.setFont('helvetica', 'normal'); d.setFontSize(8.5); text(d, C.muted); d.text('Plus oil, salt and pepper.', colL, yl); yl += 6;
-    if (!c) {
-      d.setFont('helvetica', 'normal'); d.setFontSize(10); text(d, C.ink);
-      const ll = d.splitTextToSize(clean(`The full method, amounts, lunch tip and gluten free notes for this dinner are for Docket members. Unlock every recipe free while we're in beta at ${SITE}plan.html`), wR);
-      fill(d, C.mint); d.roundedRect(colR - 2, yr - 5, wR + 2, ll.length * 4.9 + 8, 3, 3, 'F'); d.text(ll, colR + 2, yr + 0.5); yr += ll.length * 4.9 + 8;
+    let d = null;
+    for (let k = 1; k >= 0.7; k = +(k - 0.05).toFixed(2)) {
+      const last = k - 0.05 < 0.7;
+      const out = recipePage(r, n, gfCount, c, k, last);
+      d = out.d; if (out.fits) break;
     }
-    (c ? c.m : []).forEach((raw, k) => {
-      const st = stepOf(raw);
-      const body = richLines(d, fillStep(r, st.s, n, x => '\u0001' + x + '\u0002'), wR - 7, 10);
-      const need = (st.h ? 6 : 0) + body.length * 4.9 + 4;
-      if (yr + need > H - 20) { d.addPage(); yr = M + 6; }
-      text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(st.h ? 11 : 10);
-      d.text(String(k + 1), colR, yr);
-      if (st.h) { d.text(clean(st.h), colR + 7, yr); yr += 6; }
-      text(d, C.ink); d.setFontSize(10); drawRich(d, body, colR + 7, yr, 4.9);
-      yr += body.length * 4.9 + 4;
-    });
-    y = Math.max(yl, d.getNumberOfPages() > 1 ? yr : Math.max(yl, yr)) + 2;
-    if (d.getNumberOfPages() > 1) y = yr + 2;
-    if (c && c.l) y = noteBox(d, y, 'Lunch:', c.l, C.mint);
-    if (c && c.g && gfCount > 0) y = noteBox(d, y, `Gluten free (${gfCount}):`, c.g, C.butter);
-    const checks = [...new Set(r.i.filter(([i]) => ING[i].ck).map(([i]) => iname(i)))];
-    if (checks.length) y = noteBox(d, y, 'Check labels:', checks.join(', '), C.peach);
     footer(d);
     return d;
+  }
+  function recipePage(r, n, gfCount, c, k, last) {
+    const { jsPDF } = window.jspdf; const d = new jsPDF({ unit: 'mm', format: 'a4' });
+    const lh = pt => pt * 0.42; // line height in mm for a font size
+    const bottom = H - 16;
+    // Top strip: logo, dinner details, a rule
+    if (logo) d.addImage(logo, 'PNG', M, M - 1, 27, 6.4);
+    else { text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(16); d.text('Docket', M, M + 4.5); }
+    text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(9);
+    d.text(clean(`${r.c}, ${timeLabel(r)}. Makes ${n} serves.`), W - M, M + 4, { align: 'right' });
+    draw(d, C.line); d.setLineWidth(0.3); d.line(M, M + 9, W - M, M + 9);
+    let y = M + 19;
+    // Title, blurb and price tag
+    ticket(d, W - M, M + 13, money(serveCost(r)), 'per serve');
+    text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(19 * k);
+    const tl = d.splitTextToSize(clean(r.n), 128); d.text(tl, M, y); y += (tl.length - 1) * lh(19 * k) + 3;
+    if (r.d) { text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(10 * k); const dl = d.splitTextToSize(clean(r.d), 128); d.text(dl, M, y + 3); y += dl.length * lh(10 * k) + 3; }
+    text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(9 * k);
+    d.text(clean(`${Math.round(serveProt(r))}g protein a serve. ${gfType(r) === 'yes' ? 'Gluten free.' : 'Gluten free swaps included.'}`), M, y + 3);
+    y = Math.max(y + 11, M + 32);
+    // Two columns: ingredients | method
+    const colL = M, wL = 56, colR = M + wL + 9, wR = W - M - colR, amtW = 21;
+    let yl = y, yr = y;
+    text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(11.5 * k); d.text('Ingredients', colL, yl); d.text('Method', colR, yr);
+    yl += 6.5 * k; yr += 6.5 * k;
+    const fs = 9 * k;
+    splitLines(r, n).forEach(([i, a]) => {
+      d.setFontSize(fs);
+      if (c) {
+        text(d, C.ink); d.setFont('helvetica', 'bold');
+        const al = d.splitTextToSize(clean(kAmt(i, a)), amtW - 2); d.text(al, colL, yl);
+        d.setFont('helvetica', 'normal');
+        const nl = d.splitTextToSize(clean(iname(i)), wL - amtW); d.text(nl, colL + amtW, yl);
+        yl += Math.max(al.length, nl.length) * lh(fs) + 1.6 * k;
+      } else {
+        text(d, C.ink); d.setFont('helvetica', 'normal');
+        const nl = d.splitTextToSize(clean(iname(i)), wL); d.text(nl, colL, yl); yl += nl.length * lh(fs) + 1.6 * k;
+      }
+    });
+    d.setFont('helvetica', 'normal'); d.setFontSize(8.5 * k); text(d, C.muted); d.text('Plus oil, salt and pepper.', colL, yl + 1); yl += 6;
+    if (!c) {
+      d.setFont('helvetica', 'normal'); d.setFontSize(10); text(d, C.ink);
+      const ll = d.splitTextToSize(clean(`The full method, amounts, lunch tip and gluten free notes for this dinner are for Docket members. Get every recipe free while we're in beta at ${SITE}plan.html`), wR - 4);
+      fill(d, C.mint); d.roundedRect(colR - 2, yr - 5, wR + 2, ll.length * 4.9 + 8, 3, 3, 'F'); d.text(ll, colR + 2, yr + 0.5); yr += ll.length * 4.9 + 8;
+    }
+    const ms = 9.6 * k, hs = 10.5 * k;
+    (c ? c.m : []).forEach((raw, idx) => {
+      const st = stepOf(raw);
+      const body = richLines(d, fillStep(r, st.s, n, x => '\u0001' + x + '\u0002'), wR - 7, ms);
+      const need = (st.h ? lh(hs) + 1.5 : 0) + body.length * lh(ms) + 3.5 * k;
+      if (last && yr + need > bottom - 4) { d.addPage(); yr = M + 6; }
+      text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(hs);
+      d.text(String(idx + 1), colR, yr);
+      if (st.h) { d.text(clean(st.h), colR + 7, yr); yr += lh(hs) + 1.5; }
+      text(d, C.ink); d.setFontSize(ms); drawRich(d, body, colR + 7, yr, lh(ms));
+      yr += body.length * lh(ms) + 3.5 * k;
+    });
+    y = d.getNumberOfPages() > 1 ? yr + 2 : Math.max(yl, yr) + 2;
+    // Notes along the bottom
+    const notes = [];
+    if (c && c.l) notes.push(['Lunch:', c.l, C.mint]);
+    if (c && c.g && gfCount > 0) notes.push([`Gluten free (${gfCount}):`, c.g, C.butter]);
+    const checks = [...new Set(r.i.filter(([i]) => ING[i].ck).map(([i]) => iname(i)))];
+    if (checks.length) notes.push(['Check labels:', checks.join(', '), C.peach]);
+    notes.forEach(([label, body, col]) => {
+      const ns = 9 * k; d.setFontSize(ns); d.setFont('helvetica', 'bold'); const lw = d.getTextWidth(label + '  ');
+      d.setFont('helvetica', 'normal'); const lines = d.splitTextToSize(clean(body), W - 2 * M - 10 - lw);
+      const h = lines.length * lh(ns) + 5;
+      if (last && y + h > bottom) { d.addPage(); y = M + 6; }
+      fill(d, col); d.roundedRect(M, y, W - 2 * M, h, 2.5, 2.5, 'F');
+      text(d, C.ink); d.setFont('helvetica', 'bold'); d.text(label, M + 4, y + 3 + lh(ns) * 0.75);
+      d.setFont('helvetica', 'normal'); d.text(lines, M + 4 + lw, y + 3 + lh(ns) * 0.75);
+      y += h + 2.5;
+    });
+    return { d, fits: d.getNumberOfPages() === 1 && y <= bottom };
   }
 
   const slug = s => s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
