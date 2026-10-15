@@ -1,13 +1,31 @@
 {
  "id": "padthai",
  "m": [
-  "Soak the noodles in hot (not boiling) water for 15 minutes until bendy but still firm. Drain.",
-  "Sauce: fish sauce, brown sugar, tomato sauce, the juice of half the limes and 1 tbsp water per serve. Stir until the sugar dissolves.",
-  "Slice the chicken thin and stir-fry in a very hot wok until cooked. Push to one side.",
-  "Add the garlic, then crack in the eggs and scramble them into the chicken.",
-  "Add the noodles and sauce and toss constantly for 2 to 3 minutes until the sauce is absorbed. Cook in two batches if your wok is small.",
-  "Toss through the bean sprouts and spring onion. Serve with crushed peanuts, chilli flakes and lime wedges."
+  {
+   "h": "Soak the noodles",
+   "s": "Put {ricenoodles} in a large bowl and cover with hot tap water (not boiling). Soak for 15 minutes until bendy but still firm in the middle, then drain. They finish cooking in the wok, so don't let them go soft."
+  },
+  {
+   "h": "Mix the sauce",
+   "s": "In a jug stir together {fishsauce}, {brownsugar}, {ketchup}, the juice of {lime*0.5} and 1 tbsp water per serve until the sugar dissolves."
+  },
+  {
+   "h": "Get prepped",
+   "s": "Thinly slice {chk_thigh}. Crush {garlic}. Cut {springonion} into 4cm lengths, and roughly crush {peanuts}. Cut the rest of the lime into wedges."
+  },
+  {
+   "h": "Cook the chicken and egg",
+   "s": "Heat a drizzle of oil in a wok or large frying pan over high heat. Stir-fry the chicken for 4 to 5 minutes until cooked through, then push it to one side. Add the garlic for 20 seconds, then crack in {eggs} and scramble them into the chicken."
+  },
+  {
+   "h": "Toss the noodles",
+   "s": "Add the noodles and sauce and toss constantly for 2 to 3 minutes until the sauce is absorbed and the noodles are tender. If your wok is small, do this in two batches so the noodles fry rather than steam."
+  },
+  {
+   "h": "Finish and serve",
+   "s": "Toss through {beansprouts} and the spring onion for 30 seconds. Serve topped with the peanuts, a pinch of {chilliflakes} and lime wedges."
+  }
  ],
- "l": "Reheat with a splash of water so the noodles loosen up. Fresh lime over the top brings it back.",
+ "l": "Reheat with a splash of water so the noodles loosen up. Fresh lime over the top brings it back. Keeps 2 days in the fridge.",
  "g": "Naturally gluten free with rice noodles. Check the fish sauce and tomato sauce labels."
 }

@@ -1,13 +1,31 @@
 {
  "id": "fishtacos",
  "m": [
-  "Slaw: shred the cabbage thin and toss with the juice of half the limes, coriander and salt.",
-  "Sauce: mayo, sriracha, sour cream and a squeeze of lime.",
-  "Cut the fish into fingers. Mix the flour with the paprika, cumin and 1 tsp salt, and toss the fish in it.",
-  "Shallow-fry in hot oil 2 to 3 minutes a side until golden and flaky. Drain on paper towel.",
-  "Warm the tortillas in a dry pan.",
-  "Load each taco with slaw, fish, avocado and sauce. Lime wedges on the side."
+  {
+   "h": "Make the slaw",
+   "s": "Finely shred the cabbage and toss with the juice of {lime*0.5}, some chopped {coriander} and a pinch of salt."
+  },
+  {
+   "h": "Mix the sauce",
+   "s": "Stir together {mayo}, {sriracha}, {sourcream} and a squeeze of the remaining lime. Cut the rest of the lime into wedges."
+  },
+  {
+   "h": "Coat the fish",
+   "s": "Pat {whitefish} dry and cut into fingers. Mix {flour} with {smokedpaprika}, {cumin} and 1 tsp salt, then toss the fish in it until coated."
+  },
+  {
+   "h": "Fry the fish",
+   "s": "Heat 1cm of oil in a large frying pan over medium-high heat. Fry the fish in batches for 2 to 3 minutes a side until golden and it flakes easily. Drain on paper towel."
+  },
+  {
+   "h": "Warm the tortillas",
+   "s": "Warm {tortillas} in a dry frying pan for 20 seconds a side. Slice {avocado}."
+  },
+  {
+   "h": "Load the tacos",
+   "s": "Fill each taco with slaw, fish, avocado and a drizzle of sauce. Serve with the lime wedges and the rest of the coriander."
+  }
  ],
- "l": "Turn it into a bowl: fish over rice and slaw, sauce on the side.",
+ "l": "Turn it into a bowl: fish over rice and slaw, sauce on the side. Best eaten within a day. Keeps 2 days in the fridge.",
  "g": "GF flour for the GF fish (fried first in fresh oil), and corn tortillas."
 }

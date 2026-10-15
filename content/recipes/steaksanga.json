@@ -1,13 +1,31 @@
 {
  "id": "steaksanga",
  "m": [
-  "Chips: oven to 220°C. Cut potatoes into chips, toss with oil and salt, roast 35 to 40 minutes.",
-  "Caramelised onions: slice the onions thin and cook low in oil with a pinch of salt for 20 minutes, stirring often, until deep golden. Add the sugar and vinegar for the last 2 minutes.",
-  "Bash the steaks to about 1cm thick and season well.",
-  "Sear in a smoking hot pan, 1 to 2 minutes a side. Rest 3 minutes, then slice.",
-  "Split and toast the Turkish rolls. Melt a cheese slice on the steak in the pan.",
-  "Build: mayo, lettuce, sliced tomato, steak and cheese, plenty of onions. Serve with chips."
+  {
+   "h": "Get the chips in",
+   "s": "Heat the oven to 220°C. Cut {potato} into chips, toss with a good drizzle of oil and a pinch of salt on a lined tray, and roast for 35 to 40 minutes, turning halfway, until golden and crisp."
+  },
+  {
+   "h": "Caramelise the onions",
+   "s": "Thinly slice {onion}. Cook in a drizzle of oil with a pinch of salt over low heat for 20 minutes, stirring often, until deep golden and sticky. Add {brownsugar} and {whitevinegar} for the last 2 minutes."
+  },
+  {
+   "h": "Prep the steak",
+   "s": "Put {beef_rump} between two sheets of baking paper and bash with a rolling pin to about 1cm thick. Season well with salt and pepper."
+  },
+  {
+   "h": "Sear the steak",
+   "s": "Heat a heavy frying pan over high heat until smoking. Sear the steaks for 1 to 2 minutes a side. In the last 30 seconds, lay a cheese slice on each (you'll use {slices} in all) to melt. Rest for 3 minutes, then slice."
+  },
+  {
+   "h": "Toast the rolls",
+   "s": "Split {turkish} and toast cut side down in the pan."
+  },
+  {
+   "h": "Build the sangas",
+   "s": "Spread the rolls with {mayo}, then add {cos}, sliced {cherrytom}, the steak and cheese, and plenty of onions. Serve with the chips."
+  }
  ],
- "l": "Steak and onions over salad, or in a wrap. Keep the bread separate so it doesn't go soggy.",
+ "l": "Steak and onions over salad, or in a wrap. Keep the bread separate so it doesn't go soggy. Keeps 3 days in the fridge.",
  "g": "GF buns instead of Turkish rolls, toasted separately."
 }

@@ -1,13 +1,31 @@
 {
  "id": "cottage",
  "m": [
-  "Mash: boil the peeled potatoes 15 to 18 minutes until soft. Drain and mash with the butter, milk and salt.",
-  "Brown the mince hard in a big pan. Add the diced onion and carrot and cook 8 minutes.",
-  "Stir in the garlic and tomato paste for 2 minutes, then the Worcestershire and stock powder dissolved in ½ cup water per serve.",
-  "Simmer 15 minutes. Add the peas, and thicken with the cornflour mixed into a little cold water. Season well.",
-  "Oven to 200°C. Spoon the beef into a baking dish, spread the mash on top, rough it up with a fork and cover with cheese.",
-  "Bake 25 minutes until golden and bubbling at the edges. Rest 5 minutes."
+  {
+   "h": "Make the mash",
+   "s": "Peel {potato} and cut into even chunks. Boil in salted water for 15 to 18 minutes until a knife slides through. Drain well, then mash with {butter}, {milk} and a good pinch of salt until smooth."
+  },
+  {
+   "h": "Brown the mince",
+   "s": "While the potatoes cook, heat a drizzle of oil in a large deep frying pan over high heat. Cook {beef_mince} for 6 to 8 minutes, breaking it up, until well browned. Add finely diced {onion} and {carrot} and cook for 8 minutes over medium heat until soft."
+  },
+  {
+   "h": "Build the filling",
+   "s": "Stir in crushed {garlic} and {tompaste} for 2 minutes. Add {worcestershire} and {stockpowder} dissolved in ½ cup hot water per serve."
+  },
+  {
+   "h": "Simmer and thicken",
+   "s": "Simmer for 15 minutes, then stir in {peas}. Mix {cornflour} with a splash of cold water, stir it in and bubble for 1 minute until thick. Season well. Heat the oven to 200°C."
+  },
+  {
+   "h": "Top it",
+   "s": "Spoon the filling into a baking dish and spread the mash over the top. Rough it up with a fork, as the ridges go crispy, then scatter over {cheese}."
+  },
+  {
+   "h": "Bake",
+   "s": "Bake for 25 minutes until golden and bubbling at the edges. Rest for 5 minutes before serving."
+  }
  ],
- "l": "Cut into portions once cool. Reheats perfectly.",
+ "l": "Cut into portions once cool. Reheats perfectly. Keeps 3 days in the fridge, and it freezes well.",
  "g": "Check the Worcestershire sauce (some aren't GF), the stock powder and the cornflour (100% maize)."
 }

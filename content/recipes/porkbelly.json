@@ -1,13 +1,31 @@
 {
  "id": "porkbelly",
  "m": [
-  "Oven to 220°C. Cut the belly into 2cm cubes, toss with salt and spread on a lined tray.",
-  "Roast 35 to 40 minutes, turning once, until crisp and rendered. Drain off the fat.",
-  "Cook the rice. Quick pickle: thin cucumber slices with rice vinegar and a pinch of salt and sugar.",
-  "Glaze: soy, honey, grated garlic and ginger.",
-  "Toss the pork in a hot pan with the glaze for 2 to 3 minutes until sticky and glossy.",
-  "Steam the broccoli. Build bowls with rice, pork, broccoli and pickles, and finish with spring onion and sesame seeds."
+  {
+   "h": "Roast the belly",
+   "s": "Heat the oven to 220°C. Cut {pork_belly} into 2cm cubes, toss with a good pinch of salt and spread on a lined tray in one layer. Roast for 35 to 40 minutes, turning halfway, until crisp and the fat has rendered. Drain off the fat."
+  },
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Quick pickles",
+   "s": "Thinly slice {cucumber} and toss with {ricevinegar} and a pinch each of salt and sugar."
+  },
+  {
+   "h": "Mix the glaze",
+   "s": "In a small bowl mix {soy}, {honey}, finely grated {garlic} and {ginger}. Cut {broccoli} into florets and steam or boil for 3 minutes until bright green."
+  },
+  {
+   "h": "Glaze the pork",
+   "s": "Heat a large frying pan over medium-high heat. Add the pork and the glaze and toss for 2 to 3 minutes until it bubbles down to a sticky, glossy coating. Watch it closely, as honey burns fast."
+  },
+  {
+   "h": "Build the bowls",
+   "s": "Divide the rice between bowls and top with the pork, broccoli and pickles. Finish with sliced {springonion} and {sesameseeds}."
+  }
  ],
- "l": "Pork and rice together, pickles in a separate container.",
+ "l": "Pork and rice together, pickles in a separate container. Keeps 3 days in the fridge.",
  "g": "Tamari instead of soy, glazed in a separate pan."
 }

@@ -1,13 +1,31 @@
 {
  "id": "meatballs",
  "m": [
-  "Meatballs: mix both minces with the panko, egg, half the parmesan, half the garlic (crushed), chopped parsley and 1 tsp salt. Roll into golf-ball sizes, about 5 per serve.",
-  "Brown the meatballs all over in a big pan with a little oil. Set aside.",
-  "Same pan: soften the diced onion 5 minutes, then the rest of the garlic and the oregano for 1 minute.",
-  "Add the passata and crushed tomatoes, return the meatballs and simmer, half covered, 20 minutes.",
-  "Cook the pasta, keep a mug of the water, and toss with some sauce.",
-  "Serve the meatballs and sauce over pasta with the rest of the parmesan."
+  {
+   "h": "Mix the meatballs",
+   "s": "In a large bowl mix {beef_mince}, {pork_mince}, {panko}, {eggs}, grated {parm*0.5}, {garlic*0.5} (crushed), chopped {parsley} and 1 tsp salt. Mix with your hands until it just comes together."
+  },
+  {
+   "h": "Roll",
+   "s": "Roll into golf ball sizes, about five per serve. Wet your hands to stop it sticking."
+  },
+  {
+   "h": "Brown the meatballs",
+   "s": "Heat a drizzle of oil in a large deep frying pan over medium-high heat. Brown the meatballs in batches for 5 minutes, turning, until golden all over. They finish cooking in the sauce. Set aside."
+  },
+  {
+   "h": "Make the sauce",
+   "s": "In the same pan, cook finely diced {onion} over medium heat for 5 minutes until soft. Add the rest of the garlic and {oregano} for 1 minute, then {passata} and {tintom}. Return the meatballs and simmer, half covered, for 20 minutes."
+  },
+  {
+   "h": "Cook the pasta",
+   "s": "Cook {pasta} in a big pot of well-salted boiling water until al dente. Scoop out a mug of pasta water, then drain and toss with a few spoonfuls of the sauce and a splash of the water."
+  },
+  {
+   "h": "Serve up",
+   "s": "Serve the meatballs and sauce over the pasta with the rest of the parmesan grated over the top."
+  }
  ],
- "l": "Meatballs and sauce reheat beautifully. Use the pasta water to loosen it.",
+ "l": "Meatballs and sauce reheat beautifully. Use a splash of water to loosen it. Keeps 3 days in the fridge, and the meatballs freeze well.",
  "g": "GF crumbs in a separate small batch of meatballs, cooked first, and GF pasta in its own pot."
 }

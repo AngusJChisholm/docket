@@ -1,13 +1,31 @@
 {
  "id": "periperi",
  "m": [
-  "Peri peri sauce: blitz the chillies, garlic, paprika, oregano, lemon juice, vinegar, sugar, a glug of oil and 1 tsp salt. Keep a few spoonfuls aside for serving.",
-  "Coat the chicken in the rest and marinate at least 20 minutes.",
-  "Chips: oven to 220°C. Cut potatoes into chips, toss with oil and salt, roast 35 to 40 minutes, turning once.",
-  "Slaw: shredded cabbage and grated carrot with mayo, a squeeze of lemon and salt.",
-  "Grill pan, BBQ or hot oven tray: cook the chicken 5 to 6 minutes a side until charred and cooked through.",
-  "Serve with chips and slaw, and the extra sauce for the brave."
+  {
+   "h": "Make the peri peri",
+   "s": "Roughly chop {chilli} (keep the seeds if you like it hot) and {garlic}. Blitz with {smokedpaprika}, {oregano}, the juice of {lemon*0.5}, {whitevinegar}, {brownsugar}, a glug of oil and 1 tsp salt until smooth. Keep a few spoonfuls aside for serving."
+  },
+  {
+   "h": "Marinate the chicken",
+   "s": "Coat {chk_thigh} in the rest of the sauce and leave for at least 20 minutes, or overnight in the fridge."
+  },
+  {
+   "h": "Get the chips in",
+   "s": "Heat the oven to 220°C. Cut {potato} into chips, toss with a good drizzle of oil and a pinch of salt on a lined tray, and roast for 35 to 40 minutes, turning halfway, until golden and crisp."
+  },
+  {
+   "h": "Make the slaw",
+   "s": "Finely shred the cabbage and coarsely grate {carrot}. Toss with {mayo}, a squeeze of the remaining lemon and a pinch of salt."
+  },
+  {
+   "h": "Cook the chicken",
+   "s": "Heat a grill pan or BBQ over medium-high heat. Cook the chicken for 5 to 6 minutes a side until charred at the edges and cooked through (75°C in the thickest part). Rest for 5 minutes."
+  },
+  {
+   "h": "Serve up",
+   "s": "Serve the chicken with the chips and slaw, and the extra sauce on the side for the brave."
+  }
  ],
- "l": "Chicken and slaw in a wrap, or over rice. Skip the chips.",
+ "l": "Chicken and slaw in a wrap, or over rice. Skip the chips. Keeps 3 days in the fridge.",
  "g": "Naturally gluten free. Check the mayo label."
 }

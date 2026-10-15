@@ -1,13 +1,31 @@
 {
  "id": "chilli",
  "m": [
-  "Brown the mince hard in a heavy pot. Add the diced onion and capsicum and cook 8 minutes.",
-  "Add the garlic and all the spices and cook 1 minute until fragrant.",
-  "Stir in the tomato paste for 2 minutes, then the crushed tomatoes, drained beans and ½ cup water per 2 serves.",
-  "Simmer low for 30 to 40 minutes, stirring now and then, until rich and thick. Season with salt and a squeeze of lime.",
-  "Cook the rice.",
-  "Serve the chilli over rice with sour cream, cheese and coriander."
+  {
+   "h": "Brown the mince",
+   "s": "Heat a drizzle of oil in a heavy pot over high heat. Cook {beef_mince} for 6 to 8 minutes, breaking it up, until well browned. Add diced {onion} and {capsicum} and cook for 8 minutes over medium heat until soft."
+  },
+  {
+   "h": "Toast the spices",
+   "s": "Add crushed {garlic}, {cumin}, {smokedpaprika}, {chillipowder}, {oregano} and {cinnamon}. Stir for 1 minute until fragrant. The cinnamon is the secret, so don't skip it."
+  },
+  {
+   "h": "Simmer",
+   "s": "Stir in {tompaste} for 2 minutes, then add {tintom}, {blackbeans}, drained and rinsed, and ½ cup water for every 2 serves. Simmer on low for 30 to 40 minutes, stirring now and then, until rich and thick."
+  },
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Season",
+   "s": "Taste the chilli and season with salt and a squeeze of {lime}. Add a splash of water if it's too thick."
+  },
+  {
+   "h": "Serve up",
+   "s": "Serve the chilli over the rice, topped with {sourcream}, {cheese} and torn {coriander}."
+  }
  ],
- "l": "One of the best lunches there is. It freezes well too.",
+ "l": "One of the best lunches there is. Keeps 4 days in the fridge and freezes well too.",
  "g": "Naturally gluten free. Check the spice labels."
 }

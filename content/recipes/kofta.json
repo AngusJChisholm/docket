@@ -1,13 +1,31 @@
 {
  "id": "kofta",
  "m": [
-  "Kofta: mix the lamb with finely grated onion, garlic, cumin, cinnamon, half the chopped parsley and 1 tsp salt. Shape into small sausages, about 3 per serve.",
-  "Chill 15 minutes so they hold together.",
-  "Salad: finely diced cucumber, tomato and red onion with the rest of the parsley, lemon juice, oil and salt.",
-  "Cook the kofta on a hot grill pan or BBQ, 8 to 10 minutes, turning, until charred and cooked through.",
-  "Warm the flatbreads.",
-  "Spread hummus on each plate, add the kofta, salad, a spoon of yoghurt and flatbread on the side."
+  {
+   "h": "Mix the kofta",
+   "s": "Finely grate {onion} and squeeze out the juice. Mix with {lamb_mince}, crushed {garlic}, {cumin}, {cinnamon}, chopped {parsley*0.5} and 1 tsp salt. Mix well with your hands for a minute so it binds."
+  },
+  {
+   "h": "Shape and chill",
+   "s": "Shape into small sausages, about three per serve, and press them onto skewers if you have them. Chill for 15 minutes so they hold together on the grill."
+  },
+  {
+   "h": "Make the salad",
+   "s": "Finely dice {cucumber}, {cherrytom} and {red_onion}. Toss with the rest of the parsley, the juice of {lemon}, a drizzle of oil and a pinch of salt."
+  },
+  {
+   "h": "Cook the kofta",
+   "s": "Heat a grill pan, BBQ or frying pan over medium-high heat with a little oil. Cook the kofta for 8 to 10 minutes, turning every couple of minutes, until charred and cooked through with no pink in the middle."
+  },
+  {
+   "h": "Warm the bread",
+   "s": "Warm {pita} in the oven or a dry pan for 1 minute so it's soft and pliable."
+  },
+  {
+   "h": "Serve up",
+   "s": "Spread {hummus} over each plate and add the kofta, salad and a spoonful of {yoghurt}, with the bread on the side for scooping."
+  }
  ],
- "l": "Kofta, salad and hummus in one container, bread on the side.",
+ "l": "Kofta, salad and hummus in one container, bread on the side. Keeps 3 days in the fridge.",
  "g": "GF wraps instead of flatbread. Check the hummus label."
 }
