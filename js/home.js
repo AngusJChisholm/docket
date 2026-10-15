@@ -1,4 +1,4 @@
-// Homepage: hero docket, Kit Tax calculator, cheap-wins cards and the sign-up form.
+// Homepage: hero docket, collections, Kit Tax calculator, cheapest dinners list and the sign-up form.
 (function () {
   const $ = s => document.querySelector(s);
   const CFG = window.DOCKET_CONFIG || {};
@@ -98,39 +98,17 @@
   renderMenu(start, false);
   $('#shuffle').onclick = () => renderMenu(randomWeek(), true);
 
-  // Ribbon of dinners
-  const pill = r => `<span class="rb-pill rb-${tierOf(r)}">${esc(r.n)}</span>`;
-  const half = Math.ceil(R.length / 2);
-  const rowA = R.slice(0, half), rowB = R.slice(half);
-  $('#ribbon-a').innerHTML = `<div class="rb-track">${rowA.map(pill).join('')}${rowA.map(pill).join('')}</div>`;
-  $('#ribbon-b').innerHTML = `<div class="rb-track">${rowB.map(pill).join('')}${rowB.map(pill).join('')}</div>`;
-
-  // Numbers band
-  const flat = weekOf(fixed, 5);
-  const N = { 'n-dinners': R.length, 'n-cheap': Math.min(...R.map(serveCost)), 'n-prot': Math.round(R.reduce((s, r) => s + serveProt(r), 0) / R.length), 'n-year': Math.round((flat.kit - flat.total) * 52) };
-  const fmtN = (el, v) => { const dp = el.dataset.dp != null ? +el.dataset.dp : (el.dataset.money ? 2 : 0); el.textContent = el.dataset.money ? money(v, dp) : Math.round(v).toLocaleString('en-AU') + (el.dataset.suffix || ''); };
-  Object.entries(N).forEach(([id, v]) => { const el = document.getElementById(id); el.dataset.to = v; fmtN(el, v); });
-  if (!reduce && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver(es => es.forEach(e => {
-      if (!e.isIntersecting) return; io.unobserve(e.target);
-      const el = e.target, to = +el.dataset.to, t0 = performance.now(), dur = 1100;
-      const step = t => { const k = Math.min(1, (t - t0) / dur), ease = 1 - Math.pow(1 - k, 3); fmtN(el, to * ease); if (k < 1) requestAnimationFrame(step); else fmtN(el, to); };
-      requestAnimationFrame(step);
-    }), { threshold: .6 });
-    document.querySelectorAll('.count').forEach(el => io.observe(el));
-  }
-
   // Collections
   const COLS = [
-    { k: 'everyday', t: 'Everyday', d: 'The staples. Big flavour, big serves, best value.' },
-    { k: 'premium', t: 'Premium', d: 'Restaurant nights at home: scotch fillet, lamb cutlets, miso salmon.' },
-    { k: 'lighter', t: 'Lighter', d: 'Lean protein and loads of veg. Nothing fried or creamy.' }];
+    { k: 'everyday', t: 'Everyday', d: 'Butter chicken, tacos, fried rice. The ones you end up cooking on repeat.' },
+    { k: 'premium', t: 'Premium', d: 'Scotch fillet, lamb cutlets, miso salmon. Still well under meal kit prices.' },
+    { k: 'lighter', t: 'Lighter', d: 'Lean protein and a lot of veg. Nothing fried or creamy.' }];
   $('#col-grid').innerHTML = COLS.map(c => {
     const rs = R.filter(r => tierOf(r) === c.k); const costs = rs.map(serveCost);
     const eg = rs.slice().sort((a, b) => serveCost(b) - serveCost(a)).slice(0, 3).map(r => esc(r.n));
     const ci = ((window.DOCKET_IMG || {}).collections || {})[c.k];
-    return `<a class="col-card col-${c.k}${ci ? ' has-img' : ''}" href="plan.html#${c.k}">${ci ? `<span class="col-img"><img src="assets/img/food/${ci}-640.jpg" alt="" loading="lazy"></span>` : ''}<span class="col-count">${rs.length} dinners</span><h3>${c.t}</h3><p>${c.d}</p>
-      <ul>${eg.map(n => `<li>${n}</li>`).join('')}</ul><span class="col-from">From <b class="num">${money(Math.min(...costs))}</b> a serve</span></a>`;
+    return `<a class="col-card col-${c.k}${ci ? ' has-img' : ''}" href="plan.html#${c.k}">${ci ? `<span class="col-img"><img src="assets/img/food/${ci}-640.jpg" alt="" loading="lazy"></span>` : ''}<h3>${c.t}</h3><p>${c.d}</p>
+      <ul>${eg.map(n => `<li>${n}</li>`).join('')}</ul><span class="col-from">${rs.length} dinners, from <b class="num">${money(Math.min(...costs))}</b> a serve</span></a>`;
   }).join('');
 
   // Calculator
@@ -153,13 +131,11 @@
 
   // Cheap wins: the six cheapest dinners with 40g+ protein
   const wins = R.filter(r => serveProt(r) >= 40 && !r.tier).sort((a, b) => serveCost(a) - serveCost(b)).slice(0, 6);
-  const time = r => r.t >= 120 ? `${+(r.t / 60).toFixed(1)} hr · ${r.h} min hands-on` : `${r.t} min`;
-  $('#dinner-cards').innerHTML = wins.map(r => `<article class="card">
-      <div class="card-top"><div><h3>${esc(r.n)}</h3><div class="meta">${esc(r.c)} · ${time(r)}</div></div>
-      <div class="ticket num"><b>${money(serveCost(r))}</b><small>per serve</small></div></div>
-      ${r.d ? `<p class="blurb">${esc(r.d)}</p>` : ''}
-      <div class="badges"><span class="badge p num">${Math.round(serveProt(r))}g protein</span><span class="badge">${r.i.some(([id]) => GFSWAP[id]) ? 'GF swap' : 'Gluten free'}</span></div>
-    </article>`).join('');
+  const time = r => r.t >= 120 ? `${+(r.t / 60).toFixed(1)} hr (${r.h} min hands-on)` : `${r.t} min`;
+  $('#dinner-cards').innerHTML = wins.map(r => `<li>
+      <div class="w-name"><h3>${esc(r.n)}</h3><p>${esc(r.c)}, ${time(r)}. ${Math.round(serveProt(r))}g protein. ${r.i.some(([id]) => GFSWAP[id]) ? 'GF with a swap.' : 'Gluten free.'}</p></div>
+      <span class="w-lead" aria-hidden="true"></span><b class="w-pr num">${money(serveCost(r))}</b>
+    </li>`).join('');
 
   // Sign-up form
   $('#join-form').addEventListener('submit', async e => {
