@@ -297,7 +297,8 @@ body{font-size:15.5px;-webkit-font-smoothing:antialiased}
 .col-premium .col-from b{color:var(--ticket)}
 .col-lighter{background:var(--mint);border-color:var(--mint)}
 /* Planner refinements */
-.collections{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:10px;overflow-x:auto}
+.collections{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:10px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none}
+.collections::-webkit-scrollbar{display:none}
 .collections button{border:0;background:none;padding:10px 14px;font-weight:700;font-size:14.5px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
 .collections button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--green)}
 .col-note{margin:0 0 14px;font-size:13.5px;color:var(--muted);min-height:1em}
