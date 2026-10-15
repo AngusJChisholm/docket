@@ -1,13 +1,31 @@
 {
  "id": "larb",
  "m": [
-  "Cook the brown rice (25 to 30 minutes).",
-  "Fry the lemongrass and garlic in a little oil for 30 seconds, then add the chicken mince. Break it up and cook 5 to 6 minutes until cooked and a little golden.",
-  "Off the heat, stir in the fish sauce, lime juice, sugar and sliced chilli. Taste: it should be sour, salty and hot.",
-  "Toss through the thinly sliced red onion and a big handful of torn mint and coriander.",
-  "Separate the iceberg into cups and slice the cucumber.",
-  "Spoon the larb into the lettuce cups, with rice and cucumber on the side."
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {brownrice} until the water runs clear, then scoop out 1 tbsp and set it aside for later. Put the rest in a saucepan with twice its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 25 minutes. Take it off the heat and leave the lid on for 5 minutes so it finishes steaming."
+  },
+  {
+   "h": "Get prepped",
+   "s": "While the rice cooks, thinly slice {red_onion} and {chilli} (scrape out the seeds if you want less heat). Finely grate {garlic}. Pick the leaves from {mint} and {coriander}, and juice {lime}. Pull {iceberg} apart into cups, rinse and dry them well, as wet leaves water down the dressing. Slice {cucumber}."
+  },
+  {
+   "h": "Toast the rice",
+   "s": "Put the tablespoon of raw rice in a dry frying pan over medium heat. Shake the pan for 4 to 5 minutes until the grains are deep golden and smell nutty. Tip into a mortar and pestle or a zip-lock bag and bash to a coarse powder. This is the crunch that makes it taste like your local Thai place."
+  },
+  {
+   "h": "Cook the chicken",
+   "s": "Wipe out the pan and heat a drizzle of oil over medium-high heat. Add the garlic and {lemongrass} and stir for 30 seconds until fragrant. Add {chk_mince} and break it up with a wooden spoon. Cook for 5 to 6 minutes, stirring now and then, until there's no pink left and the edges are starting to catch and go golden."
+  },
+  {
+   "h": "Dress the larb",
+   "s": "Take the pan off the heat. Stir through {fishsauce}, the lime juice, {brownsugar} and the chilli. Taste it: it should be sour, salty and hot in roughly equal measure, so add more lime or fish sauce until it is. Toss through the red onion, most of the herbs and the toasted rice. Doing this off the heat keeps the herbs bright."
+  },
+  {
+   "h": "Serve up",
+   "s": "If you're cooking double for lunches, set those portions aside now. Spoon the larb into the lettuce cups and scatter over the rest of the herbs. Serve with the brown rice and cucumber on the side."
+  }
  ],
- "l": "Pack the larb with rice, lettuce leaves in a separate bag to stay crisp.",
- "g": "Naturally gluten free. Check the fish sauce."
+ "l": "Pack the larb with the rice and cucumber, and the lettuce cups in a separate bag so they stay crisp. Keeps 3 days in the fridge. Good cold or just warmed through.",
+ "g": "Naturally gluten free. Most fish sauce is gluten free, but a few brands add wheat, so check the label."
 }

@@ -91,7 +91,7 @@ function frac(v){const q=Math.round(v*4)/4||0.25;const w=Math.floor(q),f=+(q-w).
 function half(v){const q=Math.max(.5,Math.ceil(v*2)/2);const w=Math.floor(q);return (w?w:'')+(q-w?'½':'')}
 function spoons(ml){if(ml>=60)return`${frac(ml/250)} cup${ml>=375?'s':''}`;if(ml>=12)return`${half(ml/15)} tbsp`;return`${half(ml/5)} tsp`}
 function kAmt(id,a){const it=ING[id];
-  if(it.cl)return`${Math.max(1,Math.round(a*it.cl))} cloves`;
+  if(it.cl){const v=Math.max(1,Math.round(a*it.cl));return`${v} clove${v>1?'s':''}`}
   if(it.ea&&it.u==='g'){const n=a/it.ea[0];return`${half(n)} ${it.ea[1]}${n>1?'s':''} (${fmtAmt(id,a)})`}
   if(it.pl==='tin'||it.pl==='can')return`${half(a/it.pk)} tin${a/it.pk>1?'s':''}`;
   if(it.whole){const v=Math.max(1,Math.ceil(a-1e-6));return String(v)}
@@ -102,6 +102,15 @@ function kAmt(id,a){const it=ING[id];
   if(it.cup&&a/it.cup>=.25){const c=a/it.cup;return`${frac(c)} cup${c>1.1?'s':''} (${fmtAmt(id,a)})`}
   return fmtAmt(id,a)}
 const iname=id=>ING[id].n.replace(/\s*\([^)]*\)$/,'');
+// Method steps: a plain string, or {h: heading, s: text}. Text can hold {id} or {id*0.5} markers,
+// filled with that ingredient's amount for the household, e.g. "{lime}" -> "2 limes".
+const stepOf=s=>typeof s==='string'?{h:'',s}:s;
+function ingPhrase(id,a){const it=ING[id];const amt=kAmt(id,a);
+  if(it.u==='ea'&&it.ea&&it.ea[1]!=='bunch'&&!it.cl){const w=it.ea[1];const many=a/it.ea[0]>1.0001;return`${amt} ${many?(/(i|ch|sh)$/.test(w)?w+'es':w+'s'):w}`}
+  return`${amt} ${iname(id).toLowerCase()}`}
+function fillStep(r,txt,n,wrap=x=>x){return String(txt).replace(/\{(\w+)(?:\*([\d.]+))?\}/g,(m,id,f)=>{const q=(r.i.find(x=>x[0]===id)||[])[1];if(q==null||!ING[id])return m;return wrap(ingPhrase(id,q*n*(f?+f:1)))})}
+// [{h, s}] with amounts filled in for n serves (s as plain text)
+function methodSteps(r,c,n){return(c&&c.m||[]).map(x=>{const st=stepOf(x);return{h:st.h||'',s:fillStep(r,st.s,n)}})}
 function packLabel(id,pk){const it=ING[id];pk=pk||it.pk;if(it.pl&&pk===it.pk)return it.pl;if(it.u==='g')return pk>=1000?(+(pk/1000).toFixed(2))+'kg':pk+'g';if(it.u==='ml')return pk>=1000?(+(pk/1000).toFixed(2))+'L':pk+'ml';return pk>1?pk+' pack':'each'}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const timeLabel=r=>r.t>=120?`${+(r.t/60).toFixed(1)} hr · ${r.h} min hands-on`:`${r.t} min`;
@@ -231,7 +240,7 @@ function openRecipe(id){
 const RS=window.DocketRecipes;
 const SITE=location.href.split(/[?#]/)[0].replace(/plan\.html$/,'');
 function canSee(id){return RS.canSee(id,weekPicks())}
-const methodHTML=c=>`<h3>Method</h3><ol class="steps">${c.m.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`;
+const methodHTML=c=>{const r=R.find(x=>x.id===c.id);const n=spm();return`<h3>Method</h3><ol class="steps">${c.m.map(x=>{const st=stepOf(x);return`<li>${st.h?`<b class="st-h">${esc(st.h)}</b> `:''}${fillStep(r,esc(st.s),n,a=>`<b>${esc(a)}</b>`)}</li>`}).join('')}</ol>`};
 const notesHTML=c=>`${c.l?`<div class="gfnote"><b>Lunch:</b> ${esc(c.l)}</div>`:''}${c.g&&S.gf>0?`<div class="gfnote"><b>Gluten free (${Math.min(S.gf,S.people)}):</b> ${esc(c.g)}</div>`:''}`;
 function lockedHTML(){return`<div class="locked"><h3>Method</h3><div class="ghost" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
   <div class="unlock"><span class="eyebrow">Members' recipe</span><p><b>Get the full method, lunch tip and gluten free notes for every Docket dinner.</b> Free while we're in beta. This week's picks are open to everyone.</p>
@@ -245,7 +254,7 @@ function planText(){
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
   ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=x.pan?`[ ] ${ING[x.id].n} (check pantry, using ${kAmt(x.id,x.amt)})\n`:`[ ] ${ING[x.id].n}: ${x.label} (${money(x.cost)})\n`})});
   t+=`\nRECIPES\n`;
-  S.sel.forEach(id=>{const r=R.find(x=>x.id===id);const ok=!!RS.peek(id);t+=`\n${r.n.toUpperCase()} (${timeLabel(r)})\n`;splitLines(r,n).forEach(([i,a])=>{t+=ok?`- ${kAmt(i,a)} ${iname(i)}\n`:`- ${iname(i)}\n`});const c=RS.peek(id);if(c){c.m.forEach((s,k)=>{t+=`${k+1}. ${s}\n`});if(c.l)t+=`Lunch: ${c.l}\n`;if(c.g&&S.gf>0)t+=`Gluten free: ${c.g}\n`}else t+=`Full method: unlock it free at ${SITE}plan.html\n`});
+  S.sel.forEach(id=>{const r=R.find(x=>x.id===id);const ok=!!RS.peek(id);t+=`\n${r.n.toUpperCase()} (${timeLabel(r)})\n`;splitLines(r,n).forEach(([i,a])=>{t+=ok?`- ${kAmt(i,a)} ${iname(i)}\n`:`- ${iname(i)}\n`});const c=RS.peek(id);if(c){methodSteps(r,c,n).forEach((st,k)=>{t+=`${k+1}. ${st.h?st.h+'. ':''}${st.s}\n`});if(c.l)t+=`Lunch: ${c.l}\n`;if(c.g&&S.gf>0)t+=`Gluten free: ${c.g}\n`}else t+=`Full method: unlock it free at ${SITE}plan.html\n`});
   return t;
 }
 
@@ -322,7 +331,7 @@ function listText(){
 if(navigator.share){$('#share').hidden=false;$('#share').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}try{await navigator.share({title:'Our Docket for the week',text:planText()})}catch(e){}}}
 function fillPrint(){
   const n=spm();
-  $('#print-recipes').innerHTML='<h2>Recipes</h2>'+S.sel.map(id=>{const r=R.find(x=>x.id===id);const c=RS.peek(id);return`<article><h3>${esc(r.n)} · ${timeLabel(r)} · ${n} serves</h3><ul>${splitLines(r,n).map(([i,a])=>`<li>${c?kAmt(i,a)+' ':''}${esc(iname(i))}</li>`).join('')}</ul>${c?`<ol>${c.m.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`:`<p>Full method: unlock it free at ${esc(SITE)}plan.html</p>`}</article>`}).join('');
+  $('#print-recipes').innerHTML='<h2>Recipes</h2>'+S.sel.map(id=>{const r=R.find(x=>x.id===id);const c=RS.peek(id);return`<article><h3>${esc(r.n)} · ${timeLabel(r)} · ${n} serves</h3><ul>${splitLines(r,n).map(([i,a])=>`<li>${c?kAmt(i,a)+' ':''}${esc(iname(i))}</li>`).join('')}</ul>${c?`<ol>${methodSteps(r,c,n).map(st=>`<li>${st.h?`<b>${esc(st.h)}.</b> `:''}${esc(st.s)}</li>`).join('')}</ol>`:`<p>Full method: unlock it free at ${esc(SITE)}plan.html</p>`}</article>`}).join('');
 }
 window.addEventListener('beforeprint',fillPrint);
 $('#print').onclick=()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}fillPrint();window.print()};

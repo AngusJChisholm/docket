@@ -27,7 +27,12 @@ eval(rd('js/data.js') + rd('js/prices.js') + rd('js/season.js') + rd('js/recipes
     for (const [i, q] of r.i || []) { if (!ING[i]) fail(r.id + ' unknown ingredient ' + i); if (!(q > 0)) fail(r.id + ' bad amount for ' + i); }
     if (r.added && !/^\\d{4}-\\d{2}-\\d{2}$/.test(r.added)) fail(r.id + ' added must be YYYY-MM-DD');
     const p = serveProt(r); if (p < 35 && !/veg|chickpea|curry/i.test(r.n)) warn(r.id + ' only ' + Math.round(p) + 'g protein');
-    const text = [r.n, r.d, r.l, r.g, ...(r.m || [])].join(' ');
+    const steps = (r.m || []).map(x => typeof x === 'string' ? { h: '', s: x } : x);
+    steps.forEach((st, k) => {
+      if (!st || typeof st.s !== 'string' || !st.s) fail(r.id + ' step ' + (k + 1) + ' has no text');
+      for (const [, id] of String(st.s).matchAll(/\\{(\\w+)(?:\\*[\\d.]+)?\\}/g)) if (!(r.i || []).some(([i]) => i === id)) fail(r.id + ' step ' + (k + 1) + ' marker {' + id + '} is not one of its ingredients');
+    });
+    const text = [r.n, r.d, r.l, r.g, ...steps.map(st => st.h + ' ' + st.s)].join(' ');
     if (/—|–/.test(text)) fail(r.id + ' has an em/en dash');
     if (/\\b(elevate|unlock|seamless|journey|foodie|hack|delve)\\b/i.test(text)) fail(r.id + ' uses banned wording');
   }

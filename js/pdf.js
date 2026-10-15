@@ -21,6 +21,30 @@ const DocketPDF = window.DocketPDF = (function () {
   const text = (d, c) => d.setTextColor(c[0], c[1], c[2]);
   const draw = (d, c) => d.setDrawColor(c[0], c[1], c[2]);
 
+  // Width of a string as jsPDF draws it: letter by letter (no kerning), with the real Helvetica width for
+  // the fraction glyphs, which jsPDF's own table gets wrong.
+  const FRW = { '¼': .834, '½': .834, '¾': .834 };
+  function textW(d, str, size) { let w = 0; for (const ch of str) w += FRW[ch] ? FRW[ch] * size * 25.4 / 72 : d.getTextWidth(ch); return w; }
+  // Word-wraps text that has bold runs marked \u0001...\u0002 into lines of {t, b} pieces.
+  function richLines(d, str, width, size) {
+    const words = []; let bold = false;
+    String(str).split(/(\u0001|\u0002)/).forEach(part => {
+      if (part === '\u0001') { bold = true; return; } if (part === '\u0002') { bold = false; return; }
+      (bold ? part.split(/(\s+$)/) : part.split(/(\s+)/)).forEach(w => { if (w && !/^\s+$/.test(w)) words.push({ t: clean(w), b: bold }); else if (w && words.length) words[words.length - 1].sp = true; });
+    });
+    const lines = [[]]; let x = 0;
+    d.setFontSize(size); d.setFont('helvetica', 'normal'); const space = textW(d, ' ', size);
+    words.forEach(w => {
+      d.setFont('helvetica', w.b ? 'bold' : 'normal'); const ww = textW(d, w.t, size);
+      if (x > 0 && x + ww > width) { lines.push([]); x = 0; }
+      lines[lines.length - 1].push({ t: w.t, b: w.b, x }); x += ww + (w.sp ? space : 0);
+    });
+    return lines;
+  }
+  function drawRich(d, lines, x0, y, lh) {
+    lines.forEach((ln, i) => ln.forEach(p => { d.setFont('helvetica', p.b ? 'bold' : 'normal'); d.text(p.t, x0 + p.x, y + i * lh); }));
+  }
+
   function header(d, title, sub) {
     fill(d, C.mint); d.roundedRect(M, M, W - 2 * M, 30, 5, 5, 'F');
     if (logo) d.addImage(logo, 'PNG', M + 7, M + 7, 38, 9.0);
@@ -109,7 +133,7 @@ const DocketPDF = window.DocketPDF = (function () {
     const tl = d.splitTextToSize(clean(r.n), 135); d.text(tl, M, y + 6);
     ticket(d, W - M, y, money(serveCost(r)), 'per serve');
     y += 6 + tl.length * 8;
-    if (r.d) { text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(10.5); const dl = d.splitTextToSize(clean(r.d), W - 2 * M); d.text(dl, M, y); y += dl.length * 5 + 2; }
+    if (r.d) { text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(10.5); const dl = d.splitTextToSize(clean(r.d), 135); d.text(dl, M, y); y += dl.length * 5 + 2; }
     text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(9);
     d.text(clean(`${Math.round(serveProt(r))}g PROTEIN PER SERVE   ·   ${gfType(r) === 'yes' ? 'GLUTEN FREE' : 'GF SWAPS INCLUDED'}`), M, y + 3);
     y += 10;
@@ -136,14 +160,16 @@ const DocketPDF = window.DocketPDF = (function () {
       const ll = d.splitTextToSize(clean(`The full method, amounts, lunch tip and gluten free notes for this dinner are for Docket members. Unlock every recipe free while we're in beta at ${SITE}plan.html`), wR);
       fill(d, C.mint); d.roundedRect(colR - 2, yr - 5, wR + 2, ll.length * 4.9 + 8, 3, 3, 'F'); d.text(ll, colR + 2, yr + 0.5); yr += ll.length * 4.9 + 8;
     }
-    (c ? c.m : []).forEach((s, k) => {
-      d.setFont('helvetica', 'normal'); d.setFontSize(10);
-      const sl = d.splitTextToSize(clean(s), wR - 9);
-      if (yr + sl.length * 4.9 > H - 20) { d.addPage(); yr = M + 6; }
-      fill(d, C.butter); d.circle(colR + 3, yr - 1.3, 3, 'F');
-      text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(8.5); d.text(String(k + 1), colR + 3, yr - 0.1, { align: 'center' });
-      d.setFont('helvetica', 'normal'); d.setFontSize(10); d.text(sl, colR + 9, yr);
-      yr += sl.length * 4.9 + 3.5;
+    (c ? c.m : []).forEach((raw, k) => {
+      const st = stepOf(raw);
+      const body = richLines(d, fillStep(r, st.s, n, x => '\u0001' + x + '\u0002'), wR - 7, 10);
+      const need = (st.h ? 6 : 0) + body.length * 4.9 + 4;
+      if (yr + need > H - 20) { d.addPage(); yr = M + 6; }
+      text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(st.h ? 11 : 10);
+      d.text(String(k + 1), colR, yr);
+      if (st.h) { d.text(clean(st.h), colR + 7, yr); yr += 6; }
+      text(d, C.ink); d.setFontSize(10); drawRich(d, body, colR + 7, yr, 4.9);
+      yr += body.length * 4.9 + 4;
     });
     y = Math.max(yl, d.getNumberOfPages() > 1 ? yr : Math.max(yl, yr)) + 2;
     if (d.getNumberOfPages() > 1) y = yr + 2;
