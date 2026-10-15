@@ -1,6 +1,6 @@
 // Builds the Docket PDFs in the browser: one shopping list plus one PDF per recipe.
 // Needs jsPDF (loaded on plan.html) and the planner's functions (week, splitLines, kAmt, ...).
-const DocketPDF = (function () {
+const DocketPDF = window.DocketPDF = (function () {
   const C = { ink: [28, 33, 30], muted: [89, 98, 92], green: [31, 107, 71], mint: [207, 235, 216], butter: [255, 229, 138], peach: [255, 217, 203], markup: [169, 54, 23], line: [220, 227, 220] };
   const W = 210, H = 297, M = 16; // A4 in mm, margin
   let logo = null;
