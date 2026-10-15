@@ -7,5 +7,8 @@ window.DOCKET_CONFIG = {
   // Leave empty and "Send my plan" downloads the PDFs instead.
   emailEndpoint: "",
   // Weekly allowance for pantry staples (oil, salt, pepper, sugar), added to every Docket total.
-  staplesPerWeek: 10
+  staplesPerWeek: 10,
+  // Who can see the full recipes. 'open' = everyone, no sign-up. 'email' = this week's picks free,
+  // the rest free with an email. 'pro' = paid members only (needs recipeEndpoint).
+  recipeAccess: 'open'
 };
