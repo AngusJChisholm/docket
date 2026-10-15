@@ -1,12 +1,31 @@
 {
  "id": "lemonfish",
  "m": [
-  "Rinse the quinoa and simmer in 2 parts water for 12 minutes. Drain, then stir through chopped parsley, lemon zest and halved tomatoes.",
-  "Season the fish generously with cracked pepper, lemon zest and salt.",
-  "Pan-fry in a little oil over medium-high heat, 2 to 3 minutes a side, until opaque and flaking.",
-  "Same pan: the broccoli and beans with a splash of water for 3 minutes, then the garlic and spinach until wilted.",
-  "Squeeze lemon over everything and serve the fish on the quinoa with the greens."
+  {
+   "h": "Cook the quinoa",
+   "s": "Rinse {quinoa} well in a sieve, as it stops it tasting bitter. Simmer in a saucepan with twice its volume of salted water for 12 minutes until the little tails pop out. Take it off the heat, cover and leave for 5 minutes, then fluff with a fork. Stir through chopped {parsley}, the zest of {lemon*0.5} and halved {cherrytom}."
+  },
+  {
+   "h": "Season the fish",
+   "s": "Pat {whitefish} dry. Season generously with cracked black pepper, the rest of the lemon zest and salt."
+  },
+  {
+   "h": "Pan-fry the fish",
+   "s": "Heat a drizzle of oil in a large frying pan over medium-high heat. Cook the fish for 2 to 3 minutes a side until opaque and it flakes easily. Set aside on a plate."
+  },
+  {
+   "h": "Cook the greens",
+   "s": "In the same pan, cook {broccoli} florets and trimmed {greenbeans} with a splash of water for 3 minutes until bright green."
+  },
+  {
+   "h": "Wilt the spinach",
+   "s": "Add crushed {garlic} and {spinach} and toss for 1 minute until the spinach wilts. Season with salt."
+  },
+  {
+   "h": "Serve up",
+   "s": "Squeeze the lemon juice over everything and serve the fish on the quinoa with the greens."
+  }
  ],
- "l": "Fish over quinoa and greens. Eat within a day.",
+ "l": "Fish over quinoa and greens. Best eaten within a day. Keeps 2 days in the fridge.",
  "g": "Naturally gluten free."
 }

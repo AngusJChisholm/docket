@@ -1,13 +1,31 @@
 {
  "id": "ricepaper",
  "m": [
-  "Cook the prawns in simmering salted water for 2 minutes until pink. Cool and halve lengthways.",
-  "Cook the vermicelli per the packet, rinse cold and drain well.",
-  "Cut the carrot and cucumber into thin matchsticks and shred the lettuce. Pick the herbs.",
-  "Dipping sauce: fish sauce, lime juice, sugar, chopped chilli and 2 tbsp water per serve, with crushed peanuts on top.",
-  "Dip one rice paper sheet in warm water for a few seconds until just soft. Lay prawns cut side down, then herbs, noodles and veg, and roll up tight, tucking in the sides.",
-  "Serve straight away with the dipping sauce. About 4 rolls per person."
+  {
+   "h": "Cook the prawns",
+   "s": "Cook {prawns} in a saucepan of simmering salted water for 2 minutes until pink. Drain, cool under cold water and halve lengthways."
+  },
+  {
+   "h": "Cook the noodles",
+   "s": "Cook {vermicelli} in boiling water for 3 to 4 minutes (check the packet), rinse under cold water and drain really well."
+  },
+  {
+   "h": "Prep the fillings",
+   "s": "Cut {carrot} and {cucumber} into thin matchsticks and shred {cos}. Pick the leaves from {mint} and {coriander}."
+  },
+  {
+   "h": "Make the dipping sauce",
+   "s": "Stir together {fishsauce}, the juice of {lime}, {brownsugar}, chopped {chilli} and 2 tbsp water per serve. Top with crushed {peanuts}."
+  },
+  {
+   "h": "Roll them up",
+   "s": "Dip one sheet of {ricepaper} in warm water for a few seconds until just soft. Lay prawns cut side down in the middle, then herbs, noodles and veg. Fold in the sides and roll up tight. Repeat, about 4 rolls per person."
+  },
+  {
+   "h": "Serve up",
+   "s": "Serve straight away with the dipping sauce."
+  }
  ],
- "l": "Wrap each roll in a damp paper towel so they don't dry out. Sauce in a separate container.",
+ "l": "Wrap each roll in a damp paper towel so they don't dry out, with the sauce in a separate container. Best eaten within a day.",
  "g": "Naturally gluten free with rice paper and rice noodles. Check the fish sauce."
 }

@@ -1,13 +1,31 @@
 {
  "id": "thaibeef",
  "m": [
-  "Cook the brown rice (25 to 30 minutes).",
-  "Dressing: fish sauce, lime juice, sugar, finely chopped chilli and garlic. Taste: hot, sour, salty, a little sweet.",
-  "Season the steak and sear in a smoking hot pan 2 to 3 minutes a side for medium-rare. Rest 5 minutes, then slice thin across the grain.",
-  "Toss the sliced steak and its juices with half the dressing.",
-  "Salad: torn lettuce, cucumber, halved tomatoes, thin red onion and a big handful of herbs.",
-  "Pile the beef on the salad, pour over the rest of the dressing and finish with crushed peanuts. Rice on the side."
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {brownrice} until the water runs clear. Put it in a saucepan with twice its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 25 minutes. Take it off the heat and leave the lid on for 5 minutes."
+  },
+  {
+   "h": "Mix the dressing",
+   "s": "Stir together {fishsauce}, the juice of {lime}, {brownsugar}, and finely chopped {chilli} and {garlic}. Taste: it should be hot, sour, salty and a little sweet."
+  },
+  {
+   "h": "Sear the steak",
+   "s": "Season {beef_rump} with salt. Heat a heavy frying pan over high heat until smoking. Sear for 2 to 3 minutes a side for medium-rare. Rest for 5 minutes, then slice thin across the grain."
+  },
+  {
+   "h": "Dress the beef",
+   "s": "Toss the sliced steak and its resting juices with half the dressing while it's still warm, so it soaks it up."
+  },
+  {
+   "h": "Build the salad",
+   "s": "Tear {cos} into a big bowl. Add sliced {cucumber}, halved {cherrytom}, thinly sliced {red_onion} and the leaves from {mint} and {coriander}."
+  },
+  {
+   "h": "Serve up",
+   "s": "Pile the beef on the salad, pour over the rest of the dressing and finish with crushed {peanuts}. Serve the rice on the side."
+  }
  ],
- "l": "Pack the dressing separately and toss just before eating.",
+ "l": "Pack the dressing separately and toss just before eating. Keeps 3 days in the fridge.",
  "g": "Naturally gluten free. Check the fish sauce."
 }

@@ -1,13 +1,31 @@
 {
  "id": "gingerpork",
  "m": [
-  "Rinse the rice and cook it: 1 cup rice to 1½ cups water, lid on, 12 minutes on low, then rest 10 minutes off the heat.",
-  "Sauce: mix the soy, oyster sauce, honey, sesame oil and 2 tablespoons of water in a cup.",
-  "Get a wok or big frying pan smoking hot with a splash of oil. Add the pork, press it flat and leave it 2 to 3 minutes until a crust forms underneath, then break it up and keep cooking until browned and crispy at the edges.",
-  "Push the pork to one side. Add the grated ginger and garlic, sliced chilli and the white parts of the spring onion and fry 30 seconds.",
-  "Add the broccolini (halved lengthways if thick) and snow peas with a splash of water and toss for 2 minutes until bright green but still crunchy.",
-  "Pour in the sauce and toss for 1 minute until it coats everything. Serve over the rice with the spring onion greens and chopped peanuts."
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Mix the sauce",
+   "s": "In a cup mix {soy}, {oyster}, {honey}, {sesameoil} and 2 tbsp water. Grate {ginger} and {garlic}, slice {chilli} and slice {springonion}, keeping the whites and greens separate."
+  },
+  {
+   "h": "Crisp the pork",
+   "s": "Heat a splash of oil in a wok or big frying pan over high heat until smoking. Add {pork_mince}, press it flat and leave it for 2 to 3 minutes until a crust forms underneath. Break it up and keep cooking until browned, cooked through and crispy at the edges."
+  },
+  {
+   "h": "Fry the aromatics",
+   "s": "Push the pork to one side. Add the ginger, garlic, chilli and spring onion whites and fry for 30 seconds until fragrant."
+  },
+  {
+   "h": "Add the greens",
+   "s": "Add {broccolini} (halved lengthways if thick) and {snowpeas} with a splash of water. Toss for 2 minutes until bright green but still crunchy."
+  },
+  {
+   "h": "Sauce and serve",
+   "s": "Pour in the sauce and toss for 1 minute until it coats everything. Serve over the rice with the spring onion greens and chopped {peanuts}."
+  }
  ],
- "l": "Pack the pork and greens over the rice. Microwave 2 minutes, stirring halfway. Keep the peanuts in a separate bag so they stay crunchy.",
+ "l": "Pack the pork and greens over the rice. Microwave for 2 minutes, stirring halfway. Keep the peanuts in a separate bag so they stay crunchy. Keeps 3 days in the fridge.",
  "g": "Tamari instead of soy. Most oyster sauce contains wheat, so find a gluten free one or use extra tamari with a pinch of sugar. Cook the GF portion first in a clean wok."
 }

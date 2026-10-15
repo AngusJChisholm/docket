@@ -11,7 +11,7 @@
   },
   {
    "h": "White sauce",
-   "s": "Melt {butter} in a saucepan over medium heat. Stir in {flour} for 1 minute, then whisk in {milk} a splash at a time, letting it thicken before adding more, so it stays smooth. Simmer for 2 minutes, season and stir in half of {cheese}."
+   "s": "Melt {butter} in a saucepan over medium heat. Stir in {flour} for 1 minute, then whisk in {milk} a splash at a time, letting it thicken before adding more, so it stays smooth. Simmer for 2 minutes, season and stir in {cheese*0.5}."
   },
   {
    "h": "Layer it up",

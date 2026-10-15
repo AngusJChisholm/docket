@@ -1,13 +1,31 @@
 {
  "id": "prawnstirfry",
  "m": [
-  "Cook the brown rice (25 to 30 minutes).",
-  "Sauce: soy, oyster sauce and cornflour whisked with 3 tbsp water per serve.",
-  "Get a wok smoking hot. Stir-fry the prawns 1 minute a side until just pink, then set aside.",
-  "Add the broccoli, beans and capsicum with a splash of water and stir-fry 3 minutes until bright and just tender.",
-  "Add the garlic and ginger for 30 seconds, then the sauce. Bubble until glossy.",
-  "Toss the prawns back in with the spring onion and serve over rice."
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {brownrice} until the water runs clear. Put it in a saucepan with twice its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 25 minutes. Take it off the heat and leave the lid on for 5 minutes."
+  },
+  {
+   "h": "Mix the sauce",
+   "s": "Whisk {soy}, {oyster} and {cornflour} with 3 tbsp water per serve until smooth."
+  },
+  {
+   "h": "Get prepped",
+   "s": "Cut {broccoli} into small florets, trim {greenbeans} and slice {capsicum}. Crush {garlic}, grate {ginger} and slice {springonion}. Pat {prawns} dry."
+  },
+  {
+   "h": "Sear the prawns",
+   "s": "Heat a drizzle of oil in a wok or large frying pan over high heat until smoking. Cook the prawns for 1 minute a side until just pink, then set aside. They finish cooking later."
+  },
+  {
+   "h": "Stir-fry the greens",
+   "s": "Add a little more oil, then the broccoli, beans and capsicum with a splash of water. Stir-fry for 3 minutes until bright and just tender. Add the garlic and ginger for 30 seconds."
+  },
+  {
+   "h": "Sauce and serve",
+   "s": "Give the sauce a stir, pour it in and bubble for 1 minute until glossy. Toss the prawns and spring onion back through for 30 seconds and serve over the rice."
+  }
  ],
- "l": "Reheat until just hot so the prawns don't go rubbery.",
+ "l": "Reheat until just hot so the prawns don't go rubbery. Keeps 2 days in the fridge.",
  "g": "Tamari instead of soy, a GF oyster sauce, 100% maize cornflour, and a separate wok for the GF batch."
 }

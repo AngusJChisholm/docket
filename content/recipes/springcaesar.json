@@ -1,13 +1,31 @@
 {
  "id": "springcaesar",
  "m": [
-  "Boil the eggs for 7 minutes for jammy yolks, then cool in cold water and peel.",
-  "Croutons: tear the Turkish roll into bite-sized chunks, toss with a little oil and salt and bake at 200°C for 8 to 10 minutes until golden and crunchy.",
-  "Dressing: whisk the mayo with the grated garlic, half the parmesan (finely grated), the lemon juice, a few dashes of Worcestershire and plenty of black pepper. Loosen with a splash of water until it pours.",
-  "Halve the chicken breasts horizontally so they're an even thickness. Season and cook in a hot oiled pan for 4 to 5 minutes a side until golden and just cooked through. Rest 5 minutes, then slice.",
-  "In the same pan, cook the bacon until crisp, then char the asparagus in the bacon fat for 2 to 3 minutes.",
-  "Toss the cos leaves with most of the dressing. Top with the chicken, asparagus, bacon, croutons and halved eggs, then the rest of the dressing and parmesan."
+  {
+   "h": "Boil the eggs",
+   "s": "Lower {eggs} into a pot of boiling water and cook for 7 minutes for jammy yolks. Cool in cold water, then peel and halve."
+  },
+  {
+   "h": "Make the croutons",
+   "s": "Heat the oven to 200°C. Tear {turkish} into bite-size chunks, toss with a little oil and salt, and bake for 8 to 10 minutes until golden and crunchy."
+  },
+  {
+   "h": "Mix the dressing",
+   "s": "Whisk {mayo} with grated {garlic}, finely grated {parm*0.5}, the juice of {lemon}, {worcestershire} and plenty of black pepper. Loosen with a splash of water until it pours."
+  },
+  {
+   "h": "Cook the chicken",
+   "s": "Halve {chk_breast} horizontally so the pieces are an even thickness. Season and cook in a hot oiled frying pan for 4 to 5 minutes a side until golden and cooked through (75°C in the thickest part). Rest for 5 minutes, then slice."
+  },
+  {
+   "h": "Bacon and asparagus",
+   "s": "In the same pan, cook {bacon} until crisp, then snap the woody ends off {asparagus} and char it in the bacon fat for 2 to 3 minutes."
+  },
+  {
+   "h": "Toss and serve",
+   "s": "Toss {cos} leaves with most of the dressing. Top with the chicken, asparagus, bacon, croutons and eggs, then the rest of the dressing and parmesan."
+  }
  ],
- "l": "Keep the dressing and croutons separate and dress just before eating. The chicken and asparagus are good cold.",
+ "l": "Keep the dressing and croutons separate and dress just before eating. The chicken and asparagus are good cold. Keeps 3 days in the fridge.",
  "g": "GF bread for the croutons, baked on a separate tray. Check the Worcestershire, as some contain malt vinegar."
 }

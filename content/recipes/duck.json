@@ -1,13 +1,31 @@
 {
  "id": "duck",
  "m": [
-  "Score the duck skin in a crisscross without cutting into the meat. Rub with five spice and salt. Leave 20 minutes.",
-  "Cook the rice.",
-  "Place the duck skin side down in a cold pan, then turn the heat to medium. Cook 8 to 10 minutes, pouring off the fat as it renders, until the skin is deep golden and crisp.",
-  "Flip and cook 3 to 4 minutes for pink. Rest 8 minutes on a board.",
-  "Glaze: soy, honey and grated ginger bubbled in the pan for 1 minute. Stir-fry the halved bok choy with garlic in a little of the duck fat for 2 minutes.",
-  "Slice the duck, spoon over the glaze, and serve with rice, bok choy, spring onion and sesame seeds."
+  {
+   "h": "Score and season",
+   "s": "Score the skin of {duck} in a crisscross, cutting into the fat but not the meat. Rub all over with {fivespice} and salt. Leave for 20 minutes."
+  },
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Render the skin",
+   "s": "Place the duck skin side down in a cold frying pan, then turn the heat to medium. Cook for 8 to 10 minutes, pouring off the fat into a bowl as it renders, until the skin is deep golden and crisp. Starting cold is the trick: it melts the fat before the skin burns."
+  },
+  {
+   "h": "Finish and rest",
+   "s": "Flip and cook for 3 to 4 minutes for pink in the middle. Rest on a board for 8 minutes."
+  },
+  {
+   "h": "Glaze and greens",
+   "s": "Wipe the pan, then add {soy}, {honey} and grated {ginger} and bubble for 1 minute until syrupy. In another pan, stir-fry {bokchoy}, halved, with crushed {garlic} in a spoonful of the duck fat for 2 minutes."
+  },
+  {
+   "h": "Slice and serve",
+   "s": "Slice the duck, spoon over the glaze and serve with the rice, bok choy, sliced {springonion} and {sesameseeds}."
+  }
  ],
- "l": "Slice the duck thin over rice and greens. Good cold or barely warm.",
+ "l": "Slice the duck thin over rice and greens. Good cold or barely warm. Keeps 3 days in the fridge.",
  "g": "Tamari instead of soy for the GF glaze, made in a separate pan. Check the five spice."
 }

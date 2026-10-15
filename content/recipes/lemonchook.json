@@ -1,13 +1,31 @@
 {
  "id": "lemonchook",
  "m": [
-  "Cut the potatoes into 3cm chunks and boil in well-salted water for 12 to 15 minutes until a knife slides in easily. Throw the peas in for the last minute, then drain.",
-  "Meanwhile, pat the chicken dry and season well. Snap the woody ends off the asparagus (they break naturally where they turn tough).",
-  "Heat a splash of oil in a big frying pan over medium-high heat. Cook the chicken smooth side down for 5 to 6 minutes without moving it until deep golden, then flip and cook 4 to 5 minutes more until cooked through (75°C in the thickest part). Rest on a plate.",
-  "In the same pan, cook the asparagus for 3 minutes, turning, until bright and just tender with a few charred spots. Set aside with the chicken.",
-  "Pan sauce: turn the heat to medium, add the butter and sliced garlic and cook 1 minute until fragrant. Add the lemon zest and juice and a splash of water, scrape up the brown bits and bubble for 30 seconds.",
-  "Roughly crush the potatoes and peas with a fork, a drizzle of oil, salt and half the parsley. Slice the chicken, pile it on the potatoes with the asparagus, spoon over the lemon butter and finish with the rest of the parsley."
+  {
+   "h": "Boil the potatoes",
+   "s": "Cut {potato} into 3cm chunks and boil in well-salted water for 12 to 15 minutes until a knife slides in easily. Throw in {peas} for the last minute, then drain."
+  },
+  {
+   "h": "Get prepped",
+   "s": "Meanwhile pat {chk_thigh} dry and season well. Snap the woody ends off {asparagus}: they break naturally where they turn tough. Thinly slice {garlic}, and zest and juice {lemon}."
+  },
+  {
+   "h": "Cook the chicken",
+   "s": "Heat a splash of oil in a big frying pan over medium-high heat. Cook the chicken smooth side down for 5 to 6 minutes without moving it until deep golden, then flip and cook for 4 to 5 minutes more until cooked through (75°C in the thickest part). Rest on a plate."
+  },
+  {
+   "h": "Char the asparagus",
+   "s": "In the same pan, cook the asparagus for 3 minutes, turning, until bright and just tender with a few charred spots. Set aside with the chicken."
+  },
+  {
+   "h": "Lemon butter sauce",
+   "s": "Turn the heat to medium. Add {butter} and the garlic and cook for 1 minute until fragrant. Add the lemon zest and juice and a splash of water, scrape up the brown bits and bubble for 30 seconds."
+  },
+  {
+   "h": "Crush and serve",
+   "s": "Roughly crush the potatoes and peas with a fork, a drizzle of oil, salt and chopped {parsley*0.5}. Slice the chicken, pile it on the potatoes with the asparagus, spoon over the lemon butter and finish with the rest of the parsley."
+  }
  ],
- "l": "Pack the chicken over the crushed potatoes with the asparagus alongside. Microwave 2 minutes with the lid ajar and add a squeeze of lemon.",
+ "l": "Pack the chicken over the crushed potatoes with the asparagus alongside. Microwave for 2 minutes with the lid ajar and add a squeeze of lemon. Keeps 3 days in the fridge.",
  "g": "Naturally gluten free. Nothing to swap."
 }

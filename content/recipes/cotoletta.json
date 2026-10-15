@@ -1,13 +1,31 @@
 {
  "id": "cotoletta",
  "m": [
-  "Potatoes: oven to 220°C. Cut into small chunks, toss with oil, salt and rosemary, roast 35 minutes.",
-  "Bash the cutlets out to about 1cm thick between baking paper, leaving the bone on. Season both sides.",
-  "Mix the panko with half the parmesan. Dust the cutlets in flour, dip in beaten egg, then press firmly into the crumbs.",
-  "Shallow-fry in oil with a knob of butter over medium-high heat, 3 to 4 minutes a side, until deep golden and just cooked through. Rest on a rack so the bottom stays crisp.",
-  "Salad: rocket and halved tomatoes with lemon juice, oil and the rest of the parmesan shaved over.",
-  "Serve each cutlet with a big lemon wedge, the salad piled on top and potatoes alongside."
+  {
+   "h": "Get the potatoes in",
+   "s": "Heat the oven to 220°C. Cut {potato} into small chunks and toss with oil, salt and chopped {rosemary} on a lined tray. Roast for 35 minutes, turning halfway, until golden and crisp."
+  },
+  {
+   "h": "Bash the cutlets",
+   "s": "Bash {pork_cutlets} out to about 1cm thick between two sheets of baking paper, leaving the bone on. Season both sides with salt and pepper."
+  },
+  {
+   "h": "Crumb them",
+   "s": "Mix {panko} with grated {parm*0.5}. Dust the cutlets in {flour}, dip in beaten {eggs}, then press firmly into the crumbs on both sides."
+  },
+  {
+   "h": "Shallow-fry",
+   "s": "Heat 1cm of oil with {butter} in a large frying pan over medium-high heat. Fry the cutlets for 3 to 4 minutes a side until deep golden and just cooked through, with no pink at the bone. Rest on a rack so the bottom stays crisp."
+  },
+  {
+   "h": "Toss the salad",
+   "s": "Toss {rocket} and halved {cherrytom} with the juice of {lemon*0.5}, a drizzle of oil and a pinch of salt. Shave the rest of the parmesan over."
+  },
+  {
+   "h": "Serve up",
+   "s": "Serve each cutlet with a big lemon wedge, the salad piled on top and the potatoes alongside."
+  }
  ],
- "l": "Slice the cutlet and pack with the salad. Reheat in the oven or air fryer to keep it crisp.",
+ "l": "Slice the cutlet and pack with the salad. Reheat in the oven or air fryer to keep it crisp. Keeps 3 days in the fridge.",
  "g": "GF flour and crumbs, crumbed and fried first in fresh oil."
 }

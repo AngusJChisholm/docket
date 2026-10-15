@@ -1,13 +1,31 @@
 {
  "id": "moroccan",
  "m": [
-  "Rinse the quinoa and simmer in 2 parts water for 12 minutes. Drain and fluff.",
-  "Cut the chicken into chunks and brown in a little oil. Set aside.",
-  "Soften the onion 5 minutes, then the garlic, ginger and all the spices for 1 minute.",
-  "Add the crushed tomatoes, drained chickpeas, zucchini in chunks and stock powder with ½ cup water per 2 serves. Simmer 10 minutes.",
-  "Return the chicken and simmer 8 minutes more until cooked through. Finish with lemon juice and salt.",
-  "Serve over quinoa with parsley and a spoon of yoghurt."
+  {
+   "h": "Cook the quinoa",
+   "s": "Rinse {quinoa} well in a sieve, as it stops it tasting bitter. Simmer in a saucepan with twice its volume of salted water for 12 minutes until the little tails pop out. Take it off the heat, cover and leave for 5 minutes, then fluff with a fork."
+  },
+  {
+   "h": "Brown the chicken",
+   "s": "Cut {chk_breast} into 3cm chunks and season with salt. Heat a drizzle of oil in a large deep frying pan over medium-high heat and brown the chicken for 4 minutes. Set aside. It finishes cooking in the stew."
+  },
+  {
+   "h": "Toast the spices",
+   "s": "Turn the heat down to medium. Cook finely diced {onion} for 5 minutes until soft. Add crushed {garlic}, grated {ginger}, {cumin}, {cinnamon}, {smokedpaprika} and {turmeric}, and stir for 1 minute until fragrant."
+  },
+  {
+   "h": "Simmer",
+   "s": "Add {tintom}, {chickpeas}, drained, {zucchini} in chunks, and {stockpowder} with ½ cup water for every 2 serves. Simmer for 10 minutes."
+  },
+  {
+   "h": "Finish the stew",
+   "s": "Return the chicken and simmer for 8 minutes more until it's cooked through (75°C). Finish with the juice of {lemon} and season with salt."
+  },
+  {
+   "h": "Serve up",
+   "s": "Serve over the quinoa with chopped {parsley} and a spoonful of {yoghurt}."
+  }
  ],
- "l": "Freezes and reheats well. Pack the yoghurt separately.",
+ "l": "Freezes and reheats well. Pack the yoghurt separately. Keeps 4 days in the fridge.",
  "g": "Naturally gluten free. Check the stock powder."
 }

@@ -1,13 +1,31 @@
 {
  "id": "lambshanks",
  "m": [
-  "Oven to 160°C. Season the shanks and brown all over in a heavy ovenproof pot. Set aside.",
-  "Soften the onion and carrot 8 minutes, add the garlic and tomato paste for 2 minutes.",
-  "Add the crushed tomatoes, rosemary and stock powder with 1 cup water per 2 shanks. Nestle the shanks in.",
-  "Lid on and braise 3 hours, turning once, until the meat is falling off the bone.",
-  "Mash: boil the potatoes until soft, then mash with butter, warm milk and salt until smooth.",
-  "Lift out the shanks, thicken the sauce with cornflour mixed into a little cold water. Serve over mash with the beans and plenty of sauce."
+  {
+   "h": "Brown the shanks",
+   "s": "Heat the oven to 160°C. Season {lamb_shanks} well. Heat a drizzle of oil in a large ovenproof pot over high heat and brown the shanks all over, about 8 minutes. Set aside."
+  },
+  {
+   "h": "Build the base",
+   "s": "Turn the heat down to medium. Cook finely diced {onion} and {carrot} for 8 minutes until soft. Add crushed {garlic} and {tompaste} and stir for 2 minutes."
+  },
+  {
+   "h": "Braise",
+   "s": "Add {tintom}, {rosemary}, {stockpowder} and 1 cup water for every 2 shanks. Nestle the shanks in. Cover and braise in the oven for 3 hours, turning once, until the meat is falling off the bone."
+  },
+  {
+   "h": "Make the mash",
+   "s": "Near the end, peel {potato} and boil in salted water for 15 to 18 minutes until soft. Drain and mash with {butter}, {milk}, warmed, and a good pinch of salt until smooth."
+  },
+  {
+   "h": "Thicken the sauce",
+   "s": "Lift out the shanks and skim the fat off the sauce. Mix {cornflour} with a splash of cold water, stir it in and simmer on the stove for 2 minutes until thick. Meanwhile boil {greenbeans} for 3 minutes."
+  },
+  {
+   "h": "Serve up",
+   "s": "Serve the shanks over the mash with the beans and plenty of sauce."
+  }
  ],
- "l": "Pull the meat off the bone and pack over the mash with the sauce. Reheats beautifully.",
+ "l": "Pull the meat off the bone and pack it over the mash with the sauce. Reheats beautifully. Keeps 4 days in the fridge.",
  "g": "Check the stock powder and use 100% maize cornflour. Naturally GF otherwise."
 }

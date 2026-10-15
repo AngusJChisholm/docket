@@ -1,13 +1,31 @@
 {
  "id": "scotchverde",
  "m": [
-  "Take the steaks out of the fridge 20 minutes before cooking, pat dry and season generously with salt.",
-  "Cut the potatoes into 2cm cubes and boil 6 minutes until just tender. Drain and let them steam dry for 2 minutes.",
-  "Salsa verde: finely chop the parsley, mint, capers and garlic. Mix with the lemon zest and juice, about 3 tablespoons of olive oil for every 2 serves and a pinch of salt. It should be loose and punchy.",
-  "Fry the potatoes in a good splash of oil over medium-high heat for 10 to 12 minutes, turning, until golden and crisp. Keep warm in a low oven.",
-  "Get a heavy pan smoking hot. Cook the steaks 3 to 4 minutes a side for medium-rare (55°C inside), adding the butter for the last minute and spooning it over. Rest for 5 minutes. Don't skip the rest.",
-  "While the steak rests, char the asparagus in the steak pan for 3 minutes. Slice the steak against the grain and serve with the potatoes and asparagus, salsa verde spooned over and the resting juices poured on top."
+  {
+   "h": "Salt the steak",
+   "s": "Take {scotch} out of the fridge 20 minutes before cooking, pat dry and season generously with salt."
+  },
+  {
+   "h": "Parboil the potatoes",
+   "s": "Cut {potato} into 2cm cubes and boil for 6 minutes until just tender. Drain and let them steam dry for 2 minutes."
+  },
+  {
+   "h": "Make the salsa verde",
+   "s": "Finely chop {parsley}, {mint}, {capers} and {garlic}. Mix with the zest and juice of {lemon}, about 3 tbsp olive oil for every 2 serves and a pinch of salt. It should be loose and punchy."
+  },
+  {
+   "h": "Crisp the potatoes",
+   "s": "Fry the potatoes in a good splash of oil over medium-high heat for 10 to 12 minutes, turning, until golden and crisp. Keep them warm in a low oven."
+  },
+  {
+   "h": "Sear the steak",
+   "s": "Heat a heavy frying pan over high heat until smoking. Cook the steaks for 3 to 4 minutes a side for medium-rare (55°C inside), adding {butter} for the last minute and spooning it over. Rest for 5 minutes. Don't skip the rest."
+  },
+  {
+   "h": "Char and serve",
+   "s": "While the steak rests, char {asparagus} in the steak pan for 3 minutes. Slice the steak against the grain and serve with the potatoes and asparagus, salsa verde spooned over and the resting juices poured on top."
+  }
  ],
- "l": "Slice the steak and pack it cold with the potatoes and asparagus, salsa verde in a separate container. Best eaten cold or at room temperature, not microwaved.",
+ "l": "Slice the steak and pack it cold with the potatoes and asparagus, salsa verde in a separate container. Best eaten cold or at room temperature, not microwaved. Keeps 3 days in the fridge.",
  "g": "Naturally gluten free. Nothing to swap."
 }

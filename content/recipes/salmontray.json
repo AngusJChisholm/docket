@@ -1,12 +1,31 @@
 {
  "id": "salmontray",
  "m": [
-  "Oven to 220°C. Halve the potatoes and roast with a little oil and salt for 15 minutes.",
-  "Add the zucchini in chunks, the beans and tomatoes, crushed garlic, oregano, salt and a little oil. Toss and roast 5 minutes.",
-  "Nestle the salmon in among the veg, season, and lay lemon slices on top.",
-  "Roast 10 to 12 minutes until the salmon just flakes.",
-  "Squeeze over the rest of the lemon and scatter parsley."
+  {
+   "h": "Start the potatoes",
+   "s": "Heat the oven to 220°C. Halve {potato} and toss with a little oil and salt on a large lined tray. Roast for 15 minutes."
+  },
+  {
+   "h": "Prep the veg",
+   "s": "Meanwhile cut {zucchini} into chunks and trim {greenbeans}. Crush {garlic}. Thinly slice {lemon*0.5} into rounds and juice the rest."
+  },
+  {
+   "h": "Add the veg",
+   "s": "Add the zucchini, beans and {cherrytom} to the tray with the garlic, {oregano}, a drizzle of oil and a pinch of salt. Toss everything together and roast for 5 minutes."
+  },
+  {
+   "h": "Add the salmon",
+   "s": "Pat {salmon} dry, season with salt and pepper, and nestle it in among the veg skin side down. Lay the lemon slices on top."
+  },
+  {
+   "h": "Roast",
+   "s": "Roast for 10 to 12 minutes until the salmon just flakes in the thickest part and is still a little pink in the middle."
+  },
+  {
+   "h": "Finish and serve",
+   "s": "Squeeze over the lemon juice and scatter with chopped {parsley}. Serve straight from the tray."
+  }
  ],
- "l": "Salmon and veg together. Eat cold with a squeeze of lemon, or warm gently.",
+ "l": "Salmon and veg together. Eat cold with a squeeze of lemon, or warm it gently. Keeps 2 days in the fridge.",
  "g": "Naturally gluten free."
 }

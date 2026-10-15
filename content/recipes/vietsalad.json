@@ -1,13 +1,31 @@
 {
  "id": "vietsalad",
  "m": [
-  "Cook the brown rice (25 to 30 minutes).",
-  "Poach the chicken: cover with cold salted water, bring to a gentle simmer, then turn off the heat and leave covered for 15 minutes. Cool a little and shred.",
-  "Dressing: fish sauce, lime juice, sugar, finely chopped garlic and chilli, plus 1 tbsp water per serve.",
-  "Shred the cabbage as thin as you can. Cut the carrot and cucumber into matchsticks.",
-  "Toss the veg, chicken and torn herbs with the dressing.",
-  "Serve over rice, topped with crushed peanuts."
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {brownrice} until the water runs clear. Put it in a saucepan with twice its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 25 minutes. Take it off the heat and leave the lid on for 5 minutes."
+  },
+  {
+   "h": "Poach the chicken",
+   "s": "Put {chk_breast} in a saucepan and cover with cold salted water. Bring to a gentle simmer over medium heat, then turn off the heat, cover and leave for 15 minutes until cooked through (75°C in the thickest part). Let it cool a little, then shred with two forks."
+  },
+  {
+   "h": "Mix the dressing",
+   "s": "Stir together {fishsauce}, the juice of {lime}, {brownsugar}, finely chopped {garlic} and {chilli}, and 1 tbsp water per serve until the sugar dissolves. Taste: salty, sour, sweet and hot."
+  },
+  {
+   "h": "Prep the veg",
+   "s": "Shred the cabbage as thin as you can. Cut {carrot} and {cucumber} into matchsticks. Pick the leaves from {mint} and {coriander}, and roughly crush {peanuts}."
+  },
+  {
+   "h": "Toss the salad",
+   "s": "Toss the veg, chicken and most of the herbs with the dressing until everything is coated."
+  },
+  {
+   "h": "Serve up",
+   "s": "Serve over the rice, topped with the peanuts and the rest of the herbs."
+  }
  ],
- "l": "Pack the dressing separately and toss just before eating so the salad stays crunchy.",
+ "l": "Pack the dressing separately and toss just before eating so the salad stays crunchy. Keeps 3 days in the fridge.",
  "g": "Naturally gluten free. Check the fish sauce."
 }
