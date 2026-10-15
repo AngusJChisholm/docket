@@ -296,11 +296,11 @@ function copyText(t,okMsg){
   function fallback(t){const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();$('#msg').textContent=ok?okMsg:'Copy was blocked here. Select the list above and copy it manually.'}
 }
 $('#copy').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}if(S.sel.some(id=>canSee(id)&&!RS.peek(id)))await RS.load(S.sel.filter(canSee));copyText(planText(),'Plan copied: shopping list plus every recipe. Paste it into an email or the group chat.')};
-async function makePdfs(){
+async function makePdfs(mode='one'){
   if(!window.jspdf||!window.DocketPDF){$('#msg').textContent='The PDF maker is still loading. Give it a second and try again.';return null}
   $('#msg').textContent='Building your PDFs...';
   await RS.load(S.sel.filter(canSee));
-  return DocketPDF.build(S);
+  return DocketPDF.build(S,mode);
 }
 $('#send').onclick=async()=>{
   const v=$('#email').value.trim();
@@ -324,7 +324,9 @@ $('#send').onclick=async()=>{
   }catch(e){$('#msg').textContent=`That didn't send (${e.message}). Try again, or tap "Download PDFs".`}
   finally{btn.disabled=false}
 };
-$('#pdfs').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}const out=await makePdfs();if(!out)return;DocketPDF.download(out.files);$('#msg').textContent=`Downloading ${out.files.length} PDFs.`};
+async function downloadPdfs(mode){if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}const out=await makePdfs(mode);if(!out)return;DocketPDF.download(out.files);$('#msg').textContent=mode==='split'?`Downloading ${out.files.length} PDFs: the shopping list and ${out.files.length-1} recipe${out.files.length>2?'s':''}.`:'Downloading your week as one PDF.'}
+$('#pdfs').onclick=()=>downloadPdfs('one');
+$('#pdfs-split').onclick=()=>downloadPdfs('split');
 function listText(){
   const w=week();
   let t=`DOCKET · ${STORE_NAME[S.store]} · est. ${money(w.total)}\n`;

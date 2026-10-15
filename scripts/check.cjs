@@ -69,9 +69,11 @@ eval(rd('js/data.js') + rd('js/prices.js') + rd('js/season.js') + rd('js/recipes
   if (pk.some(id => lastWk.includes(id))) warn('a pick repeats from last week');
   // 6. PDFs for the newest five dinners, locked and unlocked
   Object.assign(S, { people: 3, gf: 1, sel: R.slice(-5).map(r => r.id), dinners: 5 });
-  let out = await DocketPDF.build(S); if (out.files.length !== 6) fail('PDF build (locked) made ' + out.files.length + ' files');
+  let out = await DocketPDF.build(S, 'split'); if (out.files.length !== 6) fail('PDF build (locked) made ' + out.files.length + ' files');
+  out = await DocketPDF.build(S, 'one'); if (out.files.length !== 1 || out.files[0].doc.getNumberOfPages() < 6) fail('one-PDF build (locked) wrong: ' + out.files.length + ' files');
   await window.DocketRecipes.load(S.sel);
-  out = await DocketPDF.build(S); if (out.files.length !== 6) fail('PDF build made ' + out.files.length + ' files');
+  out = await DocketPDF.build(S, 'split'); if (out.files.length !== 6) fail('PDF build made ' + out.files.length + ' files');
+  out = await DocketPDF.build(S, 'one'); if (out.files.length !== 1 || out.files[0].doc.getNumberOfPages() < 6) fail('one-PDF build wrong: ' + out.files.length + ' files');
   // 7. Locked recipes stay locked: no method content in the public files
   if (rd('js/data.js').includes("m:['")) fail('method text found in js/data.js');
   const orphans = fs.readdirSync(path.join(ROOT, 'content/recipes')).filter(f => !R.some(r => r.id + '.json' === f));

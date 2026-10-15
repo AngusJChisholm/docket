@@ -87,7 +87,7 @@ const DocketPDF = window.DocketPDF = (function () {
     return now.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
-  function shoppingList(w, meta) {
+  function shoppingList(w, meta, noFooter) {
     const { jsPDF } = window.jspdf; const d = new jsPDF({ unit: 'mm', format: 'a4' });
     let y = header(d, 'Shopping list', `${meta.store} · ${meta.people} people${meta.lunch ? ' + lunches' : ''} · ${w.serves} serves · ${weekLabel()}`);
     // Summary
@@ -121,24 +121,27 @@ const DocketPDF = window.DocketPDF = (function () {
     y = ensure(d, y, 14);
     text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(8.5);
     d.text(d.splitTextToSize(clean(`Prices are Docket's estimates and include ${money(STAPLES, 0)} for oil, salt and pepper. Pantry items are counted by what you use. Check prices at the shelf.`), W - 2 * M), M, y);
-    footer(d);
+    if (!noFooter) footer(d);
     return d;
   }
 
   // One recipe on one A4 page. Lays out at full size, and if it runs long, steps the type down until it fits.
   function recipe(r, n, gfCount) {
     const c = window.DocketRecipes ? window.DocketRecipes.peek(r.id) : r; // null when the method is locked
-    let d = null;
+    let d = null, size = 1;
     for (let k = 1; k >= 0.7; k = +(k - 0.05).toFixed(2)) {
       const last = k - 0.05 < 0.7;
       const out = recipePage(r, n, gfCount, c, k, last);
-      d = out.d; if (out.fits) break;
+      d = out.d; size = k; if (out.fits) break;
     }
     footer(d);
-    return d;
+    return { d, size };
   }
-  function recipePage(r, n, gfCount, c, k, last) {
-    const { jsPDF } = window.jspdf; const d = new jsPDF({ unit: 'mm', format: 'a4' });
+  // Draws one recipe at text scale k, on a new document or (with target) on a new page of target.
+  function recipePage(r, n, gfCount, c, k, last, target) {
+    const { jsPDF } = window.jspdf; const d = target || new jsPDF({ unit: 'mm', format: 'a4' });
+    if (target) d.addPage();
+    const p0 = d.getNumberOfPages();
     const lh = pt => pt * 0.42; // line height in mm for a font size
     const bottom = H - 16;
     // Top strip: logo, dinner details, a rule
@@ -193,7 +196,7 @@ const DocketPDF = window.DocketPDF = (function () {
       text(d, C.ink); d.setFontSize(ms); drawRich(d, body, colR + 7, yr, lh(ms));
       yr += body.length * lh(ms) + 3.5 * k;
     });
-    y = d.getNumberOfPages() > 1 ? yr + 2 : Math.max(yl, yr) + 2;
+    y = d.getNumberOfPages() > p0 ? yr + 2 : Math.max(yl, yr) + 2;
     // Notes along the bottom
     const notes = [];
     if (c && c.l) notes.push(['Lunch:', c.l, C.mint]);
@@ -210,18 +213,32 @@ const DocketPDF = window.DocketPDF = (function () {
       d.setFont('helvetica', 'normal'); d.text(lines, M + 4 + lw, y + 3 + lh(ns) * 0.75);
       y += h + 2.5;
     });
-    return { d, fits: d.getNumberOfPages() === 1 && y <= bottom };
+    return { d, fits: d.getNumberOfPages() === p0 && y <= bottom };
   }
 
   const slug = s => s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-  async function build(state) {
+  // mode 'one': a single PDF (shopping list, then one page per recipe). 'split': a file each.
+  async function build(state, mode = 'one') {
     await loadLogo();
-    const w = week(); const n = spm();
+    const w = week(); const n = spm(); const gf = Math.min(state.gf, state.people);
     const kit = KITS[0]; const kitTotal = kitCost(kit, n, state.sel.length);
     const meta = { store: STORE_NAME[state.store], people: state.people, lunch: state.lunch, dinners: state.sel.map(id => R.find(r => r.id === id).n), saved: kitTotal - w.eaten, kit: kit.n };
-    const files = [{ filename: '01-docket-shopping-list.pdf', doc: shoppingList(w, meta) }];
-    state.sel.forEach((id, k) => { const r = R.find(x => x.id === id); files.push({ filename: `${String(k + 2).padStart(2, '0')}-${slug(r.n)}.pdf`, doc: recipe(r, n, Math.min(state.gf, state.people)) }); });
+    const rs = state.sel.map(id => R.find(x => x.id === id));
+    let files;
+    if (mode === 'split') {
+      files = [{ filename: '01-docket-shopping-list.pdf', doc: shoppingList(w, meta) }];
+      rs.forEach((r, k) => files.push({ filename: `${String(k + 2).padStart(2, '0')}-${slug(r.n)}.pdf`, doc: recipe(r, n, gf).d }));
+    } else {
+      // Work out each recipe's text size on its own first, so it still fits its page in the combined file.
+      const doc = shoppingList(w, meta, true);
+      rs.forEach(r => {
+        const c = window.DocketRecipes ? window.DocketRecipes.peek(r.id) : r;
+        recipePage(r, n, gf, c, recipe(r, n, gf).size, true, doc);
+      });
+      footer(doc);
+      files = [{ filename: `docket-week-${slug(weekLabel())}.pdf`, doc }];
+    }
     return { files, meta, total: w.total, serves: w.serves };
   }
 
