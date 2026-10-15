@@ -1,10 +1,11 @@
 // ---------- State ----------
-const S={people:2,gf:0,dinners:4,lunch:true,budget:120,budgetAuto:true,minProt:40,store:'coles',skip:{pork:false,seafood:false,red:false},sel:['butter','tuscan','carnitas','friedrice'],sort:'cost',col:'all',done:{}};
+const S={people:2,gf:0,dinners:4,lunch:true,budget:120,budgetAuto:true,minProt:40,store:'coles',skip:{pork:false,seafood:false,red:false},sel:['butter','tuscan','carnitas','friedrice'],treats:[],sort:'cost',col:'all',done:{}};
 const STAPLES=(window.DOCKET_CONFIG||{}).staplesPerWeek??15;
 let fresh=true;try{const s=JSON.parse(localStorage.getItem('docket-state')||'null');if(s)fresh=false;if(s&&typeof s==='object'){Object.assign(S,s,{skip:{...S.skip,...(s.skip||{})}});if(s.budgetAuto===undefined)S.budgetAuto=false}}catch(e){}
 delete S.kits;S.sel=S.sel.filter(id=>R.some(r=>r.id===id));
+const TR=typeof T!=='undefined'?T:[];S.treats=(Array.isArray(S.treats)?S.treats:[]).filter(id=>TR.some(r=>r.id===id));
 S.people=Math.min(8,Math.max(1,S.people));S.gf=Math.min(S.gf,S.people);
-if(['all','picks','quick','everyday','premium','lighter'].includes(location.hash.slice(1)))S.col=location.hash.slice(1);
+if(['all','picks','quick','everyday','premium','lighter','treats'].includes(location.hash.slice(1)))S.col=location.hash.slice(1);
 function save(){try{localStorage.setItem('docket-state',JSON.stringify(S))}catch(e){}}
 
 // ---------- Pricing ----------
@@ -28,7 +29,7 @@ function price(id,store=S.store){
 function estPrice(id,store){const it=ING[id];if(store==='woolies')return it.p*(0.95+hash(id)*0.11);if(store==='aldi'&&!it.noAldi)return it.p*(0.79+hash(id+'a')*0.09);return it.p}
 const IDX={};
 function priceIndex(store=S.store){if(IDX[store])return IDX[store];let est=0,cur=0;R.forEach(r=>r.i.forEach(([id,q])=>{const pr=price(id,store);est+=q/ING[id].pk*estPrice(id,store);cur+=q/pr.pk*pr.p}));return IDX[store]=Math.min(1.35,Math.max(.8,Math.round(cur/est*100)/100))}
-function autoBudget(){const serves=S.people*(S.lunch?2:1)*S.dinners;return Math.ceil((70+serves*7.5*priceIndex()+(S.people===1?25:0))/10)*10}
+function autoBudget(){const serves=S.people*(S.lunch?2:1)*S.dinners;const tr=S.treats.reduce((s,id)=>s+batchCost(byId(id)),0);return Math.ceil((70+serves*7.5*priceIndex()+(S.people===1?25:0)+tr)/10)*10}
 const STORE_NAME={coles:'Coles',woolies:'Woolies',aldi:'Aldi'};
 const spm=()=>S.people*(S.lunch?2:1);
 const gfShare=()=>S.people?Math.min(S.gf,S.people)/S.people:0;
@@ -42,6 +43,13 @@ function splitLines(r,serves){ // returns [[id,amount]] with GF swaps split
   }
   return out.filter(x=>x[1]>1e-9);
 }
+// Sweet treats: one batch each (not per serve). Anyone GF in the house? The whole batch goes GF so everyone can share.
+const isTreat=r=>!!r&&r.mk!=null;
+const byId=id=>R.find(x=>x.id===id)||TR.find(x=>x.id===id);
+function treatLines(r){const gf=S.gf>0;return r.i.map(([id,q])=>[gf&&GFSWAP[id]?GFSWAP[id]:id,q])}
+const linesFor=(r,n)=>isTreat(r)?treatLines(r):splitLines(r,n);
+const nFor=r=>isTreat(r)?1:spm();
+function batchCost(r){return treatLines(r).reduce((s,[id,a])=>{const pr=price(id);return s+a/pr.pk*pr.p},0)}
 function serveCost(r){return splitLines(r,1).reduce((s,[id,a])=>{const pr=price(id);return s+a/pr.pk*pr.p},0)}
 function serveProt(r){return r.i.reduce((s,[id,q])=>{const it=ING[id];return s+(it.u==='ea'?q*it.pr:q*it.pr/100)},0)}
 function tags(r){const t=new Set();r.i.forEach(([id])=>{if(ING[id].t)t.add(ING[id].t)});return t}
@@ -52,8 +60,17 @@ function serveCostColes(r){return r.i.reduce((s,[id,a])=>{const pr=price(id,'col
 function allowed(r){const t=tags(r);return!Object.keys(S.skip).some(k=>S.skip[k]&&t.has(k))}
 
 function week(){
-  const agg={};const n=spm();
-  S.sel.forEach(sid=>{const r=R.find(x=>x.id===sid);if(!r)return;splitLines(r,n).forEach(([id,a])=>{agg[id]=(agg[id]||0)+a})});
+  const n=spm();const agg={};const add=([id,a])=>{agg[id]=(agg[id]||0)+a};
+  S.sel.forEach(sid=>{const r=R.find(x=>x.id===sid);if(r)splitLines(r,n).forEach(add)});
+  const din=priceItems(agg);
+  if(!S.treats.length)return din;
+  // Treats go on the shopping list, but the Kit Tax, serves and protein stay dinners only
+  S.treats.forEach(tid=>{const r=TR.find(x=>x.id===tid);if(r)treatLines(r).forEach(add)});
+  const all=priceItems(agg);
+  return{...all,eaten:din.eaten,serves:din.serves,prot:din.prot,treat:all.shop-din.shop};
+}
+function priceItems(agg){
+  const n=spm();
   const items=Object.entries(agg).map(([id,amt])=>{
     const it=ING[id];const pr=price(id);
     const base={id,amt,pk:pr.pk,real:!!pr.real,at:pr.at,pan:!!it.pan,pack:pr.p,fb:pr.fb,sp:!!pr.sp};
@@ -76,7 +93,7 @@ function week(){
   const eaten=items.reduce((s,x)=>s+(x.pan||!x.bought?x.cost:x.cost*Math.min(1,x.amt/x.bought)),0)+(S.sel.length?STAPLES:0);
   const serves=S.sel.length*n;
   const prot=S.sel.length?S.sel.reduce((s,id)=>s+serveProt(R.find(r=>r.id===id)),0)/S.sel.length:0;
-  return{items,shop,eaten,total:shop+(S.sel.length?STAPLES:0),serves,prot};
+  return{items,shop,eaten,total:shop+(S.sel.length||S.treats.length?STAPLES:0),serves,prot,treat:0};
 }
 
 // ---------- Formatting ----------
@@ -91,7 +108,8 @@ function frac(v){const q=Math.round(v*4)/4||0.25;const w=Math.floor(q),f=+(q-w).
 function half(v){const q=Math.max(.5,Math.ceil(v*2)/2);const w=Math.floor(q);return (w?w:'')+(q-w?'½':'')}
 function spoons(ml){if(ml>=60)return`${frac(ml/250)} cup${ml>=375?'s':''}`;if(ml>=12)return`${half(ml/15)} tbsp`;return`${half(ml/5)} tsp`}
 const plural=w=>/(tato|mato|lli|ch|sh)$/.test(w)?w+'es':w+'s';
-function kAmt(id,a){const it=ING[id];
+function kAmt(id,a,tr){const it=ING[id];
+  if(tr&&it.u==='g'&&!it.ea&&!(a<30&&(it.tsp||it.tbsp)))return Math.round(a/5)*5+'g';
   if(it.cl){const v=Math.max(1,Math.round(a*it.cl));return`${v} clove${v>1?'s':''}`}
   if(it.ea&&it.u==='g'){const n=a/it.ea[0];return`${half(n)} ${n>1?plural(it.ea[1]):it.ea[1]} (${fmtAmt(id,a)})`}
   if(it.pl==='tin'||it.pl==='can')return`${half(a/it.pk)} tin${a/it.pk>1?'s':''}`;
@@ -106,14 +124,14 @@ const iname=id=>ING[id].n.replace(/\s*\([^)]*\)$/,'');
 // Method steps: a plain string, or {h: heading, s: text}. Text can hold {id} or {id*0.5} markers,
 // filled with that ingredient's amount for the household, e.g. "{lime}" -> "2 limes".
 const stepOf=s=>typeof s==='string'?{h:'',s}:s;
-function ingPhrase(id,a,adj){const it=ING[id];const amt=kAmt(id,a);const pre=adj?adj+' ':'';
+function ingPhrase(id,a,adj,tr){const it=ING[id];const amt=kAmt(id,a,tr);const pre=adj?adj+' ':'';
   if(it.cl){const v=Math.max(1,Math.round(a*it.cl));return`${v} ${pre}garlic clove${v>1?'s':''}`}
   if(it.ea&&it.u==='g')return adj?amt.replace(/^(\S+) /,`$1 ${adj} `):amt;
   if(it.u==='ea'&&it.ea&&it.ea[1]!=='bunch'){const w=it.ea[1];const many=a/it.ea[0]>1.0001;return`${amt} ${pre}${many?plural(w):w}`}
   return`${amt} ${pre}${iname(id).replace(/,.*$/,'').replace(/^\w+/,w=>/^(Greek|Thai|American|Chinese|Korean|Lebanese|Turkish|Japanese|Italian|Dijon)$/.test(w)?w:w.toLowerCase())}`}
 // A describing word right before a marker ("crushed {garlic}") moves inside the amount: "4 crushed garlic cloves".
 const ADJ='(?:finely |roughly |thinly |lightly )?(?:crushed|grated|sliced|diced|chopped|torn|softened|shredded|beaten|halved)';
-function fillStep(r,txt,n,wrap=x=>x){return String(txt).replace(new RegExp(`(?:\\b(${ADJ}) )?\\{(\\w+)(?:\\*([\\d.]+))?\\}`,'g'),(m,adj,id,f)=>{const q=(r.i.find(x=>x[0]===id)||[])[1];if(q==null||!ING[id])return m;return wrap(ingPhrase(id,q*n*(f?+f:1),adj))})}
+function fillStep(r,txt,n,wrap=x=>x){return String(txt).replace(new RegExp(`(?:\\b(${ADJ}) )?\\{(\\w+)(?:\\*([\\d.]+))?\\}`,'g'),(m,adj,id,f)=>{const q=(r.i.find(x=>x[0]===id)||[])[1];if(q==null||!ING[id])return m;return wrap(ingPhrase(id,q*n*(f?+f:1),adj,isTreat(r)))})}
 // [{h, s}] with amounts filled in for n serves (s as plain text)
 function methodSteps(r,c,n){return(c&&c.m||[]).map(x=>{const st=stepOf(x);return{h:st.h||'',s:fillStep(r,st.s,n)}})}
 function packLabel(id,pk){const it=ING[id];pk=pk||it.pk;if(it.pl&&pk===it.pk)return it.pl;if(it.u==='g')return pk>=1000?(+(pk/1000).toFixed(2))+'kg':pk+'g';if(it.u==='ml')return pk>=1000?(+(pk/1000).toFixed(2))+'L':pk+'ml';return pk>1?pk+' pack':'each'}
@@ -134,9 +152,25 @@ function renderControls(){
 const tierOf=r=>r.tier||'everyday';
 const IMG=(window.DOCKET_IMG||{}).recipes||{};
 const imgOf=(r,w)=>IMG[r.id]?`assets/img/food/${IMG[r.id]}-${w}.jpg`:'';
-const COL_NOTE={picks:'',quick:'On the table in 30 minutes or less. Weeknight gold.',all:'',everyday:'Our staples: big flavour, big serves, best value.',premium:'Restaurant-style nights at home. Better cuts, a few more steps, still well under meal-kit prices.',lighter:'Lean protein, loads of veg, nothing fried or creamy. Still properly filling.'};
+const COL_NOTE={picks:'',quick:'On the table in 30 minutes or less. Weeknight gold.',all:'',everyday:'Our staples: big flavour, big serves, best value.',premium:'Restaurant-style nights at home. Better cuts, a few more steps, still well under meal-kit prices.',lighter:'Lean protein, loads of veg, nothing fried or creamy. Still properly filling.',treats:'Optional extras for the week. One batch each, added to your shopping list. They never count toward your dinners or the Kit Tax.'};
+function renderTreats(){
+  $('#cards').innerHTML=TR.map(r=>{
+    const sel=S.treats.includes(r.id);const g=gfType(r);
+    return`<article class="card tier-treat${sel?' sel':''}">
+      ${imgOf(r,640)?`<div class="card-img"><img src="${imgOf(r,640)}" alt="${esc(r.n)}" loading="lazy" width="640" height="480"></div>`:''}
+      <div class="card-top"><div><div class="card-eyebrow"><span class="tier treat">Sweet treat</span>${esc(r.c)}</div><h3>${esc(r.n)}</h3><div class="meta">${timeLabel(r)} · makes ${r.mk} ${esc(r.mu)}</div></div>
+      <div class="ticket num"><b>${money(batchCost(r))}</b><small>a batch</small></div></div>
+      ${r.d?`<p class="blurb">${esc(r.d)}</p>`:''}
+      <div class="badges"><span class="badge num">${money(batchCost(r)/r.mk)} each</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span>${!canSee(r.id)?'<span class="badge lock">Members</span>':''}</div>
+      <div class="card-actions"><button class="btn ghost view" data-id="${r.id}">Recipe</button>
+      <button class="btn ghost pick" data-id="${r.id}" data-treat="1" aria-pressed="${sel}">${sel?'✓ Added':'Add'}</button></div></article>`}).join('');
+  $('#hidden-note').textContent='';
+  $('#fill').disabled=true;
+}
 function renderCards(){
   const full=S.sel.length>=S.dinners;
+  $('#cards').classList.toggle('treat-grid',S.col==='treats');
+  if(S.col==='treats'){document.querySelectorAll('#cols button').forEach(b=>b.setAttribute('aria-selected',b.dataset.c===S.col));$('#col-note').textContent=COL_NOTE.treats;renderTreats();return}
   document.querySelectorAll('#cols button').forEach(b=>b.setAttribute('aria-selected',b.dataset.c===S.col));
   $('#col-note').textContent=COL_NOTE[S.col]||'';
   const PICKS=weekPicks();
@@ -166,7 +200,7 @@ function renderCards(){
 function renderWeek(w){
   $('#store-name').textContent=STORE_NAME[S.store];
   $('#total').textContent=money(w.total,0);
-  $('#serves-line').textContent=`${w.serves} serves`;
+  $('#serves-line').textContent=`${w.serves} serves${S.treats.length?` + ${S.treats.length} treat${S.treats.length>1?'s':''}`:''}`;
   const pct=S.budget>0?w.total/S.budget:0;
   $('#meter').classList.toggle('over',pct>1);$('#meter i').style.width=Math.min(100,pct*100)+'%';
   const diff=S.budget-w.total;
@@ -175,7 +209,7 @@ function renderWeek(w){
   const carry=w.total-w.eaten;$('#carry').innerHTML=S.sel.length&&carry>2?`Food you'll eat this week: <b>${money(w.eaten,0)}</b>. The other ${money(carry,0)} stays in the fridge and pantry for next week.`:'';
   $('#st-prot').textContent=Math.round(w.prot)+'g';
   $('#st-picked').textContent=`${S.sel.length}/${S.dinners}`;
-  $('#picked').innerHTML=S.sel.map(id=>{const r=R.find(x=>x.id===id);return`<li class="pk-${tierOf(r)}"><span>${esc(r.n)}</span><span class="num">${money(serveCost(r))}</span></li>`}).join('');
+  $('#picked').innerHTML=S.sel.map(id=>{const r=R.find(x=>x.id===id);return`<li class="pk-${tierOf(r)}"><span>${esc(r.n)}</span><span class="num">${money(serveCost(r))}</span></li>`}).join('')+S.treats.map(id=>{const r=byId(id);return`<li class="pk-treat"><span>${esc(r.n)} <small>treat</small></span><span class="num">${money(batchCost(r))}</span></li>`}).join('');
   // Kit tax
   const n=spm();const rows=KITS.map(k=>({n:kitLabel(k),v:kitCost(k,n,S.sel.length),ready:!!k.ready}));
   $('#bars').innerHTML=[`<div class="ln us"><span>Docket (food eaten)</span><span>${money(w.eaten)}</span></div>`,...rows.map(x=>`<div class="ln kit${x.ready?' ready':''}"><span>${esc(x.n)}</span><span>${money(x.v)}</span></div>`)].join('');
@@ -225,16 +259,16 @@ function renderUse(w){
   el.hidden=false;el.innerHTML=`<span class="eyebrow">Use it up</span><p><b>${esc(b.r.n)}</b> uses up your leftover ${esc(b.used.slice(0,3).join(', '))}, about ${money(b.save,0)} of food you've already bought.</p>${room?`<button class="btn" data-id="${b.r.id}" id="use-add">Add it</button>`:`<p class="hint">Your week's full. Swap a dinner out to fit it in.</p>`}`;
   const btn=$('#use-add');if(btn)btn.onclick=()=>{if(S.sel.length<S.dinners){S.sel.push(btn.dataset.id);render()}};
 }
-function render(){renderControls();renderCards();const w=week();renderWeek(w);renderList(w);renderUse(w);save();RS.load(S.sel.filter(canSee))}
+function render(){renderControls();renderCards();const w=week();renderWeek(w);renderList(w);renderUse(w);save();RS.load([...S.sel,...S.treats].filter(canSee))}
 
 // ---------- Recipe dialog ----------
 function openRecipe(id){
-  const r=R.find(x=>x.id===id);const n=spm();const lines=splitLines(r,n);const g=gfType(r);
+  const r=byId(id);const tr=isTreat(r);const n=nFor(r);const lines=linesFor(r,n);const g=gfType(r);
   const checks=[...new Set(r.i.filter(([i])=>ING[i].ck).map(([i])=>ING[i].n))];
-  $('#dlg-in').innerHTML=`${imgOf(r,1200)?`<div class="dlg-img"><img src="${imgOf(r,1200)}" alt="${esc(r.n)}"></div>`:''}<div class="dlg-head"><div><span class="eyebrow">${esc(r.c)} · ${timeLabel(r)}</span><h2>${esc(r.n)}</h2></div><button class="x" id="dlg-x" aria-label="Close">×</button></div>
+  $('#dlg-in').innerHTML=`${imgOf(r,1200)?`<div class="dlg-img"><img src="${imgOf(r,1200)}" alt="${esc(r.n)}"></div>`:''}<div class="dlg-head"><div><span class="eyebrow">${esc(r.c)} · ${timeLabel(r)}${tr?` · makes ${r.mk} ${esc(r.mu)}`:''}</span><h2>${esc(r.n)}</h2></div><button class="x" id="dlg-x" aria-label="Close">×</button></div>
    ${r.d?`<p class="lead-sm">${esc(r.d)}</p>`:''}
-   <div class="badges" style="margin-top:10px"><span class="badge p num">${Math.round(serveProt(r))}g protein/serve</span><span class="badge num">${money(serveCost(r))}/serve at ${STORE_NAME[S.store]}</span><span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span></div>
-   <div class="dlg-cols"><div>${canSee(id)?`<h3>For ${n} serves</h3><ul class="ing">${lines.map(([i,a])=>`<li><span>${esc(iname(i))}</span><b class="num">${kAmt(i,a)}</b></li>`).join('')}</ul><p class="hint" style="margin-top:8px">Plus oil, salt and pepper.</p>`:`<h3>What's in it</h3><ul class="ing names">${lines.map(([i])=>`<li><span>${esc(iname(i))}</span></li>`).join('')}</ul><p class="hint" style="margin-top:8px">Amounts for your ${n} serves unlock with the method.</p>`}</div>
+   <div class="badges" style="margin-top:10px">${tr?`<span class="badge num">${money(batchCost(r))} a batch at ${STORE_NAME[S.store]}</span>`:`<span class="badge p num">${Math.round(serveProt(r))}g protein/serve</span><span class="badge num">${money(serveCost(r))}/serve at ${STORE_NAME[S.store]}</span>`}<span class="badge">${g==='yes'?'Gluten free':'GF swap'}</span></div>
+   <div class="dlg-cols"><div>${canSee(id)?`<h3>${tr?'For one batch':`For ${n} serves`}</h3><ul class="ing">${lines.map(([i,a])=>`<li><span>${esc(iname(i))}</span><b class="num">${kAmt(i,a,tr)}</b></li>`).join('')}</ul><p class="hint" style="margin-top:8px">${tr?'Plus a pinch of salt.':'Plus oil, salt and pepper.'}</p>`:`<h3>What's in it</h3><ul class="ing names">${lines.map(([i])=>`<li><span>${esc(iname(i))}</span></li>`).join('')}</ul><p class="hint" style="margin-top:8px">${tr?'Amounts':`Amounts for your ${n} serves`} unlock with the method.</p>`}</div>
    <div id="dlg-method">${canSee(id)?'<h3>Method</h3><p class="hint">Loading the method...</p>':lockedHTML()}</div></div>
    <div id="dlg-notes"></div>
    ${checks.length?`<div class="gfnote" style="background:var(--peach)">Check the label on: ${esc(checks.join(', '))}.</div>`:''}`;
@@ -245,8 +279,8 @@ function openRecipe(id){
 const RS=window.DocketRecipes;
 const SITE=location.href.split(/[?#]/)[0].replace(/plan\.html$/,'');
 function canSee(id){return RS.canSee(id,weekPicks())}
-const methodHTML=c=>{const r=R.find(x=>x.id===c.id);const n=spm();return`<h3>Method</h3><ol class="steps">${c.m.map(x=>{const st=stepOf(x);return`<li>${st.h?`<b class="st-h">${esc(st.h)}</b> `:''}${fillStep(r,esc(st.s),n,a=>`<b>${esc(a)}</b>`)}</li>`}).join('')}</ol>`};
-const notesHTML=c=>`${c.l?`<div class="gfnote"><b>Lunch:</b> ${esc(c.l)}</div>`:''}${c.g&&S.gf>0?`<div class="gfnote"><b>Gluten free (${Math.min(S.gf,S.people)}):</b> ${esc(c.g)}</div>`:''}`;
+const methodHTML=c=>{const r=byId(c.id);const n=nFor(r);return`<h3>Method</h3><ol class="steps">${c.m.map(x=>{const st=stepOf(x);return`<li>${st.h?`<b class="st-h">${esc(st.h)}</b> `:''}${fillStep(r,esc(st.s),n,a=>`<b>${esc(a)}</b>`)}</li>`}).join('')}</ol>`};
+const notesHTML=c=>`${c.l?`<div class="gfnote"><b>Lunch:</b> ${esc(c.l)}</div>`:''}${c.k?`<div class="gfnote"><b>Keeps:</b> ${esc(c.k)}</div>`:''}${c.g&&S.gf>0?`<div class="gfnote"><b>Gluten free (${Math.min(S.gf,S.people)}):</b> ${esc(c.g)}</div>`:''}`;
 function lockedHTML(){return`<div class="locked"><h3>Method</h3><div class="ghost" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
   <div class="unlock"><span class="eyebrow">Members' recipe</span><p><b>Get the full method, lunch tip and gluten free notes for every Docket dinner.</b> Free while we're in beta. This week's picks are open to everyone.</p>
   <form id="unlock-form" class="unlock-form"><input type="email" id="unlock-email" placeholder="you@example.com" autocomplete="email" required aria-label="Your email"><button class="btn" type="submit">Unlock recipes</button></form><p class="hint" id="unlock-msg"></p></div></div>`}
@@ -255,11 +289,11 @@ $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')e.target.close()})
 // ---------- Plain text plan ----------
 function planText(){
   const w=week();const n=spm();
-  let t=`DOCKET · Your week at ${STORE_NAME[S.store]}\n${S.people} people${S.lunch?' + lunches':''} · ${S.sel.length} dinners · ${w.serves} serves\nEstimated shop: ${money(w.total)} (${money(w.total/Math.max(1,w.serves))} per serve)\n\nSHOPPING LIST\n`;
+  let t=`DOCKET · Your week at ${STORE_NAME[S.store]}\n${S.people} people${S.lunch?' + lunches':''} · ${S.sel.length} dinners · ${w.serves} serves${S.treats.length?` · ${S.treats.length} sweet treat${S.treats.length>1?'s':''}`:''}\nEstimated shop: ${money(w.total)} (${money(w.total/Math.max(1,w.serves))} per serve)\n\nSHOPPING LIST\n`;
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
   ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=x.pan?`[ ] ${ING[x.id].n} (check pantry, using ${kAmt(x.id,x.amt)})\n`:`[ ] ${ING[x.id].n}: ${x.label} (${money(x.cost)})\n`})});
   t+=`\nRECIPES\n`;
-  S.sel.forEach(id=>{const r=R.find(x=>x.id===id);const ok=!!RS.peek(id);t+=`\n${r.n.toUpperCase()} (${timeLabel(r)})\n`;splitLines(r,n).forEach(([i,a])=>{t+=ok?`- ${kAmt(i,a)} ${iname(i)}\n`:`- ${iname(i)}\n`});const c=RS.peek(id);if(c){methodSteps(r,c,n).forEach((st,k)=>{t+=`${k+1}. ${st.h?st.h+'. ':''}${st.s}\n`});if(c.l)t+=`Lunch: ${c.l}\n`;if(c.g&&S.gf>0)t+=`Gluten free: ${c.g}\n`}else t+=`Full method: unlock it free at ${SITE}plan.html\n`});
+  [...S.sel,...S.treats].forEach(id=>{const r=byId(id);const tr=isTreat(r);const n=nFor(r);const ok=!!RS.peek(id);t+=`\n${r.n.toUpperCase()} (${timeLabel(r)}${tr?`, makes ${r.mk} ${r.mu}`:''})\n`;linesFor(r,n).forEach(([i,a])=>{t+=ok?`- ${kAmt(i,a,tr)} ${iname(i)}\n`:`- ${iname(i)}\n`});const c=RS.peek(id);if(c){methodSteps(r,c,n).forEach((st,k)=>{t+=`${k+1}. ${st.h?st.h+'. ':''}${st.s}\n`});if(c.l)t+=`Lunch: ${c.l}\n`;if(c.k)t+=`Keeps: ${c.k}\n`;if(c.g&&S.gf>0)t+=`Gluten free: ${c.g}\n`}else t+=`Full method: unlock it free at ${SITE}plan.html\n`});
   return t;
 }
 
@@ -279,6 +313,7 @@ $('#cols').addEventListener('click',e=>{const b=e.target.closest('button');if(!b
 $('#cards').addEventListener('click',e=>{
   const v=e.target.closest('.view');if(v){openRecipe(v.dataset.id);return}
   const p=e.target.closest('.pick');if(!p)return;const id=p.dataset.id;
+  if(p.dataset.treat){S.treats=S.treats.includes(id)?S.treats.filter(x=>x!==id):[...S.treats,id];render();return}
   if(S.sel.includes(id))S.sel=S.sel.filter(x=>x!==id);else if(S.sel.length<S.dinners)S.sel.push(id);render();
 });
 $('#fill').onclick=()=>{
@@ -288,18 +323,18 @@ $('#fill').onclick=()=>{
   for(const r of pool){if(S.sel.length>=S.dinners)break;if(!S.sel.includes(r.id))S.sel.push(r.id)}
   render();
 };
-$('#clear').onclick=()=>{S.sel=[];render()};
+$('#clear').onclick=()=>{if(S.col==='treats')S.treats=[];else S.sel=[];render()};
 $('#aisles').addEventListener('change',e=>{const id=e.target.dataset.id;if(!id)return;S.done[id]=e.target.checked;e.target.closest('.item').classList.toggle('done',e.target.checked);save()});
 function copyText(t,okMsg){
   const done=()=>{$('#msg').textContent=okMsg};
   try{navigator.clipboard.writeText(t).then(done,()=>fallback(t))}catch(e){fallback(t)}
   function fallback(t){const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();$('#msg').textContent=ok?okMsg:'Copy was blocked here. Select the list above and copy it manually.'}
 }
-$('#copy').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}if(S.sel.some(id=>canSee(id)&&!RS.peek(id)))await RS.load(S.sel.filter(canSee));copyText(planText(),'Plan copied: shopping list plus every recipe. Paste it into an email or the group chat.')};
+$('#copy').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}await RS.load([...S.sel,...S.treats].filter(canSee));copyText(planText(),'Plan copied: shopping list plus every recipe. Paste it into an email or the group chat.')};
 async function makePdfs(mode='one'){
   if(!window.jspdf||!window.DocketPDF){$('#msg').textContent='The PDF maker is still loading. Give it a second and try again.';return null}
   $('#msg').textContent='Building your PDFs...';
-  await RS.load(S.sel.filter(canSee));
+  await RS.load([...S.sel,...S.treats].filter(canSee));
   return DocketPDF.build(S,mode);
 }
 $('#send').onclick=async()=>{
@@ -332,13 +367,13 @@ function listText(){
   let t=`DOCKET · ${STORE_NAME[S.store]} · est. ${money(w.total)}\n`;
   const by={};w.items.forEach(x=>{(by[ING[x.id].a]??=[]).push(x)});
   ['M','F','D','Z','P','B','G','K'].filter(a=>by[a]).forEach(a=>{t+=`\n${AISLE[a].toUpperCase()}\n`;by[a].forEach(x=>{t+=`[ ] ${ING[x.id].n}: ${x.label||'check pantry'}\n`})});
-  t+=`\nDINNERS: ${S.sel.map(id=>R.find(r=>r.id===id).n).join(', ')}`;
+  t+=`\nDINNERS: ${S.sel.map(id=>R.find(r=>r.id===id).n).join(', ')}`;if(S.treats.length)t+=`\nTREATS: ${S.treats.map(id=>byId(id).n).join(', ')}`;
   return t;
 }
 if(navigator.share){$('#share').hidden=false;$('#share').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}try{await navigator.share({title:'Our Docket for the week',text:planText()})}catch(e){}}}
 function fillPrint(){
   const n=spm();
-  $('#print-recipes').innerHTML='<h2>Recipes</h2>'+S.sel.map(id=>{const r=R.find(x=>x.id===id);const c=RS.peek(id);return`<article><h3>${esc(r.n)} · ${timeLabel(r)} · ${n} serves</h3><ul>${splitLines(r,n).map(([i,a])=>`<li>${c?kAmt(i,a)+' ':''}${esc(iname(i))}</li>`).join('')}</ul>${c?`<ol>${methodSteps(r,c,n).map(st=>`<li>${st.h?`<b>${esc(st.h)}.</b> `:''}${esc(st.s)}</li>`).join('')}</ol>`:`<p>Full method: unlock it free at ${esc(SITE)}plan.html</p>`}</article>`}).join('');
+  $('#print-recipes').innerHTML='<h2>Recipes</h2>'+[...S.sel,...S.treats].map(id=>{const r=byId(id);const tr=isTreat(r);const n=nFor(r);const c=RS.peek(id);return`<article><h3>${esc(r.n)} · ${timeLabel(r)} · ${tr?`makes ${r.mk} ${esc(r.mu)}`:`${n} serves`}</h3><ul>${linesFor(r,n).map(([i,a])=>`<li>${c?kAmt(i,a,tr)+' ':''}${esc(iname(i))}</li>`).join('')}</ul>${c?`<ol>${methodSteps(r,c,n).map(st=>`<li>${st.h?`<b>${esc(st.h)}.</b> `:''}${esc(st.s)}</li>`).join('')}</ol>`:`<p>Full method: unlock it free at ${esc(SITE)}plan.html</p>`}</article>`}).join('');
 }
 window.addEventListener('beforeprint',fillPrint);
 $('#print').onclick=()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}fillPrint();window.print()};

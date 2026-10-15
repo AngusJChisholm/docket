@@ -1,0 +1,31 @@
+{
+ "id": "crumble",
+ "m": [
+  {
+   "h": "Get set up",
+   "s": "Heat the oven to 180°C fan-forced. Grab a baking dish about 20cm x 30cm, or anything that holds around 2 litres."
+  },
+  {
+   "h": "Cook the apples",
+   "s": "Peel, core and cut {apple} into chunks. Put them in a saucepan with the juice of {lemon}, {cinnamon}, {brownsugar*0.33} and a splash of water. Cover and cook over medium heat for 8 minutes, stirring now and then, until they're just soft but still holding their shape."
+  },
+  {
+   "h": "Make the topping",
+   "s": "In a bowl, mix {flour}, {oats}, the rest of the brown sugar and a pinch of salt. Rub in {butter}, cold and diced, with your fingertips until it looks like rough breadcrumbs with a few bigger clumps."
+  },
+  {
+   "h": "Build it",
+   "s": "Spoon the apples and their juices into the dish. Scatter the topping over evenly. Don't press it down: loose topping goes crunchy."
+  },
+  {
+   "h": "Bake",
+   "s": "Bake for 30 to 35 minutes until the top is deep golden and the juice is bubbling up round the edges."
+  },
+  {
+   "h": "Serve",
+   "s": "Let it sit for 10 minutes, then serve warm with {cream} poured over the top, straight from the fridge."
+  }
+ ],
+ "g": "Use GF plain flour, and swap the oats for desiccated coconut, as oats aren't gluten free in Australia. The topping still crisps up nicely.",
+ "k": "Keeps covered in the fridge for 4 days. Reheat portions in the microwave, or the whole dish in a 160°C oven for 15 minutes."
+}

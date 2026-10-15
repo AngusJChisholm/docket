@@ -1,0 +1,31 @@
+{
+ "id": "cookies",
+ "m": [
+  {
+   "h": "Get set up",
+   "s": "Heat the oven to 170°C fan-forced and line two baking trays with baking paper. Take {butter} out of the fridge early so it's soft."
+  },
+  {
+   "h": "Cream the butter and sugar",
+   "s": "Beat the butter with {brownsugar} and {castersugar} for 3 minutes until pale and fluffy. Beat in {eggs} one at a time, then {vanilla}."
+  },
+  {
+   "h": "Mix the dough",
+   "s": "Add {flour}, {bicarb} and a good pinch of salt, and mix on low until just combined. Stir through {chocchips}. If the dough feels very soft, chill it for 20 minutes."
+  },
+  {
+   "h": "Roll and space them out",
+   "s": "Roll the dough into 24 balls, about 2 tablespoons each. Put them on the trays at least 6cm apart, as they spread. Bake in batches if you need to."
+  },
+  {
+   "h": "Bake",
+   "s": "Bake for 11 to 13 minutes until golden round the edges but still pale and soft in the middle. They firm up as they cool, so pull them out before they look done."
+  },
+  {
+   "h": "Cool",
+   "s": "Leave them on the tray for 5 minutes, then move them to a wire rack to cool completely."
+  }
+ ],
+ "g": "Use GF plain flour, swapped one for one, and chill the dough for 30 minutes before rolling so the cookies hold their shape. Check the choc bits label.",
+ "k": "Keeps for a week in an airtight container. Freeze the rolled dough balls and bake straight from frozen, adding 2 minutes."
+}

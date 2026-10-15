@@ -184,11 +184,25 @@ const ING={
  chilliflakes:{n:'Chilli flakes',a:'K',u:'g',pk:30,p:2.50,pr:0,tsp:1.5,pan:1},
  chillipowder:{n:'Chilli powder',a:'K',u:'g',pk:40,p:2.50,pr:0,tsp:2.7,pan:1},
  oregano:{n:'Dried oregano',a:'K',u:'g',pk:10,p:2.50,pr:0,tsp:1,pan:1},
- cinnamon:{n:'Ground cinnamon',a:'K',u:'g',pk:40,p:2.50,pr:0,tsp:2.6,pan:1}
+ cinnamon:{n:'Ground cinnamon',a:'K',u:'g',pk:40,p:2.50,pr:0,tsp:2.6,pan:1},
+ // Baking (sweet treats)
+ castersugar:{n:'Caster sugar',a:'K',u:'g',pk:1000,p:2.20,pr:0,tbsp:13,cup:220,pan:1},
+ cocoa:{n:'Cocoa powder',a:'K',u:'g',pk:375,p:5.50,pr:20,tbsp:7,pan:1},
+ vanilla:{n:'Vanilla extract',a:'K',u:'ml',pk:50,p:5.00,pr:0,pan:1},
+ bicarb:{n:'Bicarb soda',a:'K',u:'g',pk:500,p:2.00,pr:0,tsp:5,pan:1},
+ bakingpowder:{n:'Baking powder',a:'K',u:'g',pk:125,p:2.30,pr:0,ck:1,tsp:4,pan:1},
+ oats:{n:'Rolled oats',a:'K',u:'g',pk:750,p:2.00,pr:12,cup:90,pan:1},
+ desiccated:{n:'Desiccated coconut',a:'K',u:'g',pk:250,p:2.50,pr:6,cup:80,pan:1},
+ darkchoc:{n:'Dark cooking chocolate',a:'P',u:'g',pk:250,p:3.50,pr:5,ck:1,pl:'250g block'},
+ chocchips:{n:'Dark choc bits',a:'P',u:'g',pk:250,p:3.50,pr:5,ck:1,cup:170},
+ sweetbiscuits:{n:'Plain sweet biscuits (Marie)',a:'P',u:'g',pk:250,p:2.20,pr:7},
+ creamcheese:{n:'Cream cheese (250g block)',a:'D',u:'g',pk:250,p:3.80,pr:6,pl:'250g block'},
+ banana:{n:'Bananas',a:'F',u:'ea',pk:1,p:0.70,pr:1.1,ea:[1,'banana']},
+ gf_biscuits:{n:'GF plain sweet biscuits',a:'G',u:'g',pk:150,p:3.50,pr:5}
 };
 
 // Regular ingredient -> what gluten free eaters get instead (scaled to the number of GF eaters)
-const GFSWAP={panko:'gf_crumbs',flour:'gf_flour',pasta:'gf_pasta',lasagne:'gf_lasagne',buns:'gf_buns',wraps:'gf_wraps',pita:'gf_wraps',naan:'gf_wraps',tortillas:'corn_tortillas',soy:'tamari',gochujang:'sriracha',turkish:'gf_buns'};
+const GFSWAP={panko:'gf_crumbs',flour:'gf_flour',pasta:'gf_pasta',lasagne:'gf_lasagne',buns:'gf_buns',wraps:'gf_wraps',pita:'gf_wraps',naan:'gf_wraps',tortillas:'corn_tortillas',soy:'tamari',gochujang:'sriracha',turkish:'gf_buns',sweetbiscuits:'gf_biscuits',oats:'desiccated'};
 
 // ---------- Recipes (quantities per serve) ----------
 // big: needs a whole roast, best for 4+ serves · c category · tier 'premium' or 'lighter' (blank = everyday) · t total minutes · h hands-on minutes (slow cooks) · d one-line description
@@ -392,6 +406,23 @@ const R=[
 
  {id:'springcaesar',n:'Chicken Caesar with Charred Asparagus',c:'Salads',t:30,added:'2026-10-14',d:'A proper Caesar: crisp cos, jammy eggs, bacon, garlicky croutons and a real dressing, with spring asparagus.',
   i:[['chk_breast',200],['cos',.5],['asparagus',.4],['bacon',40],['eggs',1],['parm',20],['turkish',.5],['mayo',25],['lemon',.25],['garlic',.1],['worcestershire',3]]}
+];
+
+// ---------- Sweet treats (optional extras, never counted as dinners) ----------
+// Quantities are for ONE BATCH, not per serve. mk = how many it makes, mu = what they're called.
+// If anyone in the house eats gluten free, the whole batch uses the GF swaps so everyone can share.
+// Method, gluten free note (g) and keeping note (k) live in content/recipes/<id>.json, same as dinners.
+const T=[
+ {id:'brownie',n:'Fudgy Chocolate Brownies',c:'Tray bake',t:50,mk:16,mu:'squares',d:'Crackly top, gooey middle. One tray sorts the whole house for the week.',
+  i:[['butter',185],['darkchoc',200],['castersugar',275],['eggs',3],['flour',85],['cocoa',40],['vanilla',5]]},
+ {id:'crumble',n:'Apple Crumble',c:'Pudding',t:55,mk:8,mu:'serves',d:'Soft cinnamon apples under a crunchy oat topping. Best with a pour of cold cream.',
+  i:[['apple',6],['brownsugar',150],['lemon',.5],['cinnamon',3],['flour',150],['oats',100],['butter',125],['cream',300]]},
+ {id:'cheesecake',n:'Baked Vanilla Cheesecake',c:'Cake',t:90,mk:12,mu:'slices',d:'Creamy and tangy on a buttery biscuit base. Make it the night before so it sets.',
+  i:[['sweetbiscuits',250],['butter',125],['creamcheese',500],['castersugar',150],['eggs',3],['sourcream',300],['lemon',1],['vanilla',5],['flour',15]]},
+ {id:'cookies',n:'Choc Chip Cookies',c:'Biscuits',t:30,mk:24,mu:'cookies',d:'Chewy in the middle, crisp round the edges. Lunchboxes sorted for the week.',
+  i:[['butter',250],['brownsugar',200],['castersugar',100],['eggs',2],['vanilla',10],['flour',375],['bicarb',5],['chocchips',250]]},
+ {id:'bananabread',n:'Banana Bread',c:'Loaf',t:70,mk:10,mu:'slices',d:'The best thing to do with brown bananas. Toast a slice with butter for brekkie.',
+  i:[['banana',3],['butter',125],['brownsugar',150],['eggs',2],['vanilla',5],['flour',225],['bicarb',5],['bakingpowder',4],['cinnamon',3]]}
 ];
 
 // ---------- Meal kit and ready meal prices for the Kit Tax ----------

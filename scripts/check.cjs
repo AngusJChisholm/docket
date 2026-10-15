@@ -36,6 +36,38 @@ eval(rd('js/data.js') + rd('js/prices.js') + rd('js/season.js') + rd('js/recipes
     if (/—|–/.test(text)) fail(r.id + ' has an em/en dash');
     if (/\\b(elevate|unlock|seamless|journey|foodie|hack|delve)\\b/i.test(text)) fail(r.id + ' uses banned wording');
   }
+  // 1b. Sweet treats: one batch each, method/GF/keeping notes in content/recipes, never counted as dinners
+  for (const pub of T) {
+    if (pub.m || pub.g || pub.k) fail(pub.id + ' has method/GF/keeping text in js/data.js');
+    if (R.some(r => r.id === pub.id)) fail('treat id clashes with a dinner: ' + pub.id);
+    const cf = path.join(ROOT, 'content/recipes', pub.id + '.json');
+    if (!fs.existsSync(cf)) { fail(pub.id + ' missing content/recipes/' + pub.id + '.json'); continue; }
+    const r = { ...pub, ...JSON.parse(fs.readFileSync(cf, 'utf8')) };
+    if (ids.has(r.id)) fail('duplicate id ' + r.id); ids.add(r.id);
+    for (const k of ['id', 'n', 'c', 't', 'd', 'i', 'mk', 'mu', 'm', 'g', 'k']) if (r[k] == null || r[k] === '') fail(r.id + ' missing ' + k);
+    if (r.m && (r.m.length < 5 || r.m.length > 8)) fail(r.id + ' needs 5 to 8 method steps (has ' + r.m.length + ')');
+    for (const [i, q] of r.i || []) { if (!ING[i]) fail(r.id + ' unknown ingredient ' + i); if (!(q > 0)) fail(r.id + ' bad amount for ' + i); }
+    const steps = (r.m || []).map(x => typeof x === 'string' ? { h: '', s: x } : x);
+    steps.forEach((st, k) => { for (const [, id] of String(st.s).matchAll(/\\{(\\w+)(?:\\*[\\d.]+)?\\}/g)) if (!(r.i || []).some(([i]) => i === id)) fail(r.id + ' step ' + (k + 1) + ' marker {' + id + '} is not one of its ingredients'); });
+    const text = [r.n, r.d, r.g, r.k, ...steps.map(st => st.h + ' ' + st.s)].join(' ');
+    if (/—|–/.test(text)) fail(r.id + ' has an em/en dash');
+    if (/\\b(elevate|unlock|seamless|journey|foodie|hack|delve)\\b/i.test(text)) fail(r.id + ' uses banned wording');
+    for (const gf of [0, 1]) for (const store of ['coles', 'woolies', 'aldi']) {
+      Object.assign(S, { store, people: 3, gf, lunch: true, sel: [], treats: [r.id], dinners: 3 });
+      const bc = batchCost(r); if (!isFinite(bc) || bc <= 0 || bc > 40) fail(r.id + ' odd batch cost ' + bc);
+      for (const [i, a] of linesFor(r, 1)) { const k = kAmt(i, a, true); if (/NaN|undefined/.test(k)) fail(r.id + ' odd amount ' + i + ' ' + k); }
+      for (const st of steps) if (/NaN|undefined|\\{/.test(fillStep(r, st.s, 1))) fail(r.id + ' step did not fill: ' + st.s.slice(0, 40));
+    }
+  }
+  // Treats never change the dinner maths (serves, food eaten, Kit Tax)
+  for (const store of ['coles', 'aldi']) for (let p = 1; p <= 8; p++) {
+    Object.assign(S, { store, people: p, gf: Math.min(1, p), lunch: true, dinners: 4, sel: R.slice(0, 4).map(r => r.id), treats: [] });
+    const a = week(); S.treats = T.map(r => r.id); const b = week();
+    if (Math.abs(a.eaten - b.eaten) > 1e-6 || a.serves !== b.serves) fail('treats changed the dinner maths at ' + p + ' people');
+    if (!(b.total > a.total) || !isFinite(b.treat) || b.treat <= 0) fail('treats missing from the shop at ' + p + ' people');
+    for (const x of b.items) if (!isFinite(x.cost) || (x.bought !== undefined && x.bought + 1e-6 < x.amt)) fail('treat list item wrong ' + x.id);
+  }
+  S.treats = [];
   for (const [a, b] of Object.entries(GFSWAP)) if (!ING[a] || !ING[b]) fail('GFSWAP ' + a + ' -> ' + b + ' unknown');
   // 2. Every recipe at 1 to 8 people, with and without lunch, at every store
   for (const store of ['coles', 'woolies', 'aldi']) for (const r of R) for (let p = 1; p <= 8; p++) for (const lunch of [false, true]) {
@@ -74,11 +106,17 @@ eval(rd('js/data.js') + rd('js/prices.js') + rd('js/season.js') + rd('js/recipes
   await window.DocketRecipes.load(S.sel);
   out = await DocketPDF.build(S, 'split'); if (out.files.length !== 6) fail('PDF build made ' + out.files.length + ' files');
   out = await DocketPDF.build(S, 'one'); if (out.files.length !== 1 || out.files[0].doc.getNumberOfPages() < 6) fail('one-PDF build wrong: ' + out.files.length + ' files');
+  // 6b. PDFs with treats added
+  Object.assign(S, { people: 4, gf: 1, sel: R.slice(0, 2).map(r => r.id), treats: T.map(r => r.id), dinners: 2 });
+  await window.DocketRecipes.load([...S.sel, ...S.treats]);
+  out = await DocketPDF.build(S, 'split'); if (out.files.length !== 3 + T.length) fail('PDF build with treats made ' + out.files.length + ' files');
+  out = await DocketPDF.build(S, 'one'); if (out.files.length !== 1) fail('one-PDF build with treats wrong');
+  planText(); S.treats = [];
   // 7. Locked recipes stay locked: no method content in the public files
   if (rd('js/data.js').includes("m:['")) fail('method text found in js/data.js');
-  const orphans = fs.readdirSync(path.join(ROOT, 'content/recipes')).filter(f => !R.some(r => r.id + '.json' === f));
+  const orphans = fs.readdirSync(path.join(ROOT, 'content/recipes')).filter(f => ![...R, ...T].some(r => r.id + '.json' === f));
   if (orphans.length) warn('content files with no recipe: ' + orphans.join(', '));
-  console.log('Recipes: ' + R.length + ' (' + R.filter(r => r.tier === 'premium').length + ' premium, ' + R.filter(r => r.tier === 'lighter').length + ' lighter, ' + R.filter(r => r.t <= 30).length + ' quick)');
+  console.log('Recipes: ' + R.length + ' (' + R.filter(r => r.tier === 'premium').length + ' premium, ' + R.filter(r => r.tier === 'lighter').length + ' lighter, ' + R.filter(r => r.t <= 30).length + ' quick). Sweet treats: ' + T.length);
   console.log('Random weeks over budget: ' + Math.round(over / N * 100) + '%. Beat HelloFresh: ' + Math.round(beats / N * 100) + '%. Flat week: $' + flat.total.toFixed(0));
   console.log("This week's picks: " + pk.map(id => R.find(r => r.id === id).n).join(', '));
   warns.forEach(w => console.log('warn: ' + w));

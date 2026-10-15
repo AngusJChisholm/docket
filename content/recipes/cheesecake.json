@@ -1,0 +1,31 @@
+{
+ "id": "cheesecake",
+ "m": [
+  {
+   "h": "Make the base",
+   "s": "Heat the oven to 150°C fan-forced and line the base of a 22cm springform tin with baking paper. Blitz {sweetbiscuits} into fine crumbs, or bash them in a zip-lock bag with a rolling pin. Mix with melted {butter}, press firmly into the base of the tin, and chill while you make the filling."
+  },
+  {
+   "h": "Beat the filling",
+   "s": "Take {creamcheese} out of the fridge an hour before so it's soft. Beat it with {castersugar} until smooth, about 2 minutes. Add {eggs} one at a time, beating on low just until each one disappears."
+  },
+  {
+   "h": "Finish the filling",
+   "s": "Beat in {sourcream}, the finely grated zest and juice of {lemon}, {vanilla} and {flour} until smooth. Keep the mixer on low the whole time: too much air makes it crack."
+  },
+  {
+   "h": "Bake it low and slow",
+   "s": "Pour the filling over the base and smooth the top. Bake for 55 to 60 minutes, until the edges are set but the middle still has a gentle wobble."
+  },
+  {
+   "h": "Cool in the oven",
+   "s": "Turn the oven off, prop the door open a little and leave the cheesecake inside for 1 hour. Cooling it slowly stops the top cracking."
+  },
+  {
+   "h": "Chill and serve",
+   "s": "Cover and chill for at least 4 hours, or overnight. Run a hot knife round the edge before you open the tin, and cut into 12 slices with the knife dipped in hot water."
+  }
+ ],
+ "g": "Use GF plain sweet biscuits for the base and GF plain flour in the filling. GF biscuits are a little drier, so add an extra tablespoon of melted butter to the crumbs.",
+ "k": "Keeps covered in the fridge for 5 days. Slices freeze well wrapped in cling wrap for up to 2 months."
+}

@@ -26,6 +26,9 @@ const prevPrices = (() => { const c = { window: {} }; vm.createContext(c); vm.ru
 
 // What to type into the search box for each ingredient (default: its name without the bracket note)
 const SEARCH = {
+  castersugar: 'caster sugar 1kg', cocoa: 'cocoa powder', vanilla: 'vanilla extract', bicarb: 'bicarb soda', bakingpowder: 'baking powder',
+  oats: 'rolled oats', desiccated: 'desiccated coconut', darkchoc: 'dark cooking chocolate', chocchips: 'dark choc bits', sweetbiscuits: 'marie biscuits',
+  creamcheese: 'cream cheese block 250g', banana: 'bananas each', gf_biscuits: 'gluten free plain biscuits',
   beef_mince: 'beef mince 3 star', chk_whole: 'whole chicken', pork_roast: 'pork shoulder roast', lamb_sh: 'lamb shoulder',
   cabbage: 'red cabbage half', cheese: 'tasty cheese grated', slices: 'burger cheese slices', rice: 'jasmine rice 5kg',
   tintom: 'crushed tomatoes 400g', coconut: 'coconut milk 400ml', chickpeas: 'chickpeas 400g', blackbeans: 'black beans 400g',

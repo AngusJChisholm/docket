@@ -1,0 +1,31 @@
+{
+ "id": "bananabread",
+ "m": [
+  {
+   "h": "Get set up",
+   "s": "Heat the oven to 160°C fan-forced. Grease and line a loaf tin, about 22cm x 10cm, with baking paper."
+  },
+  {
+   "h": "Mash the bananas",
+   "s": "Mash {banana} in a big bowl with a fork. The browner and spottier they are, the sweeter the loaf will be."
+  },
+  {
+   "h": "Mix the wet bits",
+   "s": "Melt {butter} and whisk it into the banana with {brownsugar}, {eggs} and {vanilla} until well combined."
+  },
+  {
+   "h": "Add the dry bits",
+   "s": "Sift in {flour}, {bicarb}, {bakingpowder}, {cinnamon} and a pinch of salt. Fold together gently until just combined. A few lumps are fine."
+  },
+  {
+   "h": "Bake",
+   "s": "Pour into the tin and bake for 55 to 60 minutes, until a skewer in the middle comes out clean. If the top is browning too fast, cover it loosely with foil for the last 15 minutes."
+  },
+  {
+   "h": "Cool and slice",
+   "s": "Cool in the tin for 10 minutes, then turn out onto a rack. Slice once it's cooled, and toast slices with butter to serve."
+  }
+ ],
+ "g": "Use GF plain flour and add an extra ½ tsp baking powder to help it rise. Check the baking powder label.",
+ "k": "Keeps for 4 days wrapped up on the bench. Freeze it in slices and toast straight from frozen."
+}

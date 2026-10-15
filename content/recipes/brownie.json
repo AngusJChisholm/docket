@@ -1,0 +1,31 @@
+{
+ "id": "brownie",
+ "m": [
+  {
+   "h": "Get set up",
+   "s": "Heat the oven to 170°C fan-forced. Line a 20cm x 30cm slice tin with baking paper, leaving some hanging over the sides so you can lift the brownies out later."
+  },
+  {
+   "h": "Melt the chocolate",
+   "s": "Chop {darkchoc} and put it in a heatproof bowl with {butter}. Sit the bowl over a saucepan of barely simmering water and stir until smooth. Take it off the heat and let it cool for 5 minutes so it doesn't scramble the eggs."
+  },
+  {
+   "h": "Whisk in the sugar and eggs",
+   "s": "Whisk {castersugar} into the chocolate, then add {eggs} one at a time, whisking well after each. Stir in {vanilla}. Keep whisking for a minute after the last egg: that's what gives you the crackly top."
+  },
+  {
+   "h": "Fold in the dry bits",
+   "s": "Sift {flour} and {cocoa} over the top with a pinch of salt. Fold through gently with a spatula until there are no dry streaks left. Don't overmix or they'll go cakey."
+  },
+  {
+   "h": "Bake",
+   "s": "Spread the mix into the tin and bake for 25 to 30 minutes. They're ready when the top is set and a skewer in the middle comes out with moist crumbs. A bit of wobble is fine."
+  },
+  {
+   "h": "Cool, then cut",
+   "s": "Leave them to cool in the tin for at least an hour so they firm up, or put them in the fridge if you can't wait. Lift out with the paper and cut into 16 squares with a hot knife."
+  }
+ ],
+ "g": "Use GF plain flour in place of regular flour, swapped one for one. Brownies hardly need any flour, so you won't notice the difference. Check the chocolate label.",
+ "k": "Keeps for 5 days in an airtight container. Freeze squares for up to 3 months."
+}

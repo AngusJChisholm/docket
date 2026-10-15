@@ -93,7 +93,7 @@ const DocketPDF = window.DocketPDF = (function () {
     // Summary
     text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(11); d.text('This week', M, y + 4);
     d.setFont('helvetica', 'normal'); d.setFontSize(9.5); text(d, C.muted);
-    const dl = d.splitTextToSize(clean(meta.dinners.join('  ·  ')), 120); d.text(dl, M, y + 10);
+    const dl = d.splitTextToSize(clean(meta.dinners.join('  ·  ') + (meta.treats && meta.treats.length ? '  ·  Treats: ' + meta.treats.join(', ') : '')), 120); d.text(dl, M, y + 10);
     ticket(d, W - M, y - 1, money(w.total, 0), 'estimated shop');
     y += 12 + dl.length * 4.5;
     if (meta.saved > 0) { y = noteBox(d, y, 'Kit Tax dodged:', `${money(meta.saved)} this week vs ${meta.kit}. That's ${money(meta.saved * 52, 0)} a year.`, C.mint); }
@@ -139,6 +139,7 @@ const DocketPDF = window.DocketPDF = (function () {
   }
   // Draws one recipe at text scale k, on a new document or (with target) on a new page of target.
   function recipePage(r, n, gfCount, c, k, last, target) {
+    const tr = isTreat(r); if (tr) n = 1;
     const { jsPDF } = window.jspdf; const d = target || new jsPDF({ unit: 'mm', format: 'a4' });
     if (target) d.addPage();
     const p0 = d.getNumberOfPages();
@@ -148,16 +149,16 @@ const DocketPDF = window.DocketPDF = (function () {
     if (logo) d.addImage(logo, 'PNG', M, M - 1, 27, 6.4);
     else { text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(16); d.text('Docket', M, M + 4.5); }
     text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(9);
-    d.text(clean(`${r.c}, ${timeLabel(r)}. Makes ${n} serves.`), W - M, M + 4, { align: 'right' });
+    d.text(clean(tr ? `Sweet treat. ${r.c}, ${timeLabel(r)}. Makes ${r.mk} ${r.mu}.` : `${r.c}, ${timeLabel(r)}. Makes ${n} serves.`), W - M, M + 4, { align: 'right' });
     draw(d, C.line); d.setLineWidth(0.3); d.line(M, M + 9, W - M, M + 9);
     let y = M + 19;
     // Title, blurb and price tag
-    ticket(d, W - M, M + 13, money(serveCost(r)), 'per serve');
+    if (tr) ticket(d, W - M, M + 13, money(batchCost(r)), 'a batch'); else ticket(d, W - M, M + 13, money(serveCost(r)), 'per serve');
     text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(19 * k);
     const tl = d.splitTextToSize(clean(r.n), 128); d.text(tl, M, y); y += (tl.length - 1) * lh(19 * k) + 3;
     if (r.d) { text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(10 * k); const dl = d.splitTextToSize(clean(r.d), 128); d.text(dl, M, y + 3); y += dl.length * lh(10 * k) + 3; }
     text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(9 * k);
-    d.text(clean(`${Math.round(serveProt(r))}g protein a serve. ${gfType(r) === 'yes' ? 'Gluten free.' : 'Gluten free swaps included.'}`), M, y + 3);
+    d.text(clean(tr ? (gfCount > 0 && gfType(r) !== 'yes' ? 'Made gluten free so everyone can share.' : gfType(r) === 'yes' ? 'Gluten free.' : 'Gluten free swap in the notes.') : `${Math.round(serveProt(r))}g protein a serve. ${gfType(r) === 'yes' ? 'Gluten free.' : 'Gluten free swaps included.'}`), M, y + 3);
     y = Math.max(y + 11, M + 32);
     // Two columns: ingredients | method
     const colL = M, wL = 56, colR = M + wL + 9, wR = W - M - colR, amtW = 21;
@@ -165,11 +166,11 @@ const DocketPDF = window.DocketPDF = (function () {
     text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(11.5 * k); d.text('Ingredients', colL, yl); d.text('Method', colR, yr);
     yl += 6.5 * k; yr += 6.5 * k;
     const fs = 9 * k;
-    splitLines(r, n).forEach(([i, a]) => {
+    linesFor(r, n).forEach(([i, a]) => {
       d.setFontSize(fs);
       if (c) {
         text(d, C.ink); d.setFont('helvetica', 'bold');
-        const al = d.splitTextToSize(clean(kAmt(i, a)), amtW - 2); d.text(al, colL, yl);
+        const al = d.splitTextToSize(clean(kAmt(i, a, tr)), amtW - 2); d.text(al, colL, yl);
         d.setFont('helvetica', 'normal');
         const nl = d.splitTextToSize(clean(iname(i)), wL - amtW); d.text(nl, colL + amtW, yl);
         yl += Math.max(al.length, nl.length) * lh(fs) + 1.6 * k;
@@ -178,10 +179,10 @@ const DocketPDF = window.DocketPDF = (function () {
         const nl = d.splitTextToSize(clean(iname(i)), wL); d.text(nl, colL, yl); yl += nl.length * lh(fs) + 1.6 * k;
       }
     });
-    d.setFont('helvetica', 'normal'); d.setFontSize(8.5 * k); text(d, C.muted); d.text('Plus oil, salt and pepper.', colL, yl + 1); yl += 6;
+    d.setFont('helvetica', 'normal'); d.setFontSize(8.5 * k); text(d, C.muted); d.text(tr ? 'Plus a pinch of salt.' : 'Plus oil, salt and pepper.', colL, yl + 1); yl += 6;
     if (!c) {
       d.setFont('helvetica', 'normal'); d.setFontSize(10); text(d, C.ink);
-      const ll = d.splitTextToSize(clean(`The full method, amounts, lunch tip and gluten free notes for this dinner are for Docket members. Get every recipe free while we're in beta at ${SITE}plan.html`), wR - 4);
+      const ll = d.splitTextToSize(clean(`The full method, amounts, ${tr ? 'keeping' : 'lunch'} tip and gluten free notes for this ${tr ? 'treat' : 'dinner'} are for Docket members. Get every recipe free while we're in beta at ${SITE}plan.html`), wR - 4);
       fill(d, C.mint); d.roundedRect(colR - 2, yr - 5, wR + 2, ll.length * 4.9 + 8, 3, 3, 'F'); d.text(ll, colR + 2, yr + 0.5); yr += ll.length * 4.9 + 8;
     }
     const ms = 9.6 * k, hs = 10.5 * k;
@@ -200,6 +201,7 @@ const DocketPDF = window.DocketPDF = (function () {
     // Notes along the bottom
     const notes = [];
     if (c && c.l) notes.push(['Lunch:', c.l, C.mint]);
+    if (c && c.k) notes.push(['Keeps:', c.k, C.mint]);
     if (c && c.g && gfCount > 0) notes.push([`Gluten free (${gfCount}):`, c.g, C.butter]);
     const checks = [...new Set(r.i.filter(([i]) => ING[i].ck).map(([i]) => iname(i)))];
     if (checks.length) notes.push(['Check labels:', checks.join(', '), C.peach]);
@@ -223,8 +225,8 @@ const DocketPDF = window.DocketPDF = (function () {
     await loadLogo();
     const w = week(); const n = spm(); const gf = Math.min(state.gf, state.people);
     const kit = KITS[0]; const kitTotal = kitCost(kit, n, state.sel.length);
-    const meta = { store: STORE_NAME[state.store], people: state.people, lunch: state.lunch, dinners: state.sel.map(id => R.find(r => r.id === id).n), saved: kitTotal - w.eaten, kit: kit.n };
-    const rs = state.sel.map(id => R.find(x => x.id === id));
+    const meta = { store: STORE_NAME[state.store], people: state.people, lunch: state.lunch, dinners: state.sel.map(id => R.find(r => r.id === id).n), treats: (state.treats || []).map(id => byId(id).n), saved: kitTotal - w.eaten, kit: kit.n };
+    const rs = [...state.sel, ...(state.treats || [])].map(id => byId(id));
     let files;
     if (mode === 'split') {
       files = [{ filename: '01-docket-shopping-list.pdf', doc: shoppingList(w, meta) }];
