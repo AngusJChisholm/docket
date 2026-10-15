@@ -1,13 +1,31 @@
 {
  "id": "mongolian",
  "m": [
-  "Cook the rice.",
-  "Slice the beef as thin as you can across the grain (freeze it for 20 minutes first to make this easy). Toss in the cornflour.",
-  "Sauce: soy, brown sugar and 3 tbsp water per serve.",
-  "Fry the beef in a very hot wok with plenty of oil, in small batches, 1 to 2 minutes until crisp. Drain.",
-  "Pour out most of the oil. Fry the garlic and ginger 30 seconds, add the broccoli and a splash of water, and cook 3 minutes.",
-  "Pour in the sauce and bubble until it thickens, then toss the beef and spring onions through. Finish with sesame oil and serve over rice."
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Slice the beef",
+   "s": "Pop {beef_rump} in the freezer for 20 minutes so it firms up, then slice it as thin as you can across the grain. Toss in {cornflour} until lightly coated."
+  },
+  {
+   "h": "Mix the sauce",
+   "s": "In a jug mix {soy}, {brownsugar} and 3 tbsp water per serve. Crush {garlic}, grate {ginger}, cut {broccoli} into small florets and cut {springonion} into 4cm lengths."
+  },
+  {
+   "h": "Crisp the beef",
+   "s": "Heat 1cm of oil in a wok or large frying pan over high heat. Fry the beef in small batches for 1 to 2 minutes until crisp and browned. Drain on paper towel."
+  },
+  {
+   "h": "Cook the broccoli",
+   "s": "Pour out all but a spoonful of the oil. Fry the garlic and ginger for 30 seconds, then add the broccoli and a splash of water and stir-fry for 3 minutes until bright green and just tender."
+  },
+  {
+   "h": "Sauce and serve",
+   "s": "Pour in the sauce and bubble for 1 minute until it thickens. Toss the beef and spring onion through until glossy, then finish with {sesameoil}. Serve over the rice."
+  }
  ],
- "l": "Beef, broccoli and rice together. Reheat until hot.",
+ "l": "Beef, broccoli and rice together. Reheat until hot right through. Keeps 3 days in the fridge.",
  "g": "Tamari instead of soy, 100% maize cornflour, and a separate clean wok for the GF batch."
 }

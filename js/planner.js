@@ -112,7 +112,7 @@ function ingPhrase(id,a,adj){const it=ING[id];const amt=kAmt(id,a);const pre=adj
   if(it.u==='ea'&&it.ea&&it.ea[1]!=='bunch'){const w=it.ea[1];const many=a/it.ea[0]>1.0001;return`${amt} ${pre}${many?plural(w):w}`}
   return`${amt} ${pre}${iname(id).replace(/,.*$/,'').replace(/^\w+/,w=>/^(Greek|Thai|American|Chinese|Korean|Lebanese|Turkish|Japanese|Italian|Dijon)$/.test(w)?w:w.toLowerCase())}`}
 // A describing word right before a marker ("crushed {garlic}") moves inside the amount: "4 crushed garlic cloves".
-const ADJ='(?:finely |roughly |thinly )?(?:crushed|grated|sliced|diced|chopped|torn|softened|shredded)';
+const ADJ='(?:finely |roughly |thinly |lightly )?(?:crushed|grated|sliced|diced|chopped|torn|softened|shredded|beaten|halved)';
 function fillStep(r,txt,n,wrap=x=>x){return String(txt).replace(new RegExp(`(?:\\b(${ADJ}) )?\\{(\\w+)(?:\\*([\\d.]+))?\\}`,'g'),(m,adj,id,f)=>{const q=(r.i.find(x=>x[0]===id)||[])[1];if(q==null||!ING[id])return m;return wrap(ingPhrase(id,q*n*(f?+f:1),adj))})}
 // [{h, s}] with amounts filled in for n serves (s as plain text)
 function methodSteps(r,c,n){return(c&&c.m||[]).map(x=>{const st=stepOf(x);return{h:st.h||'',s:fillStep(r,st.s,n)}})}

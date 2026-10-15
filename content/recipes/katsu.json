@@ -1,13 +1,31 @@
 {
  "id": "katsu",
  "m": [
-  "Curry sauce: soften the diced onion and carrot in a little oil for 8 minutes. Add the garlic, ginger and curry powder for 1 minute.",
-  "Stir in half the flour for 1 minute, then whisk in the stock powder dissolved in ¾ cup hot water per serve. Simmer 15 minutes, add the honey and soy, then blitz smooth.",
-  "Cook the rice. Slaw: shred the cabbage thin and toss with the rice vinegar and a pinch of salt and sugar.",
-  "Flatten the thighs a little. Dust in the remaining flour, dip in beaten egg, press into the panko.",
-  "Shallow-fry in 1cm of oil, 4 minutes a side, until deep golden and cooked through. Drain and rest 2 minutes, then slice.",
-  "Plate the rice, chicken and slaw, and pour the curry sauce alongside."
+  {
+   "h": "Start the curry sauce",
+   "s": "Heat a drizzle of oil in a saucepan over medium heat. Cook finely diced {onion} and {carrot} for 8 minutes until soft. Add crushed {garlic}, grated {ginger} and {currypowder} and stir for 1 minute."
+  },
+  {
+   "h": "Simmer and blitz",
+   "s": "Stir in {flour*0.5} for 1 minute, then whisk in {stockpowder} dissolved in ¾ cup hot water per serve. Simmer for 15 minutes, stirring now and then. Add {honey} and {soy}, then blitz smooth with a stick blender."
+  },
+  {
+   "h": "Rice and slaw",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming. Finely shred the cabbage and toss with {ricevinegar} and a pinch each of salt and sugar."
+  },
+  {
+   "h": "Crumb the chicken",
+   "s": "Flatten {chk_thigh} a little with your hand so they're an even thickness. Dust in the rest of the flour, dip in beaten {eggs}, then press firmly into {panko}."
+  },
+  {
+   "h": "Fry until golden",
+   "s": "Heat 1cm of oil in a large frying pan over medium-high heat. Fry the chicken in batches for 4 minutes a side until deep golden and cooked through (75°C in the thickest part). Drain on paper towel, rest for 2 minutes, then slice."
+  },
+  {
+   "h": "Serve up",
+   "s": "Plate the rice, chicken and slaw, and pour the curry sauce alongside so the crumb stays crunchy."
+  }
  ],
- "l": "Keep the sauce separate and reheat the chicken in the oven or air fryer so it stays crunchy.",
+ "l": "Keep the sauce separate and reheat the chicken in the oven or air fryer so it stays crunchy. Keeps 3 days in the fridge.",
  "g": "GF flour in the sauce (make a small separate pot) and for crumbing, with GF crumbs. Tamari instead of soy. Fry the GF chicken first in fresh oil."
 }

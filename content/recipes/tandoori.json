@@ -1,13 +1,31 @@
 {
  "id": "tandoori",
  "m": [
-  "Marinade: half the yoghurt with the curry paste, garam masala, half the garlic, the juice of half the lemons and 1 tsp salt. Coat the chicken and leave at least 30 minutes (overnight is best).",
-  "Pickled onion: thinly sliced red onion with the vinegar, a pinch of sugar and salt.",
-  "Raita: the rest of the yoghurt with grated cucumber, chopped mint, the rest of the garlic and salt.",
-  "Cook the rice.",
-  "Grill or pan-fry the chicken on high, 5 to 6 minutes a side, until charred at the edges and cooked through. Rest 5 minutes.",
-  "Serve with rice, warm naan, raita, pickled onion and lemon wedges."
+  {
+   "h": "Marinate the chicken",
+   "s": "Mix {yoghurt*0.5} with {currypaste}, {garammasala}, {garlic*0.5} (crushed), the juice of {lemon*0.5} and 1 tsp salt. Coat {chk_thigh} and leave for at least 30 minutes, or overnight in the fridge for the best flavour."
+  },
+  {
+   "h": "Quick pickled onion",
+   "s": "Thinly slice {red_onion} and toss with {whitevinegar}, a pinch of sugar and a pinch of salt. Leave to turn pink while you cook."
+  },
+  {
+   "h": "Make the raita",
+   "s": "Coarsely grate {cucumber} and squeeze out the water. Mix with the rest of the yoghurt, chopped {mint}, the rest of the garlic and a pinch of salt."
+  },
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Char the chicken",
+   "s": "Heat a grill pan, BBQ or heavy frying pan over high heat with a drizzle of oil. Cook the chicken for 5 to 6 minutes a side until charred at the edges and cooked through (75°C in the thickest part). Rest for 5 minutes, then slice."
+  },
+  {
+   "h": "Serve up",
+   "s": "Warm {naan} in a dry pan. Serve the chicken with the rice, naan, raita, pickled onion and wedges of the remaining lemon."
+  }
  ],
- "l": "Chicken over rice with the raita in a separate container.",
+ "l": "Chicken over rice with the raita in a separate container. Keeps 3 days in the fridge.",
  "g": "GF wraps or extra rice instead of naan. Check the curry paste label."
 }

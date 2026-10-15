@@ -1,14 +1,31 @@
 {
  "id": "honeygarlic",
  "m": [
-  "Cook the rice.",
-  "Cut the chicken into bite-size pieces, season with salt and pepper and toss in the cornflour so it's lightly coated.",
-  "Glaze: honey, soy, rice vinegar, grated garlic and ginger, plus 2 tbsp water per serve.",
-  "Fry the chicken in a hot pan with a good splash of oil, in batches, 6 to 7 minutes until golden and crisp on the edges.",
-  "Meanwhile cut the broccoli into small florets and char in a separate hot pan with a little oil for 4 minutes, then add a splash of water and cover for 2 minutes.",
-  "Pour the glaze over the chicken and bubble 2 minutes, tossing, until thick and sticky.",
-  "Serve over rice with the broccoli, spring onion and sesame seeds."
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Coat the chicken",
+   "s": "Cut {chk_thigh} into bite-size pieces and season with salt and pepper. Toss in {cornflour} until lightly coated all over."
+  },
+  {
+   "h": "Mix the glaze",
+   "s": "In a jug mix {honey}, {soy}, {ricevinegar}, finely grated {garlic} and {ginger}, and 2 tbsp water per serve."
+  },
+  {
+   "h": "Fry the chicken",
+   "s": "Heat a good splash of oil in a large frying pan over medium-high heat. Fry the chicken in batches for 6 to 7 minutes, turning, until golden, crisp on the edges and cooked through. Crowding the pan stops it crisping, so keep the batches small."
+  },
+  {
+   "h": "Char the broccoli",
+   "s": "Cut {broccoli} into small florets. In a second pan, heat a little oil over high heat and cook the broccoli for 4 minutes until charred in spots. Add a splash of water, cover and steam for 2 minutes."
+  },
+  {
+   "h": "Glaze and serve",
+   "s": "Put all the chicken back in the pan, pour in the glaze and bubble for 2 minutes, tossing, until thick and sticky. Serve over the rice with the broccoli, sliced {springonion} and {sesameseeds}."
+  }
  ],
- "l": "Chicken, broccoli and rice in one container. The glaze keeps it juicy when reheated.",
+ "l": "Chicken, broccoli and rice in one container. The glaze keeps it juicy when reheated. Keeps 3 days in the fridge.",
  "g": "Tamari instead of soy, and make sure the cornflour is 100% maize. Cook the GF batch first in a clean pan."
 }

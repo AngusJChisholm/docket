@@ -1,14 +1,31 @@
 {
  "id": "massaman",
  "m": [
-  "Cut the chuck into large 4cm chunks, season with salt and brown hard in a heavy pot in batches. Set aside.",
-  "Lower the heat, add a splash of oil and fry the curry paste for 2 minutes until fragrant.",
-  "Add the coconut milk, half a cup of water per 2 serves, the fish sauce and brown sugar. Return the beef and bring to a gentle simmer.",
-  "Lid on, low heat (or 160°C oven) for 2 hours, stirring occasionally.",
-  "Add the potato in chunks and the onion in wedges. Simmer uncovered 30 to 40 minutes until the potato is tender and the beef falls apart.",
-  "Taste: adjust with more fish sauce for salt, sugar for sweet, lime for sour. Cook the rice.",
-  "Serve over rice, topped with crushed peanuts and coriander."
+  {
+   "h": "Brown the beef",
+   "s": "Cut {beef_chuck} into large 4cm chunks, pat dry and season with salt. Heat a drizzle of oil in a large heavy pot over high heat and brown the beef in batches for 3 to 4 minutes a side until well coloured. Set aside."
+  },
+  {
+   "h": "Fry the paste",
+   "s": "Turn the heat down to medium and add a splash of oil. Fry {massaman} for 2 minutes, stirring, until fragrant."
+  },
+  {
+   "h": "Low and slow",
+   "s": "Add {coconut}, ½ cup water for every 2 serves, {fishsauce} and {brownsugar}. Return the beef and bring to a gentle simmer. Cover and cook on low (or in a 160°C oven) for 2 hours, stirring now and then."
+  },
+  {
+   "h": "Add the potatoes",
+   "s": "Add {potato} in chunks and {onion} in wedges. Simmer with the lid off for 30 to 40 minutes until the potato is tender and the beef falls apart."
+  },
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Balance and serve",
+   "s": "Taste the curry and adjust: more fish sauce for salt, sugar for sweet, a squeeze of {lime} for sour. Serve over the rice, topped with crushed {peanuts} and torn {coriander}."
+  }
  ],
- "l": "Even better the next day. Pack the peanuts separately so they stay crunchy.",
+ "l": "Even better the next day. Pack the peanuts separately so they stay crunchy. Keeps 4 days in the fridge, and it freezes well.",
  "g": "Naturally gluten free. Check the curry paste and fish sauce labels."
 }

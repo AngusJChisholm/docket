@@ -1,13 +1,31 @@
 {
  "id": "burrito",
  "m": [
-  "Rub the chicken with the paprika, cumin, oregano, garlic, oil and salt. Leave 15 minutes.",
-  "Cook the rice. Stir through lime juice and chopped coriander.",
-  "Cook the chicken 5 to 6 minutes a side until charred. Rest and slice.",
-  "Warm the drained black beans with a pinch of cumin and salt.",
-  "Salsa: corn, chopped tomatoes, red onion, jalapeño, lime and coriander.",
-  "Build bowls: rice, beans, chicken, salsa, cheese, sour cream and avocado."
+  {
+   "h": "Season the chicken",
+   "s": "Toss {chk_thigh} with {smokedpaprika}, {cumin}, {oregano}, {garlic*0.5} (crushed), a drizzle of oil and 1 tsp salt. Leave for 15 minutes while you get the rice on."
+  },
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming. Stir through the juice of {lime*0.5} and some chopped {coriander}."
+  },
+  {
+   "h": "Cook the chicken",
+   "s": "Heat a large frying pan or grill pan over medium-high heat. Cook the chicken for 5 to 6 minutes a side until charred and cooked through (75°C in the thickest part). Rest for 5 minutes, then slice."
+  },
+  {
+   "h": "Warm the beans",
+   "s": "Tip {blackbeans}, drained and rinsed, into a small saucepan with the rest of the garlic, a pinch of cumin, a splash of water and a pinch of salt. Warm over medium heat for 3 to 4 minutes, lightly crushing a few beans."
+  },
+  {
+   "h": "Make the salsa",
+   "s": "Drain {corn}. Chop {cherrytom}, finely dice {red_onion} and chop {jalapenos}. Toss together with a squeeze of the remaining lime, a little more coriander and a pinch of salt."
+  },
+  {
+   "h": "Build the bowls",
+   "s": "Divide the rice between bowls and top with the beans, chicken and salsa. Finish with {cheese}, {sourcream} and sliced {avocado}."
+  }
  ],
- "l": "Built for lunch. Keep the sour cream and avo separate until eating.",
+ "l": "Built for lunch. Keep the sour cream and avo separate until you eat. Keeps 3 days in the fridge.",
  "g": "Naturally gluten free. Check the spice labels."
 }

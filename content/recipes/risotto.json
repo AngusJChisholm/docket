@@ -1,13 +1,31 @@
 {
  "id": "risotto",
  "m": [
-  "Roast the cherry tomatoes at 200°C with oil and salt for 15 minutes.",
-  "Make the stock: stock powder dissolved in 350ml hot water per serve. Keep it warm.",
-  "Fry the sliced chorizo until crisp, remove. Soften the onion in the chorizo oil 3 minutes, add half the garlic, then the rice. Toast 1 minute.",
-  "Add stock a ladle at a time, stirring, for 18 to 20 minutes until creamy.",
-  "Meanwhile sizzle the prawns with the rest of the garlic, 2 minutes a side. Add them and the peas for the last 3 minutes.",
-  "Off the heat, stir in butter, parmesan and lemon. Top with chorizo, tomatoes and parsley."
+  {
+   "h": "Roast the tomatoes",
+   "s": "Heat the oven to 200°C. Toss {cherrytom} with a drizzle of oil and a pinch of salt on a tray and roast for 15 minutes until blistered. Meanwhile dissolve {stockpowder} in 350ml hot water per serve and keep it warm in a saucepan on low."
+  },
+  {
+   "h": "Crisp the chorizo",
+   "s": "Slice {chorizo} into thin rounds and fry in a large deep frying pan over medium heat for 4 minutes until crisp. Lift out and leave the red oil in the pan."
+  },
+  {
+   "h": "Toast the rice",
+   "s": "Add finely diced {onion} to the chorizo oil and cook for 3 minutes until soft. Add {garlic*0.5} (crushed) for 30 seconds, then {arborio}. Stir for 1 minute until the grains turn slightly see-through at the edges."
+  },
+  {
+   "h": "Stir it creamy",
+   "s": "Add the warm stock a ladle at a time, stirring often and waiting until each lot is almost absorbed before adding the next. After 18 to 20 minutes the rice should be creamy and just tender with a little bite."
+  },
+  {
+   "h": "Cook the prawns",
+   "s": "While the risotto cooks, heat a drizzle of oil in a frying pan over high heat. Cook {prawns} with the rest of the garlic for 1 to 2 minutes a side until pink. Stir the prawns and {peas} into the risotto for the last 3 minutes."
+  },
+  {
+   "h": "Finish and serve",
+   "s": "Take it off the heat. Stir in {butter}, grated {parm} and the juice of {lemon}, then rest for 2 minutes. Serve topped with the chorizo, roasted tomatoes and chopped {parsley}."
+  }
  ],
- "l": "Reheat with a splash of water and stir well. Prawns are best eaten within a day.",
+ "l": "Reheat with a splash of water and stir well. Best eaten within a day because of the prawns. Keeps 2 days in the fridge.",
  "g": "Naturally gluten free. Check the stock powder and chorizo."
 }
