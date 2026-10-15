@@ -1,13 +1,31 @@
 {
  "id": "bun",
  "m": [
-  "Pork: mix the mince with lemongrass paste, half the garlic, half the fish sauce, half the sugar and pepper. Roll into small flat patties.",
-  "Nuoc cham: the rest of the fish sauce and sugar with lime juice, the rest of the garlic, sliced chilli and 2 tbsp water per serve. Taste: it should be salty, sweet and sour.",
-  "Cook the vermicelli per the packet (usually 3 to 4 minutes), rinse under cold water and drain well.",
-  "Pan-fry the patties in a hot pan 3 minutes a side until caramelised.",
-  "Prep the salad: shredded lettuce, cucumber and carrot matchsticks, a pile of mint and coriander, crushed peanuts.",
-  "Bowls: noodles, salad, pork, herbs and peanuts. Pour the nuoc cham over at the table."
+  {
+   "h": "Mix the pork",
+   "s": "In a bowl, mix {pork_mince} with {lemongrass}, {garlic*0.5} (finely grated), {fishsauce*0.5}, {brownsugar*0.5} and plenty of pepper. Roll into small flat patties about 5cm across."
+  },
+  {
+   "h": "Make the nuoc cham",
+   "s": "Mix the rest of the fish sauce and sugar with the juice of {lime}, the rest of the garlic, sliced {chilli} and 2 tbsp water per serve. Stir until the sugar dissolves. Taste it: it should be salty, sweet and sour all at once."
+  },
+  {
+   "h": "Cook the noodles",
+   "s": "Cook {vermicelli} in boiling water for 3 to 4 minutes (check the packet), then rinse under cold water until cool and drain really well."
+  },
+  {
+   "h": "Prep the salad",
+   "s": "Shred {cos}. Cut {cucumber} and {carrot} into matchsticks. Pick the leaves from {mint} and {coriander}, and roughly crush {peanuts}."
+  },
+  {
+   "h": "Cook the pork",
+   "s": "Heat a drizzle of oil in a large frying pan over medium-high heat. Cook the patties in batches for 3 minutes a side until caramelised and cooked through."
+  },
+  {
+   "h": "Build the bowls",
+   "s": "Divide the noodles between bowls and top with the salad, pork, herbs and peanuts. Pour the nuoc cham over at the table."
+  }
  ],
- "l": "A great cold lunch. Pack the dressing separately and pour it on just before eating.",
+ "l": "A great cold lunch. Pack the dressing separately and pour it on just before eating. Keeps 3 days in the fridge.",
  "g": "Naturally gluten free with rice noodles. Check the fish sauce label."
 }

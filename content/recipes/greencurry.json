@@ -1,13 +1,31 @@
 {
  "id": "greencurry",
  "m": [
-  "Cook the rice.",
-  "Fry the curry paste in a splash of oil for 2 minutes until it smells amazing. Add a third of the coconut milk and cook until the oil splits out.",
-  "Add the chicken (bite-size) and stir to coat. Cook 4 minutes.",
-  "Pour in the rest of the coconut milk with ½ cup water. Add the eggplant in chunks and simmer 10 minutes.",
-  "Add the beans for the last 4 minutes. Season with fish sauce and sugar, taste, adjust.",
-  "Off the heat, stir through the Thai basil and a squeeze of lime. Serve over rice with sliced chilli."
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Get prepped",
+   "s": "Cut {chk_thigh} into bite-size pieces. Cut {eggplant} into 3cm chunks. Trim {greenbeans} and cut them in half. Thinly slice {chilli} and pick the leaves from {thaibasil}."
+  },
+  {
+   "h": "Fry the paste",
+   "s": "Heat a splash of oil in a large saucepan or wok over medium heat. Fry {greencurry} for 2 minutes, stirring, until it smells amazing. Add about a third of {coconut} and cook for 2 to 3 minutes until the oil splits out and shimmers on top. That's where the flavour comes from."
+  },
+  {
+   "h": "Cook the chicken",
+   "s": "Add the chicken and stir to coat it in the paste. Cook for 4 minutes until it's sealed all over."
+  },
+  {
+   "h": "Simmer",
+   "s": "Pour in the rest of the coconut milk with ½ cup water for every 2 serves. Add the eggplant and simmer for 10 minutes until soft. Add the beans for the last 4 minutes so they stay bright. Season with {fishsauce} and {brownsugar}, then taste and adjust."
+  },
+  {
+   "h": "Finish and serve",
+   "s": "Take the pan off the heat and stir through the Thai basil and a squeeze of {lime}. Serve over the rice, topped with the sliced chilli."
+  }
  ],
- "l": "Curry over rice in one container. Squeeze extra lime over when reheating.",
+ "l": "Curry over rice in one container. Squeeze over extra lime when you reheat it. Keeps 3 days in the fridge.",
  "g": "Naturally gluten free, but check the curry paste and fish sauce labels."
 }

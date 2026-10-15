@@ -1,13 +1,31 @@
 {
  "id": "ragu",
  "m": [
-  "A Sunday arvo job. Cut the chuck into big chunks, season well and brown hard in a heavy pot in batches. Set aside.",
-  "Turn the heat down. Cook the diced onion and carrot in the same pot for 10 minutes until soft, then the garlic for 1 minute.",
-  "Stir in the tomato paste and cook 2 minutes until it darkens. Add the crushed tomatoes, oregano, stock powder and enough water to just cover the beef.",
-  "Lid on, low simmer for 3 hours (or 160°C in the oven) until the beef falls apart. Stir every 45 minutes and top up with water if it gets thick.",
-  "Shred the beef in the pot with two forks and simmer uncovered 15 minutes to thicken. Taste and season.",
-  "Cook the pasta, keep a mug of pasta water, and toss through the ragu with a splash of that water. Finish with parmesan and parsley."
+  {
+   "h": "Brown the beef",
+   "s": "A Sunday arvo job. Cut {beef_chuck} into big 5cm chunks, pat dry with paper towel and season well. Heat a drizzle of oil in a large heavy pot over high heat. Brown the beef in batches for 3 to 4 minutes a side until a deep crust forms. Crowd the pot and it steams instead, so keep the batches small. Set aside on a plate."
+  },
+  {
+   "h": "Build the base",
+   "s": "Turn the heat down to medium. Finely dice {onion} and {carrot}, add to the pot and cook for 10 minutes, scraping up the brown bits, until soft and sweet. Add {garlic}, crushed, and cook for 1 minute."
+  },
+  {
+   "h": "Add the tomato",
+   "s": "Stir in {tompaste} and cook for 2 minutes until it darkens to brick red. Add {tintom}, {oregano} and {stockpowder}, then return the beef and its juices. Pour in just enough water to cover the beef."
+  },
+  {
+   "h": "Low and slow",
+   "s": "Bring to a simmer, then cover and cook on the lowest heat for 3 hours (or in a 160°C oven) until the beef falls apart when pushed with a spoon. Stir every 45 minutes and add a splash of water if it gets too thick."
+  },
+  {
+   "h": "Shred and thicken",
+   "s": "Shred the beef in the pot with two forks. Simmer with the lid off for 15 minutes until thick and glossy. Taste and season with salt and pepper."
+  },
+  {
+   "h": "Pasta time",
+   "s": "Cook {pasta} in a big pot of well-salted boiling water until al dente. Scoop out a mug of the pasta water, then drain. Toss the pasta through the ragu with a splash of that water so it coats every piece. Serve with grated {parm} and chopped {parsley}."
+  }
  ],
- "l": "Keep the pasta water to loosen it when reheating. It honestly eats better the next day.",
+ "l": "Keep a little pasta water to loosen it when reheating. It honestly eats better the next day. Keeps 4 days in the fridge, and the ragu freezes well.",
  "g": "GF pasta in a separate pot with its own spoon, sauced from the main pot before the regular pasta goes in. Check the stock powder."
 }

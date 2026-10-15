@@ -1,13 +1,31 @@
 {
  "id": "smash",
  "m": [
-  "Chips: oven to 220°C. Cut potatoes into chips, toss with oil and salt, roast 35 to 40 minutes, turning once.",
-  "Special sauce: mayo, tomato sauce, mustard and a spoonful of chopped pickles.",
-  "Roll the mince into 110g balls (two per person). Slice the onion paper thin.",
-  "Get a heavy pan or BBQ plate smoking hot. Add a ball, smash it flat with a spatula, season hard. Cook 2 minutes until the edge is deep brown.",
-  "Flip, add a cheese slice, cook 1 minute more. Stack two patties per burger.",
-  "Toast the buns. Sauce, lettuce, double patty, pickles, onion. Done."
+  {
+   "h": "Get the chips in",
+   "s": "Heat the oven to 220°C. Cut {potato} into chips, toss with a good drizzle of oil and a pinch of salt on a lined tray, and roast for 35 to 40 minutes, turning halfway, until golden and crisp."
+  },
+  {
+   "h": "Special sauce",
+   "s": "Slice {pickles} into rounds and finely chop a spoonful of them. Mix the chopped pickles with {mayo}, {ketchup} and {mustard}."
+  },
+  {
+   "h": "Prep the patties",
+   "s": "Roll {beef_mince} into 110g balls, two per person, and keep them in the fridge until you cook. Slice {onion} paper thin and shred {cos}."
+  },
+  {
+   "h": "Smash them",
+   "s": "Heat a heavy frying pan or BBQ plate over high heat until it's smoking. Add a ball, then smash it flat with a sturdy spatula, pressing hard for 10 seconds. Season well with salt and pepper. Cook for 2 minutes without touching it, until the edge is deep brown and crispy."
+  },
+  {
+   "h": "Flip and cheese",
+   "s": "Scrape under the patty so you keep the crust, flip it, and lay a cheese slice on top (you'll use {slices} in all). Cook for 1 more minute. Stack two patties together and repeat with the rest, wiping the pan between batches if it gets too smoky."
+  },
+  {
+   "h": "Build the burgers",
+   "s": "Toast {buns} cut side down in the pan. Spread with the sauce, then add lettuce, the double patty, pickles and onion. Serve with the chips."
+  }
  ],
- "l": "Burger bowl: patties over shredded lettuce and leftover rice or chips, sauce in a little container.",
+ "l": "Burger bowl: patties over shredded lettuce and leftover chips, sauce in a little container. Keeps 3 days in the fridge.",
  "g": "GF buns, toasted separately. Cook the GF patties first on a clean surface. Check the mustard and pickle labels."
 }

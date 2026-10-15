@@ -1,13 +1,31 @@
 {
  "id": "souvlaki",
  "m": [
-  "Cut the pork into 3cm cubes. Toss with the oregano, juice of half the lemons, half the garlic, a glug of oil and 1 tsp salt. Leave 20 minutes, then thread onto skewers if you have them.",
-  "Chips: heat oven to 220°C. Cut potatoes into wedges, toss with oil and salt, roast 35 to 40 minutes, turning once.",
-  "Tzatziki: grate half the cucumber, squeeze out the water, and stir into the yoghurt with the rest of the garlic, chopped mint, lemon and salt.",
-  "Greek salad: chop the rest of the cucumber, the tomatoes and red onion, crumble over the fetta, dress with oil and lemon.",
-  "Grill pan or BBQ the pork 8 to 10 minutes, turning, until charred and cooked through.",
-  "Warm the pita. Everyone builds their own."
+  {
+   "h": "Marinate the pork",
+   "s": "Cut {pork_shoulder} into 3cm cubes. Toss with {oregano}, the juice of {lemon*0.5}, {garlic*0.5} (crushed), a glug of oil and 1 tsp salt. Leave for 20 minutes, then thread onto skewers if you have them."
+  },
+  {
+   "h": "Get the chips in",
+   "s": "Heat the oven to 220°C. Cut {potato} into wedges, toss with a good drizzle of oil and a pinch of salt on a lined tray, and roast for 35 to 40 minutes, turning halfway, until golden and crisp."
+  },
+  {
+   "h": "Make the tzatziki",
+   "s": "Coarsely grate half of {cucumber}, then squeeze out as much water as you can with your hands so it doesn't go runny. Stir into {yoghurt} with the rest of the garlic, chopped {mint}, a squeeze of lemon and a pinch of salt."
+  },
+  {
+   "h": "Toss the Greek salad",
+   "s": "Chop the rest of the cucumber, {cherrytom} and {red_onion}. Crumble over {fetta} and dress with a drizzle of oil, a squeeze of lemon and a pinch of salt."
+  },
+  {
+   "h": "Grill the pork",
+   "s": "Heat a grill pan, BBQ or frying pan over medium-high heat. Cook the pork for 8 to 10 minutes, turning every couple of minutes, until charred on the edges and cooked through with no pink in the middle."
+  },
+  {
+   "h": "Serve up",
+   "s": "Warm {pita} in the oven for the last 2 minutes of the chips. Let everyone build their own with pork, salad, tzatziki and a few chips tucked in."
+  }
  ],
- "l": "Pack pork, salad and tzatziki separately. Skip the chips and double the salad.",
+ "l": "Pack the pork, salad and tzatziki separately. Skip the chips and double the salad. Keeps 3 days in the fridge.",
  "g": "GF wraps instead of pita. Everything else is naturally gluten free."
 }

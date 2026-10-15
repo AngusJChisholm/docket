@@ -1,13 +1,31 @@
 {
  "id": "shawarma",
  "m": [
-  "Marinade: half the yoghurt with cumin, smoked paprika, turmeric, cinnamon, half the garlic, the juice of half the lemons, a glug of oil and 1 tsp salt. Coat the chicken and leave at least 20 minutes.",
-  "Pink onions: slice the red onion thin, cover with the vinegar, sugar, a pinch of salt and a splash of hot water. Leave 15 minutes.",
-  "Garlic yoghurt: the rest of the yoghurt with the remaining garlic (finely grated), a squeeze of lemon and salt.",
-  "Cook the chicken in a hot pan, grill or BBQ for 5 to 6 minutes a side until charred and cooked through. Rest 5 minutes, then slice.",
-  "Salad: chop the tomatoes, cucumber and parsley, dress with lemon, oil and salt.",
-  "Warm the wraps in a dry pan. Everyone builds their own: wrap, chicken, salad, onions and plenty of garlic yoghurt."
+  {
+   "h": "Marinate the chicken",
+   "s": "In a large bowl mix {yoghurt*0.5} with {cumin}, {smokedpaprika}, {turmeric}, {cinnamon}, {garlic*0.5} (finely grated), the juice of {lemon*0.5}, a glug of oil and 1 tsp salt. Add {chk_thigh} and toss to coat. Leave for at least 20 minutes, or overnight in the fridge."
+  },
+  {
+   "h": "Quick pink onions",
+   "s": "Thinly slice {red_onion} and put it in a small bowl with {whitevinegar}, {brownsugar}, a pinch of salt and a splash of hot water. Leave for 15 minutes until bright pink and softened."
+  },
+  {
+   "h": "Garlic yoghurt",
+   "s": "Mix the rest of the yoghurt with the rest of the garlic, finely grated, a squeeze of the remaining lemon and a pinch of salt. Keep it in the fridge until you eat."
+  },
+  {
+   "h": "Cook the chicken",
+   "s": "Heat a drizzle of oil in a large frying pan, grill pan or BBQ over medium-high heat. Cook the chicken for 5 to 6 minutes a side, in batches if needed, until charred and cooked through (75°C in the thickest part). Rest for 5 minutes, then slice."
+  },
+  {
+   "h": "Toss the salad",
+   "s": "Halve {cherrytom}, chop {cucumber} and roughly chop the leaves from {parsley}. Toss together with the last of the lemon juice, a drizzle of oil and a pinch of salt."
+  },
+  {
+   "h": "Wrap it up",
+   "s": "Warm {wraps} in a dry frying pan for 30 seconds a side. Let everyone build their own: wrap, chicken, salad, pink onions and plenty of garlic yoghurt."
+  }
  ],
- "l": "Skip the wrap and make it a bowl: chicken over salad, with the yoghurt in a little container. Add leftover rice if you have it.",
+ "l": "Skip the wrap and make it a bowl: chicken over salad, with the yoghurt in a little container. Add leftover rice if you have it. Keeps 3 days in the fridge.",
  "g": "GF wraps, warmed in a separate pan. Everything else is naturally gluten free."
 }

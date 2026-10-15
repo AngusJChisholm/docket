@@ -1,14 +1,31 @@
 {
  "id": "butter",
  "m": [
-  "Cut the chicken into bite-size pieces. Mix with the yoghurt, half the garam masala, the turmeric, chilli powder and 1 tsp salt. Leave 20 minutes or overnight.",
-  "Cook the rice.",
-  "Brown the chicken in batches in a hot pan with a little oil. It doesn't need to cook through. Set aside.",
-  "Turn the heat down, add the butter and the finely diced onion and cook 8 minutes until soft and golden. Add the grated garlic and ginger, the rest of the garam masala and the cumin for 1 minute.",
-  "Stir in the tomato paste for 2 minutes, then the crushed tomatoes and sugar. Simmer 10 minutes, then blitz smooth with a stick blender if you have one.",
-  "Add the chicken and cream and simmer 10 minutes until the chicken's cooked through. Taste and season.",
-  "Serve over rice with warm naan and coriander."
+  {
+   "h": "Marinate the chicken",
+   "s": "Cut {chk_thigh} into bite-size pieces. In a bowl, mix with {yoghurt}, {garammasala*0.5}, {turmeric}, {chillipowder} and 1 tsp salt. Leave for 20 minutes, or overnight in the fridge for the best flavour."
+  },
+  {
+   "h": "Get the rice on",
+   "s": "Rinse {rice} until the water runs clear. Put it in a saucepan with 1½ times its volume of cold water and a pinch of salt. Bring to the boil, then cover and cook on low for 12 minutes. Take it off the heat and leave the lid on for 10 minutes so it finishes steaming."
+  },
+  {
+   "h": "Brown the chicken",
+   "s": "Heat a drizzle of oil in a large frying pan over high heat. Brown the chicken in batches for 2 to 3 minutes until charred in spots. It doesn't need to cook through yet. Set aside on a plate."
+  },
+  {
+   "h": "Make the sauce base",
+   "s": "Turn the heat down to medium. Add {butter} and finely diced {onion} and cook for 8 minutes until soft and golden. Add finely grated {garlic} and {ginger}, the rest of the garam masala and {cumin}, and stir for 1 minute until fragrant."
+  },
+  {
+   "h": "Simmer it all",
+   "s": "Stir in {tompaste} for 2 minutes, then add {tintom} and {brownsugar}. Simmer for 10 minutes until thickened, then blitz smooth with a stick blender if you have one. Add the chicken and {cream} and simmer for 10 minutes until the chicken is cooked through. Taste and season."
+  },
+  {
+   "h": "Serve up",
+   "s": "Warm {naan} in a dry pan or the oven for a couple of minutes. Serve the curry over the rice, with the naan and torn {coriander}."
+  }
  ],
- "l": "Curry and rice in one container. It reheats perfectly, and the flavour gets better overnight.",
+ "l": "Curry and rice in one container. It reheats perfectly, and the flavour gets better overnight. Keeps 3 days in the fridge.",
  "g": "GF wraps or extra rice instead of naan. Naturally GF otherwise; just check the garam masala label."
 }

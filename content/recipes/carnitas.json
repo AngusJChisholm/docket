@@ -1,13 +1,31 @@
 {
  "id": "carnitas",
  "m": [
-  "Cut the pork into big chunks. Rub with the cumin, oregano, smoked paprika and 2 tsp salt.",
-  "Slow cooker: onion and garlic in the bottom, pork on top, juice of half the limes and the stock powder dissolved in ½ cup water. 8 hours on low or 5 on high. (Oven: covered, 160°C for 3½ hours.)",
-  "Shred the pork with two forks and stir it through the juices.",
-  "Crisp it up: spread the pork on a tray with a ladle of juices and grill on high for 5 to 8 minutes until the edges are crunchy. Or fry in batches in a hot pan.",
-  "Lime crema: sour cream with the juice of the remaining limes and a pinch of salt. Slaw: shred the cabbage thin and toss with a little lime and salt.",
-  "Warm the tortillas in a dry pan. Load with pork, slaw, crema, jalapeños, avocado and coriander."
+  {
+   "h": "Season the pork",
+   "s": "Cut {pork_shoulder} into large 6cm chunks. Rub all over with {cumin}, {oregano}, {smokedpaprika} and 2 tsp salt."
+  },
+  {
+   "h": "Slow cook",
+   "s": "Roughly chop {onion} and smash {garlic}, and put them in the bottom of a slow cooker. Sit the pork on top. Add the juice of {lime*0.5} and {stockpowder} dissolved in ½ cup hot water. Cook for 8 hours on low or 5 on high, until it falls apart. No slow cooker? Cover tightly and cook in a 160°C oven for 3½ hours."
+  },
+  {
+   "h": "Shred",
+   "s": "Lift out the pork and shred it with two forks, then stir it back through the juices so it soaks them up. Skim off some of the fat on top if you like."
+  },
+  {
+   "h": "Crisp it up",
+   "s": "Heat the grill to high. Spread the pork over a lined tray with a ladle of the juices and grill for 5 to 8 minutes until the edges are dark and crunchy. Or fry it in batches in a hot frying pan. The crispy bits are the whole point, so don't rush it."
+  },
+  {
+   "h": "Crema and slaw",
+   "s": "Mix {sourcream} with the juice of the remaining lime and a pinch of salt. Finely shred the cabbage and toss with a squeeze of lime and a pinch of salt. Slice {avocado} and pick the leaves from {coriander}."
+  },
+  {
+   "h": "Load the tacos",
+   "s": "Warm {tortillas} in a dry frying pan for 20 seconds a side. Load them up with pork, slaw, crema, avocado, {jalapenos} and coriander."
+  }
  ],
- "l": "Burrito bowl it: pork over rice and slaw, crema on the side. Keep the avo whole until the day.",
+ "l": "Burrito bowl it: pork over rice and slaw, crema on the side. Keep the avo whole until the day. Keeps 3 days in the fridge, and the pork freezes well.",
  "g": "Corn tortillas instead of flour (check they're 100% corn). Check the stock powder."
 }

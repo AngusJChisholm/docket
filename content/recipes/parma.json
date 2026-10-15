@@ -1,13 +1,31 @@
 {
  "id": "parma",
  "m": [
-  "Chips: oven to 220°C. Cut potatoes into chips, toss with oil and salt, roast 35 to 40 minutes.",
-  "Slice the breasts in half horizontally so they cook evenly. Set up flour, beaten egg and crumbs.",
-  "Crumb every piece. Do the GF ones first in their own flour, egg and crumbs.",
-  "Shallow-fry 3 minutes a side until golden. Move to a lined tray.",
-  "Napoli: passata with oregano and salt. Spoon over each schnitzel, top with ham and mozzarella.",
-  "Bake 10 minutes until bubbling. Serve with chips and a simple lettuce, cucumber and lemon salad."
+  {
+   "h": "Get the chips in",
+   "s": "Heat the oven to 220°C. Cut {potato} into chips, toss with a good drizzle of oil and a pinch of salt on a lined tray, and roast for 35 to 40 minutes, turning halfway, until golden and crisp."
+  },
+  {
+   "h": "Prep the chicken",
+   "s": "Slice {chk_breast} in half horizontally so you have thin, even pieces that cook quickly. Set up three shallow bowls: {flour} seasoned with salt, {eggs} beaten with a splash of water, and {panko}."
+  },
+  {
+   "h": "Crumb it",
+   "s": "Coat each piece in flour, then egg, then crumbs, pressing them on firmly. If anyone's gluten free, crumb theirs first with their own flour, egg and crumbs."
+  },
+  {
+   "h": "Fry until golden",
+   "s": "Heat 1cm of oil in a large frying pan over medium-high heat. Fry the chicken in batches for 3 minutes a side until deep golden, then move to a lined tray. It finishes cooking in the oven."
+  },
+  {
+   "h": "Sauce and bake",
+   "s": "Mix {passata} with {oregano} and a pinch of salt. Spoon over each schnitzel, then top with {ham} and {mozz}. Bake for 10 minutes until the cheese is bubbling and the chicken is cooked through (75°C in the thickest part)."
+  },
+  {
+   "h": "Serve up",
+   "s": "Chop {cos} and {cucumber}, and dress with the juice of {lemon}, a drizzle of oil and a pinch of salt. Serve the parmas with the chips and salad."
+  }
  ],
- "l": "Slice the parma into strips and pack with salad. Reheat in the oven or air fryer, never the microwave, to keep it crunchy.",
+ "l": "Slice the parma into strips and pack with salad. Reheat in the oven or air fryer, never the microwave, to keep it crunchy. Keeps 3 days in the fridge.",
  "g": "GF flour and breadcrumbs, crumbed first and fried in fresh oil or a separate pan. Check the ham."
 }
