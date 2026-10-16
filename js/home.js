@@ -33,12 +33,12 @@
       <hr class="rule">
       <p class="kt-head">THE KIT TAX · SAME SERVES</p>
       <div class="lines">
-        <div class="ln us"><span>Docket (est.)</span><span>${money(w.docket)}</span></div>
+        <div class="ln us"><span>Riversdale Fresh (est.)</span><span>${money(w.docket)}</span></div>
         ${w.kits.map(k => `<div class="ln kit"><span>${esc(k.n)}</span><span>${money(k.v)}</span></div>`).join('')}
       </div>
       ${saved > 0 ? `<div class="dodged"><span>KIT TAX DODGED</span><b class="num">${money(saved)}</b></div>
       <p class="kt-save num">vs ${esc(hf.n)}. That's ${money(saved * 52, 0)} a year.</p>` : ''}
-      ${cheaper.length ? `<p class="kt-note">${cheaper.join(' and ')} ${cheaper.length > 1 ? 'are' : 'is'} cheaper on price alone. Docket dinners average ${AVGP}g protein a serve.</p>` : ''}`;
+      ${cheaper.length ? `<p class="kt-note">${cheaper.join(' and ')} ${cheaper.length > 1 ? 'are' : 'is'} cheaper on price alone. Riversdale Fresh dinners average ${AVGP}g protein a serve.</p>` : ''}`;
   }
 
   // Hero: an example week, set like a menu

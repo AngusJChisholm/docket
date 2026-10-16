@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Price Importer · Docket</title>
+<title>Price Importer · Riversdale Fresh</title>
 <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,700..900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap">
-<link rel="stylesheet" href="../assets/css/docket.css?v=202610152006">
+<link rel="stylesheet" href="../assets/css/docket.css?v=202610161143">
 <style>
   .admin{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 60px;display:flex;flex-direction:column;gap:20px}
   .admin h1{font-family:var(--display);font-weight:900;font-size:34px;letter-spacing:-.02em;margin:0}
@@ -32,7 +32,7 @@
 </head>
 <body>
 <main class="admin">
-  <div><h1>Price importer</h1><p class="small">Private tool. Search a supermarket site, select all (Ctrl/Cmd + A, then C) and paste below. That's it: every product goes into the catalogue, the best match for each Docket ingredient becomes its recipe price, and the site updates itself.</p></div>
+  <div><h1>Price importer</h1><p class="small">Private tool. Search a supermarket site, select all (Ctrl/Cmd + A, then C) and paste below. That's it: every product goes into the catalogue, the best match for each recipe ingredient becomes its recipe price, and the site updates itself.</p></div>
 
   <section class="panel">
     <div class="row" style="margin-bottom:12px">
@@ -47,18 +47,18 @@
 
   <details class="panel" id="results-panel" hidden>
     <summary class="sec-head" style="cursor:pointer"><h2 style="display:inline">Last paste</h2> <span class="small">Optional: open to review or change a match</span></summary>
-    <div class="wrapx"><table class="tbl"><thead><tr><th>Docket price</th><th>Product</th><th>Price</th><th>Unit price</th><th>Deal</th><th>Rating</th><th>Docket ingredient</th><th>Vs current</th></tr></thead><tbody id="results"></tbody></table></div>
+    <div class="wrapx"><table class="tbl"><thead><tr><th>Recipe price</th><th>Product</th><th>Price</th><th>Unit price</th><th>Deal</th><th>Rating</th><th>recipe ingredient</th><th>Vs current</th></tr></thead><tbody id="results"></tbody></table></div>
     <div class="row" style="margin-top:12px"><button class="btn" id="add">Save these changes</button><span class="small" id="added"></span></div>
   </details>
 
   <section class="panel">
     <div class="sec-head"><h2>Catalogue</h2><div class="row"><input class="filter" id="filter" placeholder="Filter products, e.g. mince" aria-label="Filter catalogue"><button class="btn ghost" id="csv">Copy as CSV</button></div></div>
     <div class="stats" id="cstats"></div>
-    <div class="wrapx" style="margin-top:10px"><table class="tbl"><thead><tr><th>Store</th><th>Product</th><th>Price</th><th>Unit price</th><th>Deal</th><th>Rating</th><th>Docket ingredient</th><th>Seen</th></tr></thead><tbody id="catalogue"></tbody></table></div>
+    <div class="wrapx" style="margin-top:10px"><table class="tbl"><thead><tr><th>Store</th><th>Product</th><th>Price</th><th>Unit price</th><th>Deal</th><th>Rating</th><th>recipe ingredient</th><th>Seen</th></tr></thead><tbody id="catalogue"></tbody></table></div>
   </section>
 
   <section class="panel">
-    <div class="sec-head"><h2>Docket recipe prices</h2><span class="small" id="count"></span></div>
+    <div class="sec-head"><h2>Recipe prices</h2><span class="small" id="count"></span></div>
     <div class="wrapx"><table class="tbl"><thead><tr><th>Store</th><th>Ingredient</th><th>Product</th><th>Price</th><th>Checked</th><th></th></tr></thead><tbody id="saved"></tbody></table></div>
   </section>
 
@@ -70,8 +70,8 @@
   </section>
 </main>
 
-<script src="../js/data.js?v=202610152006"></script>
-<script src="../js/prices.js?v=202610152006"></script>
+<script src="../js/data.js?v=202610161143"></script>
+<script src="../js/prices.js?v=202610161143"></script>
 <script>
 (function(){
   const $=s=>document.querySelector(s);
@@ -123,7 +123,7 @@
     return out;
   }
 
-  // ---------- Match to Docket ingredients ----------
+  // ---------- Match to recipe ingredients ----------
   const STOP=new Set(['and','the','with','fresh','pack','tin','jar','each','bunch','free','range','approx','australian','coles','woolworths','aldi','rspca','approved']);
   const WRONG=/marinated|sausage|burger|meatball|slow cooked|\bcook\b|bbq|schnitzel|stir fry|knuckle|rib|kangaroo|kebab|crumbed|kiev|nugget|smoked|seasoned|portion/i;
   const words=s=>s.toLowerCase().replace(/\([^)]*\)/g,' ').split(/[^a-z]+/).filter(w=>w.length>2&&!STOP.has(w));
@@ -168,12 +168,12 @@
     $('#results').innerHTML=found.map((f,i)=>{
       let cmp='';if(f.id){const c=toIng(f,f.id),cur=current(f.id);const pct=Math.round(((c.p/c.pk)/(cur.p/cur.pk)-1)*100);
         cmp=`<span class="diff ${pct>0?'up':pct<0?'down':''}">${pct>0?'+':''}${pct}%</span>${Math.abs(pct)>60?' <span class="warn">check</span>':''}`}
-      return`<tr><td><input type="checkbox" data-i="${i}" class="tick" ${f.tick?'checked':''} ${f.id?'':'disabled'} aria-label="Use as Docket price"></td><td>${esc(f.name)}${f.size?`<br><span class="small">${esc(f.size)}</span>`:''}</td><td class="num">${money(f.price)}</td><td class="num">${unitTxt(f.unit)}</td><td>${dealTxt(f)}</td><td class="num">${ratingTxt(f)}</td><td><select data-i="${i}" class="ing" aria-label="Docket ingredient">${ingOptions(f.id)}</select></td><td>${cmp}</td></tr>`}).join('');
+      return`<tr><td><input type="checkbox" data-i="${i}" class="tick" ${f.tick?'checked':''} ${f.id?'':'disabled'} aria-label="Use as Recipe price"></td><td>${esc(f.name)}${f.size?`<br><span class="small">${esc(f.size)}</span>`:''}</td><td class="num">${money(f.price)}</td><td class="num">${unitTxt(f.unit)}</td><td>${dealTxt(f)}</td><td class="num">${ratingTxt(f)}</td><td><select data-i="${i}" class="ing" aria-label="recipe ingredient">${ingOptions(f.id)}</select></td><td>${cmp}</td></tr>`}).join('');
     $('#results-panel').hidden=!found.length;
   }
   $('#find').onclick=()=>{
     found=parse($('#paste').value).map(f=>({...f,id:bestMatch(f.name)}));
-    $('#found').textContent=found.length?`Read ${found.length} products${found[0]&&found[0].search?` for "${found[0].search}"`:''}. ${found.filter(f=>f.id).length} match a Docket ingredient.`:'No products found. Make sure you copied the whole results page.';
+    $('#found').textContent=found.length?`Read ${found.length} products${found[0]&&found[0].search?` for "${found[0].search}"`:''}. ${found.filter(f=>f.id).length} match a recipe ingredient.`:'No products found. Make sure you copied the whole results page.';
     renderResults();
   };
   $('#results').addEventListener('change',e=>{const i=+e.target.dataset.i;if(e.target.classList.contains('ing')){found[i].id=e.target.value;found[i].tick=!!e.target.value;renderResults()}else found[i].tick=e.target.checked});
@@ -197,14 +197,14 @@
     renderCatalogue();renderSaved();
     return{added,updated,priced};
   }
-  $('#add').onclick=async()=>{const r=addAll();if(!r)return;$('#added').textContent=`${r.added} new, ${r.updated} updated, ${r.priced} Docket prices set.`;await publish(true)};
+  $('#add').onclick=async()=>{const r=addAll();if(!r)return;$('#added').textContent=`${r.added} new, ${r.updated} updated, ${r.priced} Recipe prices set.`;await publish(true)};
 
   // ---------- Catalogue ----------
   function renderCatalogue(){
     if(!CAT){$('#catalogue').innerHTML='<tr><td colspan="8" class="small">Loading...</td></tr>';return}
     const all=Object.values(CAT.products);const q=$('#filter').value.trim().toLowerCase();
     const rows=all.filter(p=>!q||p.name.toLowerCase().includes(q)||(p.search||'').toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name)||a.store.localeCompare(b.store)).slice(0,500);
-    $('#cstats').innerHTML=STORES.map(s=>`<span>${SN[s]} <b>${all.filter(p=>p.store===s).length}</b></span>`).join('')+`<span>Matched to Docket <b>${all.filter(p=>p.ingredient).length}</b></span><span>On a deal <b>${all.filter(p=>p.was||p.multi||p.save||(p.badges||[]).length).length}</b></span>`;
+    $('#cstats').innerHTML=STORES.map(s=>`<span>${SN[s]} <b>${all.filter(p=>p.store===s).length}</b></span>`).join('')+`<span>Matched to a recipe <b>${all.filter(p=>p.ingredient).length}</b></span><span>On a deal <b>${all.filter(p=>p.was||p.multi||p.save||(p.badges||[]).length).length}</b></span>`;
     $('#catalogue').innerHTML=rows.map(p=>`<tr><td>${SN[p.store]}</td><td>${esc(p.name)}${p.search?`<br><span class="small">search: ${esc(p.search)}</span>`:''}</td><td class="num">${money(p.price)}</td><td class="num">${unitTxt(p.unit)}</td><td>${dealTxt(p)}</td><td class="num">${ratingTxt(p)}</td><td class="small">${esc(ING[p.ingredient]?.n||'')}</td><td class="small">${esc(p.last)}${p.history&&p.history.length>1?`<br>${p.history.length} prices`:''}</td></tr>`).join('')||'<tr><td colspan="8" class="small">Nothing yet. Paste a results page above.</td></tr>';
   }
   $('#filter').addEventListener('input',renderCatalogue);
@@ -258,7 +258,7 @@ window.DOCKET_PRICES = ${JSON.stringify(P,null,2)};
     if(!found.length){$('#found').textContent='No products found. Make sure you copied the whole results page.';return}
     const r=addAll();if(!r){$('#found').textContent='Catalogue still loading, paste again in a second.';return}
     $('#paste').value='';
-    $('#found').textContent=`${SN[store]}${found[0].search?` "${found[0].search}"`:''}: ${found.length} products read. ${r.added} new, ${r.updated} updated, ${r.priced} Docket price${r.priced===1?'':'s'} set. Publishing...`;
+    $('#found').textContent=`${SN[store]}${found[0].search?` "${found[0].search}"`:''}: ${found.length} products read. ${r.added} new, ${r.updated} updated, ${r.priced} Recipe price${r.priced===1?'':'s'} set. Publishing...`;
     const ok=await publish(true);
     $('#found').textContent=$('#found').textContent.replace('Publishing...',ok?'Published. Next search!':'Saved here, not published yet (see below).');
   },50));

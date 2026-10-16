@@ -8,6 +8,7 @@ const DocketPDF = window.DocketPDF = (function () {
   async function loadLogo() {
     if (logo) return logo;
     try {
+      return null; // text wordmark while trading as Riversdale Fresh
       const res = await fetch('assets/img/docket-wordmark-green-600.png');
       const blob = await res.blob();
       logo = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
@@ -48,7 +49,7 @@ const DocketPDF = window.DocketPDF = (function () {
   function header(d, title, sub) {
     fill(d, C.mint); d.roundedRect(M, M, W - 2 * M, 30, 5, 5, 'F');
     if (logo) d.addImage(logo, 'PNG', M + 7, M + 7, 38, 9.0);
-    else { text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(22); d.text('Docket', M + 7, M + 15); }
+    else { text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(18); d.text('Riversdale Fresh', M + 7, M + 15); }
     text(d, C.ink); d.setFont('helvetica', 'bold'); d.setFontSize(15); d.text(clean(title), W - M - 7, M + 13, { align: 'right' });
     text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(9); d.text(clean(sub), W - M - 7, M + 20, { align: 'right' });
     return M + 40;
@@ -58,7 +59,7 @@ const DocketPDF = window.DocketPDF = (function () {
     for (let i = 1; i <= n; i++) {
       d.setPage(i); text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(8);
       const who = window.DocketRecipes && window.DocketRecipes.member();
-      d.text(clean(who ? `Docket  ·  Prepared for ${who}. Please don't share.` : 'Docket  ·  Meal kit dinners. Supermarket prices.'), M, H - 9);
+      d.text(clean(who ? `Riversdale Fresh  ·  Prepared for ${who}. Please don't share.` : 'Riversdale Fresh  ·  Meal kit dinners. Supermarket prices.'), M, H - 9);
       d.text(`${i} / ${n}`, W - M, H - 9, { align: 'right' });
     }
   }
@@ -120,7 +121,7 @@ const DocketPDF = window.DocketPDF = (function () {
     });
     y = ensure(d, y, 14);
     text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(8.5);
-    d.text(d.splitTextToSize(clean(`Prices are Docket's estimates and include ${money(STAPLES, 0)} for oil, salt and pepper. Pantry items are counted by what you use. Check prices at the shelf.`), W - 2 * M), M, y);
+    d.text(d.splitTextToSize(clean(`Prices are Riversdale Fresh's estimates and include ${money(STAPLES, 0)} for oil, salt and pepper. Pantry items are counted by what you use. Check prices at the shelf.`), W - 2 * M), M, y);
     if (!noFooter) footer(d);
     return d;
   }
@@ -147,7 +148,7 @@ const DocketPDF = window.DocketPDF = (function () {
     const bottom = H - 16;
     // Top strip: logo, dinner details, a rule
     if (logo) d.addImage(logo, 'PNG', M, M - 1, 27, 6.4);
-    else { text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(16); d.text('Docket', M, M + 4.5); }
+    else { text(d, C.green); d.setFont('helvetica', 'bold'); d.setFontSize(13); d.text('Riversdale Fresh', M, M + 4.5); }
     text(d, C.muted); d.setFont('helvetica', 'normal'); d.setFontSize(9);
     d.text(clean(tr ? `Sweet treat. ${r.c}, ${timeLabel(r)}. Makes ${r.mk} ${r.mu}.` : `${r.c}, ${timeLabel(r)}. Makes ${n} serves.`), W - M, M + 4, { align: 'right' });
     draw(d, C.line); d.setLineWidth(0.3); d.line(M, M + 9, W - M, M + 9);
@@ -182,7 +183,7 @@ const DocketPDF = window.DocketPDF = (function () {
     d.setFont('helvetica', 'normal'); d.setFontSize(8.5 * k); text(d, C.muted); d.text(tr ? 'Plus a pinch of salt.' : 'Plus oil, salt and pepper.', colL, yl + 1); yl += 6;
     if (!c) {
       d.setFont('helvetica', 'normal'); d.setFontSize(10); text(d, C.ink);
-      const ll = d.splitTextToSize(clean(`The full method, amounts, ${tr ? 'keeping' : 'lunch'} tip and gluten free notes for this ${tr ? 'treat' : 'dinner'} are for Docket members. Get every recipe free while we're in beta at ${SITE}plan.html`), wR - 4);
+      const ll = d.splitTextToSize(clean(`The full method, amounts, ${tr ? 'keeping' : 'lunch'} tip and gluten free notes for this ${tr ? 'treat' : 'dinner'} are for Riversdale Fresh members. Get every recipe free while we're in beta at ${SITE}plan.html`), wR - 4);
       fill(d, C.mint); d.roundedRect(colR - 2, yr - 5, wR + 2, ll.length * 4.9 + 8, 3, 3, 'F'); d.text(ll, colR + 2, yr + 0.5); yr += ll.length * 4.9 + 8;
     }
     const ms = 9.6 * k, hs = 10.5 * k;
@@ -229,7 +230,7 @@ const DocketPDF = window.DocketPDF = (function () {
     const rs = [...state.sel, ...(state.treats || [])].map(id => byId(id));
     let files;
     if (mode === 'split') {
-      files = [{ filename: '01-docket-shopping-list.pdf', doc: shoppingList(w, meta) }];
+      files = [{ filename: '01-riversdale-fresh-shopping-list.pdf', doc: shoppingList(w, meta) }];
       rs.forEach((r, k) => files.push({ filename: `${String(k + 2).padStart(2, '0')}-${slug(r.n)}.pdf`, doc: recipe(r, n, gf).d }));
     } else {
       // Work out each recipe's text size on its own first, so it still fits its page in the combined file.
@@ -239,7 +240,7 @@ const DocketPDF = window.DocketPDF = (function () {
         recipePage(r, n, gf, c, recipe(r, n, gf).size, true, doc);
       });
       footer(doc);
-      files = [{ filename: `docket-week-${slug(weekLabel())}.pdf`, doc }];
+      files = [{ filename: `riversdale-fresh-week-${slug(weekLabel())}.pdf`, doc }];
     }
     return { files, meta, total: w.total, serves: w.serves };
   }

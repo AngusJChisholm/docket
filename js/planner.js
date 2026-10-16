@@ -212,7 +212,7 @@ function renderWeek(w){
   $('#picked').innerHTML=S.sel.map(id=>{const r=R.find(x=>x.id===id);return`<li class="pk-${tierOf(r)}"><span>${esc(r.n)}</span><span class="num">${money(serveCost(r))}</span></li>`}).join('')+S.treats.map(id=>{const r=byId(id);return`<li class="pk-treat"><span>${esc(r.n)} <small>treat</small></span><span class="num">${money(batchCost(r))}</span></li>`}).join('');
   // Kit tax
   const n=spm();const rows=KITS.map(k=>({n:kitLabel(k),v:kitCost(k,n,S.sel.length),ready:!!k.ready}));
-  $('#bars').innerHTML=[`<div class="ln us"><span>Docket (food eaten)</span><span>${money(w.eaten)}</span></div>`,...rows.map(x=>`<div class="ln kit${x.ready?' ready':''}"><span>${esc(x.n)}</span><span>${money(x.v)}</span></div>`)].join('');
+  $('#bars').innerHTML=[`<div class="ln us"><span>Riversdale Fresh (food eaten)</span><span>${money(w.eaten)}</span></div>`,...rows.map(x=>`<div class="ln kit${x.ready?' ready':''}"><span>${esc(x.n)}</span><span>${money(x.v)}</span></div>`)].join('');
   const hf=rows[0];
   if(!S.sel.length){$('#dodged').innerHTML='';$('#kt-save').textContent='Pick some dinners to see what the kits would charge.';}
   else{
@@ -220,7 +220,7 @@ function renderWeek(w){
     const cheaper=rows.filter(r=>r.v<w.eaten);
     $('#dodged').innerHTML=s>0?`<div class="dodged"><span>KIT TAX DODGED</span><b class="num">${money(s)}</b></div>`:`<div class="dodged"><span>${esc(hf.n)} is cheaper</span><b class="num">${money(-s)}</b></div>`;
     let txt=s>0?`vs ${esc(hf.n)}. That's ${money(s*52,0)} a year.`:'';
-    if(cheaper.length)txt+=` ${cheaper.map(c=>esc(c.n)).join(' and ')} ${cheaper.length>1?'are':'is'} cheaper on price alone this week. Docket dinners average ${Math.round(w.prot)}g protein a serve.`;
+    if(cheaper.length)txt+=` ${cheaper.map(c=>esc(c.n)).join(' and ')} ${cheaper.length>1?'are':'is'} cheaper on price alone this week. Riversdale Fresh dinners average ${Math.round(w.prot)}g protein a serve.`;
     else{const lo=rows.reduce((a,b)=>b.v<a.v?b:a);if(lo!==hf&&lo.v>w.eaten)txt+=` Even the cheapest, ${esc(lo.n)}, costs ${money(lo.v-w.eaten,0)} more.`}
     $('#kt-save').innerHTML=txt.trim();
   }
@@ -240,7 +240,7 @@ function renderList(w){
   $('#list-meta').textContent=`${w.items.length} items · ${money(w.shop)} + ${money(STAPLES,0)} staples`;
   const buyable=w.items.filter(x=>!x.pan);const checked=buyable.filter(x=>x.real).length;
   const upd=PRICES.updated?new Date(PRICES.updated+'T12:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}):'';const sp=buyable.filter(x=>x.sp).length;
-  $('#price-note').textContent=checked?`${checked===buyable.length?'Every price':`${checked} of ${buyable.length} prices`} on this list ${checked===1?'is':'are'} ${STORE_NAME[S.store]}'s shelf price${upd?`, updated ${upd}`:' this week'}.${sp?` ${sp} on special.`:''}${checked<buyable.length?' The rest are Docket estimates.':''}`:`Prices are Docket's estimates for ${STORE_NAME[S.store]}, so expect the shelf to be within a few dollars either way.`;
+  $('#price-note').textContent=checked?`${checked===buyable.length?'Every price':`${checked} of ${buyable.length} prices`} on this list ${checked===1?'is':'are'} ${STORE_NAME[S.store]}'s shelf price${upd?`, updated ${upd}`:' this week'}.${sp?` ${sp} on special.`:''}${checked<buyable.length?' The rest are Riversdale Fresh estimates.':''}`:`Prices are Riversdale Fresh's estimates for ${STORE_NAME[S.store]}, so expect the shelf to be within a few dollars either way.`;
 }
 function useItUp(w){
   const left={};w.items.forEach(x=>{if(!x.pan&&x.left>0&&x.bought)left[x.id]=x.left});
@@ -282,7 +282,7 @@ function canSee(id){return RS.canSee(id,weekPicks())}
 const methodHTML=c=>{const r=byId(c.id);const n=nFor(r);return`<h3>Method</h3><ol class="steps">${c.m.map(x=>{const st=stepOf(x);return`<li>${st.h?`<b class="st-h">${esc(st.h)}</b> `:''}${fillStep(r,esc(st.s),n,a=>`<b>${esc(a)}</b>`)}</li>`}).join('')}</ol>`};
 const notesHTML=c=>`${c.l?`<div class="gfnote"><b>Lunch:</b> ${esc(c.l)}</div>`:''}${c.k?`<div class="gfnote"><b>Keeps:</b> ${esc(c.k)}</div>`:''}${c.g&&S.gf>0?`<div class="gfnote"><b>Gluten free (${Math.min(S.gf,S.people)}):</b> ${esc(c.g)}</div>`:''}`;
 function lockedHTML(){return`<div class="locked"><h3>Method</h3><div class="ghost" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-  <div class="unlock"><span class="eyebrow">Members' recipe</span><p><b>Get the full method, lunch tip and gluten free notes for every Docket dinner.</b> Free while we're in beta. This week's picks are open to everyone.</p>
+  <div class="unlock"><span class="eyebrow">Members' recipe</span><p><b>Get the full method, lunch tip and gluten free notes for every Riversdale Fresh dinner.</b> Free while we're in beta. This week's picks are open to everyone.</p>
   <form id="unlock-form" class="unlock-form"><input type="email" id="unlock-email" placeholder="you@example.com" autocomplete="email" required aria-label="Your email"><button class="btn" type="submit">Unlock recipes</button></form><p class="hint" id="unlock-msg"></p></div></div>`}
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')e.target.close()});
 
@@ -348,7 +348,7 @@ $('#send').onclick=async()=>{
     const out=await makePdfs();if(!out)return;
     const endpoint=(window.DOCKET_CONFIG||{}).emailEndpoint;
     if(!endpoint){DocketPDF.download(out.files);$('#msg').textContent='Email sending switches on soon, so your PDFs have downloaded instead.';return}
-    $('#msg').textContent='Sending your Docket...';
+    $('#msg').textContent='Sending your week...';
     const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
       to:v,store:out.meta.store,people:S.people,serves:out.serves,total:Math.round(out.total*100)/100,
       saved:Math.round(out.meta.saved*100)/100,kit:out.meta.kit,dinners:out.meta.dinners,
@@ -370,7 +370,7 @@ function listText(){
   t+=`\nDINNERS: ${S.sel.map(id=>R.find(r=>r.id===id).n).join(', ')}`;if(S.treats.length)t+=`\nTREATS: ${S.treats.map(id=>byId(id).n).join(', ')}`;
   return t;
 }
-if(navigator.share){$('#share').hidden=false;$('#share').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}try{await navigator.share({title:'Our Docket for the week',text:planText()})}catch(e){}}}
+if(navigator.share){$('#share').hidden=false;$('#share').onclick=async()=>{if(!S.sel.length){$('#msg').textContent='Pick at least one dinner first.';return}try{await navigator.share({title:'Our Riversdale Fresh week',text:planText()})}catch(e){}}}
 function fillPrint(){
   const n=spm();
   $('#print-recipes').innerHTML='<h2>Recipes</h2>'+[...S.sel,...S.treats].map(id=>{const r=byId(id);const tr=isTreat(r);const n=nFor(r);const c=RS.peek(id);return`<article><h3>${esc(r.n)} · ${timeLabel(r)} · ${tr?`makes ${r.mk} ${esc(r.mu)}`:`${n} serves`}</h3><ul>${linesFor(r,n).map(([i,a])=>`<li>${c?kAmt(i,a,tr)+' ':''}${esc(iname(i))}</li>`).join('')}</ul>${c?`<ol>${methodSteps(r,c,n).map(st=>`<li>${st.h?`<b>${esc(st.h)}.</b> `:''}${esc(st.s)}</li>`).join('')}</ol>`:`<p>Full method: unlock it free at ${esc(SITE)}plan.html</p>`}</article>`}).join('');
