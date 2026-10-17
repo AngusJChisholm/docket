@@ -1,5 +1,5 @@
 // Weekly price update. Runs on GitHub (see .github/workflows/prices.yml) every Wednesday morning.
-// 1. Asks the price feed for every Docket ingredient at Coles, Woolies and Aldi.
+// 1. Asks the price feed for every Riversdale Fresh ingredient at Coles, Woolies and Aldi.
 // 2. Picks the best matching product per ingredient per store (right product, sensible pack, cheapest per kg/L/each).
 // 3. Writes js/prices.js (what the site uses) and data/catalogue.json (every product seen, with price history).
 // Usage: APIFY_TOKEN=... node scripts/update-prices.mjs        live run
@@ -17,7 +17,7 @@ const ACTOR = process.env.PRICE_ACTOR || 'toptock~au-grocery-prices';
 const PER_KEYWORD = +(process.env.PER_KEYWORD || 10);
 const today = new Date(Date.now() + 11 * 36e5).toISOString().slice(0, 10); // Melbourne date
 
-// ---------- Load Docket's ingredients ----------
+// ---------- Load Riversdale Fresh's ingredients ----------
 const ctx = {};
 vm.createContext(ctx);
 vm.runInContext(fs.readFileSync(path.join(ROOT, 'js/data.js'), 'utf8') + '\n;globalThis.__D={ING};', ctx);
@@ -132,7 +132,7 @@ for (const f of products) {
     const c = toIng(f, id); if (!c) continue;
     const it = ING[id]; const per = c.p / c.pk; const ratio = per / (it.p / it.pk);
     if (ratio > 2.5 || ratio < .3) continue; // way off: wrong product or a weird pack
-    // Prefer packs near the size Docket plans around, so small households aren't sent a 5kg bag
+    // Prefer packs near the size Riversdale Fresh plans around, so small households aren't sent a 5kg bag
     const sizeOk = c.byWeight || it.u === 'ea' || (c.pk >= it.pk * .4 && c.pk <= it.pk * 2.5);
     (((cand[f.store] ??= {})[id]) ??= []).push({ ...c, per, sizeOk, sc, f });
   }

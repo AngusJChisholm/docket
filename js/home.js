@@ -147,7 +147,7 @@
     try {
       const res = await fetch(CFG.waitlistEndpoint, { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify({ email, source: 'docket-home' }) });
       if (!res.ok) throw new Error(res.status);
-      msg.textContent = "You're in. First docket lands Wednesday."; e.target.reset();
+      msg.textContent = "You're in. First plan lands Wednesday."; e.target.reset();
     } catch (err) { msg.textContent = "That didn't go through. Try again in a minute."; }
   });
 })();

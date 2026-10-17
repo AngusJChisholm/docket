@@ -1,5 +1,5 @@
 // Recipe methods: loaded one at a time, only for people allowed to see them.
-// Today they come from content/recipes/<id>.json. When Docket Pro launches, set recipeEndpoint in js/config.js
+// Today they come from content/recipes/<id>.json. When Riversdale Fresh Pro launches, set recipeEndpoint in js/config.js
 // to the Worker that checks the member's login before handing over the method.
 window.DocketRecipes = (function () {
   const CFG = window.DOCKET_CONFIG || {};

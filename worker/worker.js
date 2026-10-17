@@ -1,9 +1,9 @@
-// Docket mailer: a Cloudflare Worker that emails the plan PDFs through Resend.
+// Riversdale Fresh mailer: a Cloudflare Worker that emails the plan PDFs through Resend.
 // Settings (Cloudflare dashboard > Worker > Settings > Variables and secrets):
 //   RESEND_API_KEY  (secret)  your Resend API key
-//   FROM_EMAIL      (text)    e.g.  Docket <plans@getdocket.com.au>   (must be on your verified Resend domain)
+//   FROM_EMAIL      (text)    e.g.  Riversdale Fresh <plans@yourdomain>   (must be on your verified Resend domain)
 //   ALLOWED_ORIGIN  (text)    the site address(es), comma separated, e.g. https://angusjchisholm.github.io
-//   SITE_URL        (text)    e.g. https://angusjchisholm.github.io/docket/plan.html
+//   SITE_URL        (text)    e.g. https://angusjchisholm.github.io/riversdale-fresh/plan.html
 
 const MAX_FILES = 12;
 const MAX_BASE64 = 6_000_000; // about 4.5MB of PDFs in total
@@ -55,12 +55,12 @@ export default {
     const kit = esc(String(b.kit || 'HelloFresh').slice(0, 30));
     const serves = Math.round(num(b.serves));
     const saved = num(b.saved);
-    const site = env.SITE_URL || 'https://angusjchisholm.github.io/docket/plan.html';
+    const site = env.SITE_URL || 'https://angusjchisholm.github.io/riversdale-fresh/plan.html';
 
     const html = `<!doctype html><html><body style="margin:0;background:#F4F7F2;font-family:Helvetica,Arial,sans-serif;color:#1C211E">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F4F7F2;padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#FFFFFF;border-radius:20px;overflow:hidden">
-<tr><td style="background:#CFEBD8;padding:24px 28px"><div style="font-size:30px;font-weight:900;color:#1F6B47;letter-spacing:-0.5px">Docket</div>
+<tr><td style="background:#CFEBD8;padding:24px 28px"><div style="font-size:30px;font-weight:900;color:#1F6B47;letter-spacing:-0.5px">Riversdale Fresh</div>
 <div style="font-size:15px;font-weight:600;margin-top:4px">Your week is sorted.</div></td></tr>
 <tr><td style="padding:24px 28px">
 <p style="margin:0 0 14px;font-size:15px;line-height:1.5">Your shopping list and recipes are attached as PDFs. Here's the week at a glance:</p>
@@ -71,17 +71,17 @@ ${dinners.map((d, i) => `<tr><td style="padding:6px 0;border-bottom:1px dashed #
 <td style="background:#FFE58A;border-radius:12px;padding:12px 14px;font-weight:900;font-size:22px">${money(b.total, 0)}<div style="font-size:11px;font-weight:700;letter-spacing:1px">ESTIMATED SHOP${store ? ' · ' + store.toUpperCase() : ''}${serves ? ' · ' + serves + ' SERVES' : ''}</div></td>
 </tr></table>
 ${saved > 0 ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:10px"><tr><td style="background:#CFEBD8;border-radius:12px;padding:12px 14px;color:#1F6B47;font-weight:700;font-size:15px">Kit Tax dodged: ${money(saved)} vs ${kit}. That's ${money(saved * 52, 0)} a year.</td></tr></table>` : ''}
-<p style="margin:20px 0 0;font-size:14px"><a href="${esc(site)}" style="color:#1F6B47;font-weight:700">Plan next week on Docket</a></p>
+<p style="margin:20px 0 0;font-size:14px"><a href="${esc(site)}" style="color:#1F6B47;font-weight:700">Plan next week on Riversdale Fresh</a></p>
 </td></tr>
-<tr><td style="padding:16px 28px 24px;font-size:12px;color:#59625C;border-top:1px solid #DCE3DC">Docket · Meal kit dinners. Supermarket prices.<br>You got this email because this address was entered on Docket. Prices are estimates; check them at the shelf.</td></tr>
+<tr><td style="padding:16px 28px 24px;font-size:12px;color:#59625C;border-top:1px solid #DCE3DC">Riversdale Fresh · Meal kit dinners. Supermarket prices.<br>You got this email because this address was entered on Riversdale Fresh. Prices are estimates; check them at the shelf.</td></tr>
 </table></td></tr></table></body></html>`;
 
-    const text = `Your Docket for the week\n\n${dinners.map((d, i) => `${i + 1}. ${d}`).join('\n')}\n\nEstimated shop: ${money(b.total, 0)}${saved > 0 ? `\nKit Tax dodged: ${money(saved)} vs ${b.kit || 'HelloFresh'}` : ''}\n\nYour shopping list and recipes are attached as PDFs.\nPlan next week: ${site}`;
+    const text = `Your Riversdale Fresh plan for the week\n\n${dinners.map((d, i) => `${i + 1}. ${d}`).join('\n')}\n\nEstimated shop: ${money(b.total, 0)}${saved > 0 ? `\nKit Tax dodged: ${money(saved)} vs ${b.kit || 'HelloFresh'}` : ''}\n\nYour shopping list and recipes are attached as PDFs.\nPlan next week: ${site}`;
 
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: env.FROM_EMAIL, to: [to], subject: 'Your Docket for the week', html, text, attachments: files.map(f => ({ filename: f.filename, content: f.content })) })
+      body: JSON.stringify({ from: env.FROM_EMAIL, to: [to], subject: 'Your Riversdale Fresh plan for the week', html, text, attachments: files.map(f => ({ filename: f.filename, content: f.content })) })
     });
     if (!res.ok) { const t = await res.text(); console.log('Resend error', res.status, t); return reply(502, { error: 'Email service error' }); }
     hits.push(now); recent.set(ip, hits);

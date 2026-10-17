@@ -1,4 +1,4 @@
-# Docket
+# Riversdale Fresh
 
 Meal kit dinners. Supermarket prices.
 
@@ -14,8 +14,8 @@ A static site: no build step, no framework. Open `index.html` in a browser to ru
 | `js/config.js` | Sign-up form endpoint and the weekly pantry-staples allowance |
 | `js/planner.js`, `js/home.js` | Page logic |
 | `js/pdf.js` | Builds the shopping list and recipe PDFs in the browser |
-| `worker/` | The Docket mailer that emails the PDFs. Setup steps in `worker/SETUP.md` |
-| `assets/css/docket.css` | All styles, built from the Docket brand colours |
+| `worker/` | The Riversdale Fresh mailer that emails the PDFs. Setup steps in `worker/SETUP.md` |
+| `assets/css/riversdale-fresh.css` | All styles, built from the Riversdale Fresh brand colours |
 | `assets/img/` | Logo, icon, favicon, ticket and social share image |
 
 ## Common updates
@@ -26,4 +26,4 @@ A static site: no build step, no framework. Open `index.html` in a browser to ru
 - **Switch on plan emails:** follow `worker/SETUP.md`, then set `emailEndpoint` in `js/config.js`.
 - **Switch on email sign-ups:** paste your form endpoint into `waitlistEndpoint` in `js/config.js`.
 
-Supermarket prices are estimates while Docket is in beta. Woolworths and Aldi prices are derived from the Coles figures.
+Supermarket prices are estimates while Riversdale Fresh is in beta. Woolworths and Aldi prices are derived from the Coles figures.

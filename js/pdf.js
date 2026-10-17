@@ -1,4 +1,4 @@
-// Builds the Docket PDFs in the browser: one shopping list plus one PDF per recipe.
+// Builds the Riversdale Fresh PDFs in the browser: one shopping list plus one PDF per recipe.
 // Needs jsPDF (loaded on plan.html) and the planner's functions (week, splitLines, kAmt, ...).
 const DocketPDF = window.DocketPDF = (function () {
   const C = { ink: [28, 33, 30], muted: [89, 98, 92], green: [31, 107, 71], mint: [207, 235, 216], butter: [255, 229, 138], peach: [255, 217, 203], markup: [169, 54, 23], line: [220, 227, 220] };
@@ -8,10 +8,7 @@ const DocketPDF = window.DocketPDF = (function () {
   async function loadLogo() {
     if (logo) return logo;
     try {
-      return null; // text wordmark while trading as Riversdale Fresh
-      const res = await fetch('assets/img/docket-wordmark-green-600.png');
-      const blob = await res.blob();
-      logo = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+      return null; // text wordmark until there's a Riversdale Fresh logo image
     } catch (e) { logo = null; }
     return logo;
   }

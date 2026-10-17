@@ -26,7 +26,7 @@ window.DOCKET_SEASON = (function () {
     r.i.forEach(([id]) => { const s = status(id, m); if (s > 0) inn.push(id); else if (s < 0) out.push(id); });
     return { inn, out, score: inn.length - out.length * 1.5, isIn: inn.length > 0 && out.length === 0 };
   }
-  // The Docket week runs Wednesday to Tuesday, when the specials flip
+  // The Riversdale Fresh week runs Wednesday to Tuesday, when the specials flip
   function weekStart(d) { const x = new Date(d || now()); x.setHours(12, 0, 0, 0); x.setDate(x.getDate() - ((x.getDay() + 4) % 7)); return x; }
   const key = d => weekStart(d).toISOString().slice(0, 10);
   const hash = s => { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return ((h >>> 0) % 10000) / 10000; };

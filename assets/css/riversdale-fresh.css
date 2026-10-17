@@ -1,4 +1,4 @@
-/* Docket site styles. Tokens first, then site chrome (nav, footer), the home page, then the planner. */
+/* Riversdale Fresh site styles. Tokens first, then site chrome (nav, footer), the home page, then the planner. */
 :root{
   --bg:#F4F7F2; --surface:#FFFFFF; --sunk:#EAF0E9; --ink:#1C211E; --muted:#59625C; --line:#DCE3DC;
   --green:#1F6B47; --on-green:#FFFFFF; --mint:#CFEBD8; --ticket:#FFE58A; --on-ticket:#1C1A0E;

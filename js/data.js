@@ -1,5 +1,5 @@
 // ============================================================================
-// Docket recipe library and ingredient prices.
+// Riversdale Fresh recipe library and ingredient prices.
 // Prices are Coles estimates (Melbourne, Oct 2026). Woolies and Aldi are derived from these.
 // Quantities in recipes are PER SERVE (one dinner portion). The planner scales them.
 //
