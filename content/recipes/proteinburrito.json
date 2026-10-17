@@ -1,0 +1,31 @@
+{
+ "id": "proteinburrito",
+ "m": [
+  {
+   "h": "Roast the sweet potato",
+   "s": "Heat the oven to 220°C (fan-forced 200°C). Cut {swpotato} into 2cm cubes, skin on. Toss on a lined tray with a drizzle of oil, a pinch of the {smokedpaprika} and salt. Spread them out so they don't touch and roast for 20 to 25 minutes, flipping halfway, until golden and crispy at the edges."
+  },
+  {
+   "h": "Rice and hot honey",
+   "s": "Rinse {rice}, then cook with 1½ times its volume of water and a pinch of salt: boil, cover and cook on low for 12 minutes, then rest 10 minutes with the lid on. Stir through the juice of {lime*0.5}. For the hot honey, warm {honey} with {chilliflakes} in a small pan or the microwave for 20 seconds, then leave it to infuse."
+  },
+  {
+   "h": "Whip the cottage cheese",
+   "s": "Blitz {cottagecheese} with a squeeze of the remaining lime and a pinch of salt in a blender or with a stick blender for 1 minute until silky smooth. Drain {corn} and toss with chopped {coriander} and a pinch of salt."
+  },
+  {
+   "h": "Brown the beef hard",
+   "s": "Heat a splash of oil in a large frying pan over high heat. Add {beef_lean}, press it flat and leave it for 3 minutes until a dark crust forms. Break it up and cook 3 to 4 minutes more. Lean mince dries out fast, so don't overcook it, and cook in batches if your pan is crowded."
+  },
+  {
+   "h": "Spice and add the beans",
+   "s": "Add finely diced {onion} and crushed {garlic} and cook for 2 minutes. Stir in {tompaste}, the rest of the smoked paprika, {cumin}, {chillipowder} and {oregano} and fry for 1 minute. Add {blackbeans}, drained and rinsed, with about 1/3 cup water per 2 serves. Simmer 3 minutes until thick and saucy."
+  },
+  {
+   "h": "Build the bowls",
+   "s": "Shred {cos}. Divide the rice and cos between bowls, then top with the beef and beans, crispy sweet potato and corn. Add a big spoon of whipped cottage cheese and sliced {avocado}, then drizzle the hot honey over the lot."
+  }
+ ],
+ "l": "Meal-prep friendly. Pack the rice, beef and sweet potato together and the cos, corn and cottage cheese separately. Microwave the hot part for 2 minutes, then add the cold bits and a fresh drizzle of hot honey. Slice the avo fresh. Keeps 3 days in the fridge.",
+ "g": "Naturally gluten free. Check the chilli powder, chilli flakes and spice labels, and that the cottage cheese has no added thickeners containing gluten."
+}

@@ -20,6 +20,7 @@ const ING={
  chk_breast:{n:'Chicken breast fillets',a:'M',u:'g',pk:1000,p:13.00,pr:23,alt:[500,7.50]},
  chk_whole:{n:'Whole chicken (1.8kg)',a:'M',u:'g',pk:1800,p:13.50,pr:13,pl:'1.8kg bird'},
  beef_mince:{n:'Beef mince (3 star)',a:'M',u:'g',pk:1000,p:14.00,pr:19,t:'red',alt:[500,7.50]},
+ beef_lean:{n:'Lean beef mince (5 star)',a:'M',u:'g',pk:500,p:9.00,pr:21,t:'red'},
  beef_rump:{n:'Rump steak',a:'M',u:'g',pk:1000,p:27.00,pr:22,t:'red',wt:1},
  beef_chuck:{n:'Beef chuck (slow cook)',a:'M',u:'g',pk:1000,p:18.00,pr:20,t:'red',wt:1},
  pork_shoulder:{n:'Pork shoulder, boneless',a:'M',u:'g',pk:1000,p:12.00,pr:18,t:'pork',wt:1},
@@ -43,6 +44,7 @@ const ING={
  slices:{n:'Burger cheese slices (12)',a:'D',u:'ea',pk:12,p:4.50,pr:3.5,pl:'12 pack',ea:[1,'slice'],whole:1},
  sourcream:{n:'Sour cream',a:'D',u:'ml',pk:300,p:2.60,pr:3},
  yoghurt:{n:'Greek yoghurt',a:'D',u:'g',pk:1000,p:6.00,pr:9,cup:250,alt:[500,4.00]},
+ cottagecheese:{n:'Cottage cheese',a:'D',u:'g',pk:500,p:5.00,pr:11,cup:225,alt:[250,3.00]},
  kimchi:{n:'Kimchi',a:'D',u:'g',pk:400,p:7.50,pr:1.5,ck:1},
 
  // Fruit & veg
@@ -405,7 +407,10 @@ const R=[
   i:[['prawns',180],['quinoa',60],['broccolini',.5],['snowpeas',60],['lemon',.4],['garlic',.15],['chilli',.3],['parsley',.12],['fetta',25]]},
 
  {id:'springcaesar',n:'Chicken Caesar with Charred Asparagus',c:'Salads',t:30,added:'2026-10-14',d:'A proper Caesar: crisp cos, jammy eggs, bacon, garlicky croutons and a real dressing, with spring asparagus.',
-  i:[['chk_breast',200],['cos',.5],['asparagus',.4],['bacon',40],['eggs',1],['parm',20],['turkish',.5],['mayo',25],['lemon',.25],['garlic',.1],['worcestershire',3]]}
+  i:[['chk_breast',200],['cos',.5],['asparagus',.4],['bacon',40],['eggs',1],['parm',20],['turkish',.5],['mayo',25],['lemon',.25],['garlic',.1],['worcestershire',3]]},
+
+ {id:'proteinburrito',n:'Protein Beef Burrito Bowls',c:'Bowls',t:30,added:'2026-10-17',d:'Lean smoky beef and black beans with roast sweet potato, whipped cottage cheese, avo and a drizzle of hot honey. Around 70g protein a bowl.',
+  i:[['beef_lean',230],['swpotato',150],['onion',40],['garlic',.08],['tompaste',15],['smokedpaprika',1.2],['cumin',1.2],['chillipowder',.5],['oregano',.4],['blackbeans',80],['rice',60],['lime',.4],['coriander',.15],['cos',.2],['corn',50],['avocado',.4],['cottagecheese',100],['honey',12],['chilliflakes',.5]]}
 ];
 
 // ---------- Sweet treats (optional extras, never counted as dinners) ----------
